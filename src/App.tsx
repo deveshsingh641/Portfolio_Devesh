@@ -330,7 +330,7 @@ function App() {
 
               {/* FIXED RESUME LINK - Uses %20 for spaces */}
               <a
-                href="/Updated_resume%20(1).pdf"
+                href="/resume.pdf"
                 download="Devesh_Singh_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
