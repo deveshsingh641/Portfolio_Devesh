@@ -289,7 +289,7 @@ function App() {
             <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000 motion-reduce:animate-none"></div>
           </div>
 
-          <div className="relative z-10 w-full max-w-5xl mx-auto text-center md:text-left">
+          <div className="relative z-10 w-full max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border-2 border-violet-200 text-violet-700 text-xs font-bold tracking-wide uppercase mb-8 animate-fade-in-up shadow-sm">
               <span className="w-2.5 h-2.5 rounded-full bg-violet-600 animate-pulse"></span>
               Open to Work
@@ -304,7 +304,7 @@ function App() {
             </h1>
 
             {/* TYPEWRITER EFFECT */}
-            <div className="text-xl md:text-2xl text-gray-200 font-medium mb-10 max-w-3xl mx-auto leading-relaxed h-20 md:h-auto">
+            <div className="text-xl md:text-2xl text-gray-200 font-medium mb-10 max-w-3xl mx-auto text-center leading-relaxed h-20 md:h-auto">
               I am a{" "}
               <span className="bg-gradient-to-r from-violet-400 to-emerald-400 bg-clip-text text-transparent font-bold block md:inline mt-2 md:mt-0">
                 <TypeAnimation
