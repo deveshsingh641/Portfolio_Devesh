@@ -369,7 +369,7 @@ function App() {
                 <div className="space-y-6 text-lg text-gray-200 leading-relaxed mb-10">
                   <p>
                     I am a developer who{" "}
-                    <span className="text-gray-900 font-bold">
+                    <span className="text-cyan-300 font-bold">
                       thinks in data
                     </span>
                     . Currently pursuing my B.Tech in IT at{" "}
