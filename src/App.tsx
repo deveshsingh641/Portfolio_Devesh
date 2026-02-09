@@ -356,7 +356,7 @@ function App() {
           className="py-24 bg-white/50 backdrop-blur-sm relative px-6 md:px-20"
         >
           <div className="max-w-6xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-16 items-start">
+            <div className="flex flex-col md:flex-row gap-16 items-center">
               <div className="w-full md:w-1/2">
                 <h2 className="text-4xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   About Me{" "}
@@ -446,7 +446,8 @@ function App() {
                 </div>
               </div>
 
-              <div className="relative md:absolute md:right-20 md:top-32 w-full md:w-auto mt-10 md:mt-0">
+              {/* Profile Image */}
+              <div className="w-full md:w-1/2 flex justify-center md:justify-end mt-10 md:mt-0">
                 <Tilt
                   tiltMaxAngleX={10}
                   tiltMaxAngleY={10}
@@ -455,18 +456,19 @@ function App() {
                   scale={1.02}
                   disabled={isMobile}
                 >
-                  <div className="w-[220px] md:w-[420px] rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-gradient-to-r from-blue-600 to-purple-600 p-1 mx-auto md:mx-0">
+                  <div className="w-[220px] md:w-[380px] rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-gradient-to-r from-blue-600 to-purple-600 p-1">
                     <div className="rounded-xl overflow-hidden">
                       <img
                         src="/profile.jpg"
                         alt="Profile"
-                        className="w-full h-auto block object-cover"
+                        className="w-full h-auto object-cover"
                         loading="lazy"
                         decoding="async"
                       />
                     </div>
                   </div>
-                  <div className="mt-6 md:mt-8 flex justify-center md:block">
+
+                  <div className="mt-6 flex justify-center md:justify-end">
                     <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg border border-gray-100 flex items-center gap-2 animate-bounce-slow w-fit">
                       <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                       <span className="text-xs font-bold text-gray-800">
