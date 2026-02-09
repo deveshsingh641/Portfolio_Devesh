@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Mail,
   Github,
@@ -29,44 +29,52 @@ function App() {
   const [activeSection, setActiveSection] = useState("home");
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const isMobile = useMemo(() => window.innerWidth < 768, []);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      
-      const scrollTop = window.scrollY;
-      const docHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      setScrollProgress(scrollPercent);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50);
 
-      const sections = [
-        "home",
-        "about",
-        "skills",
-        "projects",
-        "certifications",
-        "contact",
-      ];
-      const scrollPosition = window.scrollY + 100;
+          const scrollTop = window.scrollY;
+          const docHeight =
+            document.documentElement.scrollHeight -
+            document.documentElement.clientHeight;
+          const scrollPercent = (scrollTop / docHeight) * 100;
+          setScrollProgress(scrollPercent);
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            setActiveSection(section);
-            break;
+          const sections = [
+            "home",
+            "about",
+            "skills",
+            "projects",
+            "certifications",
+            "contact",
+          ];
+          const scrollPosition = window.scrollY + 100;
+
+          for (const section of sections) {
+            const element = document.getElementById(section);
+            if (element) {
+              const { offsetTop, offsetHeight } = element;
+              if (
+                scrollPosition >= offsetTop &&
+                scrollPosition < offsetTop + offsetHeight
+              ) {
+                setActiveSection(section);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -276,9 +284,9 @@ function App() {
           className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
         >
           <div className="absolute top-0 w-full h-full overflow-hidden z-0">
-            <div className="absolute top-0 left-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-            <div className="absolute top-0 right-1/4 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-            <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+            <div className="absolute top-0 left-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob motion-reduce:animate-none"></div>
+            <div className="absolute top-0 right-1/4 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 motion-reduce:animate-none"></div>
+            <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000 motion-reduce:animate-none"></div>
           </div>
 
           <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
@@ -330,7 +338,7 @@ function App() {
 
               {/* FIXED RESUME LINK - Uses %20 for spaces */}
               <a
-                href="/resume.pdf"
+                href="/Updated_resume%20(1).pdf"
                 download="Devesh_Singh_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -349,13 +357,14 @@ function App() {
         >
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-16 items-start">
-              <div className="sticky top-24 z-10">
+              <div className="static md:sticky md:top-24 z-0">
                 <Tilt
                   tiltMaxAngleX={10}
                   tiltMaxAngleY={10}
                   perspective={1000}
                   transitionSpeed={1000}
                   scale={1.02}
+                  disabled={isMobile}
                 >
                   <div className="relative group cursor-pointer">
                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
@@ -364,6 +373,8 @@ function App() {
                         src="/profile.jpg"
                         alt="Profile"
                         className="relative rounded-2xl shadow-2xl w-full max-w-md mx-auto object-cover aspect-[3/4] border-2 border-white"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2 animate-bounce-slow">
                         <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
@@ -470,8 +481,8 @@ function App() {
 
         {/* SKILLS SECTION */}
         <section id="skills" className="py-24 relative overflow-hidden">
-          <div className="absolute right-0 top-1/4 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-          <div className="absolute left-0 bottom-1/4 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+          <div className="hidden lg:block absolute right-0 top-1/4 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
+          <div className="hidden lg:block absolute left-0 bottom-1/4 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
 
           <div className="max-w-6xl mx-auto px-4 relative z-10">
             <div className="text-center mb-16">
@@ -481,7 +492,7 @@ function App() {
               <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-8 will-change-auto">
               {[
                 {
                   title: "Languages",
@@ -631,12 +642,13 @@ function App() {
               {projects.map((project, index) => (
                 <Tilt
                   key={index}
-                  tiltMaxAngleX={8}
-                  tiltMaxAngleY={8}
-                  glareEnable={true}
+                  tiltMaxAngleX={isMobile ? 0 : 8}
+                  tiltMaxAngleY={isMobile ? 0 : 8}
+                  glareEnable={!isMobile}
                   glareMaxOpacity={0.25}
                   scale={1.02}
                   className="h-full"
+                  disabled={isMobile}
                 >
                   <div className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-xl h-full flex flex-col transform-style-3d">
                     <div className="h-64 overflow-hidden relative">
@@ -645,6 +657,8 @@ function App() {
                         src={project.image}
                         alt={project.title}
                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div
                         className="absolute bottom-4 left-4 z-20"
@@ -719,10 +733,11 @@ function App() {
         >
           <div className="max-w-4xl mx-auto px-4 relative z-10">
             <Tilt
-              tiltMaxAngleX={2}
-              tiltMaxAngleY={2}
-              glareEnable={true}
+              tiltMaxAngleX={isMobile ? 0 : 2}
+              tiltMaxAngleY={isMobile ? 0 : 2}
+              glareEnable={!isMobile}
               glareMaxOpacity={0.05}
+              disabled={isMobile}
             >
               <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-100">
                 <div className="text-center mb-10">

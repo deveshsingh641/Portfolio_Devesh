@@ -4,6 +4,8 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -28,10 +30,40 @@ body {
 
 .animate-blob {
   animation: blob 7s infinite;
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 .animation-delay-2000 { animation-delay: 2s; }
 .animation-delay-4000 { animation-delay: 4s; }
+
+/* Mobile performance optimization */
+@media (max-width: 768px) {
+  .animate-blob {
+    animation: blob 7s infinite !important;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Reduce animations on mobile */
+  button, a, input, textarea {
+    transition: all 0.2s ease !important;
+  }
+}
+
+/* Performance optimization for smooth animations */
+.will-change-auto {
+  will-change: auto;
+}
+
+/* Smooth transitions across the board */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 /* 2. Glassmorphism Utilities */
 .glass {
@@ -39,6 +71,15 @@ body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.5);
+  backface-visibility: hidden;
+}
+
+/* Reduce backdrop blur on mobile for performance */
+@media (max-width: 768px) {
+  .glass {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
 }
 
 /* 3. Gradient Border Utility */

@@ -7,4 +7,26 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    target: 'es2020',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+      },
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'ui-vendor': ['react-parallax-tilt', 'react-type-animation'],
+        },
+      },
+    },
+  },
+  server: {
+    headers: {
+      'Cache-Control': 'public, max-age=3600',
+    },
+  },
 });
