@@ -655,7 +655,17 @@ function App() {
                 >
                   <div className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-xl h-full flex flex-col transform-style-3d">
                     <div className="h-64 overflow-hidden relative">
-                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60 z-10"></div>
+                      <div
+                        className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10"
+                        style={{ opacity: project.title === "Lecture Feedback System" ? 0.25 : 0.6 }}
+                      ></div>
+
+                      {project.title === "Lecture Feedback System" && (
+                        <div className="absolute top-4 left-4 z-30 bg-white/90 text-xs md:text-sm font-bold px-3 py-1 rounded-md shadow">
+                          Lecture Feedback
+                        </div>
+                      )}
+
                       <img
                         src={project.image}
                         alt={project.title}
