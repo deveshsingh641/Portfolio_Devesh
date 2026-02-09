@@ -556,7 +556,7 @@ function App() {
                   scale={1.03}
                   className="h-full"
                 >
-                  <div className="glass p-8 rounded-2xl h-full border border-violet-400/50 shadow-xl hover:shadow-2xl hover:shadow-violet-500/40 backdrop-blur-md transition-all duration-300 group hover:-translate-y-2 bg-gradient-to-br from-slate-800/80 via-slate-800/60 to-slate-900">
+                  <div className="p-8 rounded-2xl h-full border-2 border-violet-500/70 shadow-xl hover:shadow-2xl hover:shadow-violet-500/60 backdrop-blur-sm transition-all duration-300 group hover:-translate-y-2 bg-slate-900/98">
                     <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.gradient} p-3 mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                       <category.icon size={28} className="text-white" />
                     </div>
@@ -567,7 +567,7 @@ function App() {
                       {category.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className={`px-4 py-3 bg-gradient-to-r ${category.gradient}/25 border-2 ${category.borderColor} rounded-lg text-sm font-bold ${category.accentColor} shadow-lg hover:shadow-xl hover:scale-110 transition-all cursor-default hover:${category.gradient}/35`}
+                          className={`px-4 py-2.5 bg-gradient-to-r ${category.gradient}/70 border-2 ${category.borderColor} rounded-lg text-sm font-bold ${category.accentColor} shadow-lg hover:shadow-xl hover:scale-110 transition-all cursor-default hover:${category.gradient}/90`}
                         >
                           {skill.name}
                         </span>
