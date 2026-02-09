@@ -494,7 +494,8 @@ function App() {
               <h2 className="text-4xl font-bold text-white mb-4">
                 Technical Arsenal
               </h2>
-              <div className="w-24 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50"></div>
+              <p className="text-emerald-300 font-medium text-lg mb-4">Weapons in my developer toolkit</p>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50"></div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 will-change-auto stagger-animation">
@@ -503,17 +504,21 @@ function App() {
                   title: "Languages",
                   icon: Code,
                   skills: programmingSkills,
-                  color: "text-violet-600",
+                  color: "text-violet-300",
                   bg: "bg-violet-50",
-                  gradient: "from-violet-500 to-violet-600",
+                  gradient: "from-violet-500 to-purple-600",
+                  borderColor: "border-violet-400/60",
+                  accentColor: "text-violet-200",
                 },
                 {
                   title: "Web Development",
                   icon: Globe,
                   skills: webDevSkills,
-                  color: "text-emerald-600",
+                  color: "text-emerald-300",
                   bg: "bg-emerald-50",
-                  gradient: "from-emerald-500 to-emerald-600",
+                  gradient: "from-emerald-500 to-teal-600",
+                  borderColor: "border-emerald-400/60",
+                  accentColor: "text-emerald-200",
                 },
                 {
                   title: "Core Concepts",
@@ -522,9 +527,11 @@ function App() {
                     { name: "DSA", icon: Brain },
                     { name: "OOP", icon: Brain },
                   ],
-                  color: "text-cyan-600",
+                  color: "text-cyan-300",
                   bg: "bg-cyan-50",
-                  gradient: "from-cyan-500 to-cyan-600",
+                  gradient: "from-cyan-500 to-blue-600",
+                  borderColor: "border-cyan-400/60",
+                  accentColor: "text-cyan-200",
                 },
                 {
                   title: "Tools",
@@ -533,9 +540,11 @@ function App() {
                     { name: "Git", icon: Layers },
                     { name: "Figma", icon: Layers },
                   ],
-                  color: "text-violet-600",
-                  bg: "bg-violet-50",
-                  gradient: "from-violet-500 via-emerald-500 to-cyan-500",
+                  color: "text-pink-300",
+                  bg: "bg-pink-50",
+                  gradient: "from-pink-500 via-rose-500 to-orange-500",
+                  borderColor: "border-pink-400/60",
+                  accentColor: "text-pink-200",
                 },
               ].map((category, idx) => (
                 <Tilt
@@ -547,18 +556,18 @@ function App() {
                   scale={1.03}
                   className="h-full"
                 >
-                  <div className="glass p-8 rounded-2xl h-full border border-violet-400/40 shadow-xl hover:shadow-2xl hover:shadow-violet-500/30 backdrop-blur-md transition-all duration-300 group hover:-translate-y-2 bg-gradient-to-br from-slate-800 via-violet-900/40 to-slate-800">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${category.gradient} p-2.5 mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <category.icon size={24} className="text-white" />
+                  <div className="glass p-8 rounded-2xl h-full border border-violet-400/50 shadow-xl hover:shadow-2xl hover:shadow-violet-500/40 backdrop-blur-md transition-all duration-300 group hover:-translate-y-2 bg-gradient-to-br from-slate-800/80 via-slate-800/60 to-slate-900">
+                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.gradient} p-3 mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                      <category.icon size={28} className="text-white" />
                     </div>
-                    <h3 className="text-xl font-bold mb-6 text-white">
+                    <h3 className={`text-2xl font-bold mb-6 ${category.color}`}>
                       {category.title}
                     </h3>
                     <div className="flex flex-wrap gap-3">
                       {category.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className="px-4 py-2 bg-gradient-to-r from-violet-600/40 to-emerald-600/40 border border-emerald-300/70 rounded-lg text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-emerald-500/50 hover:scale-110 transition-all cursor-default hover:bg-gradient-to-r hover:from-violet-600/60 hover:to-emerald-600/60 hover:border-emerald-200"
+                          className={`px-4 py-3 bg-gradient-to-r ${category.gradient}/20 border ${category.borderColor} rounded-lg text-sm font-bold ${category.accentColor} shadow-lg hover:shadow-xl hover:scale-110 transition-all cursor-default hover:${category.gradient}/40`}
                         >
                           {skill.name}
                         </span>
@@ -575,10 +584,11 @@ function App() {
         <section id="certifications" className="py-24 bg-gradient-to-b from-slate-900/50 via-violet-900/20 to-slate-900/50 relative">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <h2 className="text-4xl font-bold text-white mb-3">
                 Certifications & Badges
               </h2>
-              <div className="w-20 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-emerald-400/50"></div>
+              <p className="text-cyan-300 font-medium text-lg">Professional credentials & achievements</p>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cyan-600 via-emerald-500 to-violet-600 mx-auto rounded-full shadow-lg shadow-cyan-400/50 mt-4"></div>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 stagger-animation">
@@ -593,32 +603,32 @@ function App() {
                     glareEnable={true}
                     glareMaxOpacity={0.1}
                   >
-                    <div className="glass p-6 rounded-2xl shadow-lg border border-cyan-400/50 group h-full backdrop-blur-md hover:shadow-2xl hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-slate-800 via-slate-800 to-violet-900/30">
+                    <div className="glass p-7 rounded-2xl shadow-lg border border-gradient-to-r from-cyan-400 to-emerald-400 border-opacity-60 group h-full backdrop-blur-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-slate-800/90 via-slate-800/70 to-violet-900/40">
                       <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 via-emerald-500 to-violet-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-cyan-400/60 shrink-0 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300">
-                          <IconComponent size={28} />
+                        <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 via-emerald-500 to-violet-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-cyan-400/70 shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                          <IconComponent size={32} />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-bold text-white text-lg leading-tight mb-1 group-hover:text-cyan-300 transition-colors">
+                          <h3 className="font-bold text-white text-lg leading-tight mb-2 group-hover:text-cyan-300 transition-colors">
                             {cert.name}
                           </h3>
-                          <div className="flex justify-between items-center mb-2">
-                            <p className="text-sm font-semibold text-cyan-300">
+                          <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                            <p className="text-sm font-bold text-emerald-300 bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-400/50">
                               {cert.source}
                             </p>
                             {cert.year && (
-                              <span className="text-xs text-emerald-300 flex items-center gap-1">
+                              <span className="text-xs text-cyan-300 font-semibold bg-cyan-500/20 px-3 py-1 rounded-full border border-cyan-400/50 flex items-center gap-1">
                                 <Calendar size={12} /> {cert.year}
                               </span>
                             )}
                           </div>
 
                           {cert.badges && (
-                            <div className="mt-3 flex flex-wrap gap-2">
+                            <div className="mt-4 flex flex-wrap gap-2">
                               {cert.badges.map((badge, badgeIndex) => (
                                 <span
                                   key={badgeIndex}
-                                  className="px-2 py-1 bg-gradient-to-r from-emerald-600/50 to-cyan-600/50 border border-cyan-300/70 text-white text-[11px] uppercase tracking-wider font-bold rounded-md shadow-md hover:shadow-lg hover:shadow-cyan-500/50 transition-all hover:from-cyan-600/70 hover:to-emerald-600/70 hover:border-cyan-200"
+                                  className="px-3 py-2 bg-gradient-to-r from-violet-600/50 to-cyan-600/50 border border-violet-300/80 text-white text-[12px] uppercase tracking-wider font-bold rounded-lg shadow-md hover:shadow-lg hover:shadow-violet-500/60 transition-all hover:from-violet-600/70 hover:to-cyan-600/70 hover:border-violet-200 hover:scale-105"
                                 >
                                   {badge}
                                 </span>
