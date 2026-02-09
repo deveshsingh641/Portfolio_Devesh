@@ -507,8 +507,8 @@ function App() {
                   color: "text-violet-300",
                   bg: "bg-violet-50",
                   gradient: "from-violet-500 to-purple-600",
-                  borderColor: "border-violet-400/60",
-                  accentColor: "text-violet-200",
+                  borderColor: "border-violet-400/70",
+                  accentColor: "text-violet-400",
                 },
                 {
                   title: "Web Development",
@@ -517,8 +517,8 @@ function App() {
                   color: "text-emerald-300",
                   bg: "bg-emerald-50",
                   gradient: "from-emerald-500 to-teal-600",
-                  borderColor: "border-emerald-400/60",
-                  accentColor: "text-emerald-200",
+                  borderColor: "border-emerald-400/70",
+                  accentColor: "text-emerald-400",
                 },
                 {
                   title: "Core Concepts",
@@ -530,8 +530,8 @@ function App() {
                   color: "text-cyan-300",
                   bg: "bg-cyan-50",
                   gradient: "from-cyan-500 to-blue-600",
-                  borderColor: "border-cyan-400/60",
-                  accentColor: "text-cyan-200",
+                  borderColor: "border-cyan-400/70",
+                  accentColor: "text-cyan-400",
                 },
                 {
                   title: "Tools",
@@ -543,8 +543,8 @@ function App() {
                   color: "text-pink-300",
                   bg: "bg-pink-50",
                   gradient: "from-pink-500 via-rose-500 to-orange-500",
-                  borderColor: "border-pink-400/60",
-                  accentColor: "text-pink-200",
+                  borderColor: "border-pink-400/70",
+                  accentColor: "text-orange-400",
                 },
               ].map((category, idx) => (
                 <Tilt
@@ -567,7 +567,7 @@ function App() {
                       {category.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className={`px-4 py-3 bg-gradient-to-r ${category.gradient}/20 border ${category.borderColor} rounded-lg text-sm font-bold ${category.accentColor} shadow-lg hover:shadow-xl hover:scale-110 transition-all cursor-default hover:${category.gradient}/40`}
+                          className={`px-4 py-3 bg-gradient-to-r ${category.gradient}/25 border-2 ${category.borderColor} rounded-lg text-sm font-bold ${category.accentColor} shadow-lg hover:shadow-xl hover:scale-110 transition-all cursor-default hover:${category.gradient}/35`}
                         >
                           {skill.name}
                         </span>
