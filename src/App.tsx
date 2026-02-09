@@ -558,7 +558,7 @@ function App() {
                       {category.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className="px-4 py-2 bg-gradient-to-r from-violet-500/20 to-emerald-500/20 border border-emerald-400/60 rounded-lg text-sm font-semibold text-emerald-100 shadow-sm hover:shadow-md hover:shadow-emerald-500/30 hover:scale-105 transition-all cursor-default hover:from-emerald-500/30 hover:to-emerald-500/40"
+                          className="px-4 py-2 bg-gradient-to-r from-violet-600/40 to-emerald-600/40 border border-emerald-300/70 rounded-lg text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-emerald-500/50 hover:scale-110 transition-all cursor-default hover:bg-gradient-to-r hover:from-violet-600/60 hover:to-emerald-600/60 hover:border-emerald-200"
                         >
                           {skill.name}
                         </span>
@@ -593,21 +593,21 @@ function App() {
                     glareEnable={true}
                     glareMaxOpacity={0.1}
                   >
-                    <div className="glass p-6 rounded-2xl shadow-lg border border-emerald-400/40 group h-full backdrop-blur-md hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-slate-800 via-violet-900/40 to-slate-800">
+                    <div className="glass p-6 rounded-2xl shadow-lg border border-cyan-400/50 group h-full backdrop-blur-md hover:shadow-2xl hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-slate-800 via-slate-800 to-violet-900/30">
                       <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-violet-500 via-emerald-500 to-cyan-400 rounded-xl flex items-center justify-center text-white shadow-lg shadow-violet-400/50 shrink-0 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300">
+                        <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 via-emerald-500 to-violet-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-cyan-400/60 shrink-0 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300">
                           <IconComponent size={28} />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-bold text-white text-lg leading-tight mb-1 group-hover:text-emerald-300 transition-colors">
+                          <h3 className="font-bold text-white text-lg leading-tight mb-1 group-hover:text-cyan-300 transition-colors">
                             {cert.name}
                           </h3>
                           <div className="flex justify-between items-center mb-2">
-                            <p className="text-sm font-semibold text-emerald-300">
+                            <p className="text-sm font-semibold text-cyan-300">
                               {cert.source}
                             </p>
                             {cert.year && (
-                              <span className="text-xs text-cyan-300 flex items-center gap-1">
+                              <span className="text-xs text-emerald-300 flex items-center gap-1">
                                 <Calendar size={12} /> {cert.year}
                               </span>
                             )}
@@ -618,7 +618,7 @@ function App() {
                               {cert.badges.map((badge, badgeIndex) => (
                                 <span
                                   key={badgeIndex}
-                                  className="px-2 py-1 bg-gradient-to-r from-violet-500/20 to-emerald-500/20 border border-violet-400/60 text-violet-200 text-[11px] uppercase tracking-wider font-bold rounded-md shadow-sm hover:shadow-md hover:shadow-violet-500/30 transition-all hover:from-violet-500/40 hover:to-emerald-500/30"
+                                  className="px-2 py-1 bg-gradient-to-r from-emerald-600/50 to-cyan-600/50 border border-cyan-300/70 text-white text-[11px] uppercase tracking-wider font-bold rounded-md shadow-md hover:shadow-lg hover:shadow-cyan-500/50 transition-all hover:from-cyan-600/70 hover:to-emerald-600/70 hover:border-cyan-200"
                                 >
                                   {badge}
                                 </span>
