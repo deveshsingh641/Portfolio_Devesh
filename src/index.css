@@ -10,8 +10,9 @@ html {
 
 body {
   font-family: 'Lato', sans-serif;
-  background-color: #f8fafc; /* Slate-50 */
-  overflow-x: hidden; /* Prevent horizontal scroll from animations */
+  background: linear-gradient(135deg, #0f0721 0%, #1a0a3e 25%, #0d1b2a 50%, #0f0721 75%, #1a0a3e 100%);
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
 /* Custom Scrollbar */
@@ -182,4 +183,50 @@ body {
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradient-shift 3s ease infinite;
+}
+
+/* Neon Text Effects */
+.neon-text {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(16, 185, 129, 0.3);
+  animation: neon-pulse 3s ease-in-out infinite;
+}
+
+/* Section Backgrounds with Neon Glow */
+section {
+  position: relative;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), rgba(16, 185, 129, 0.5), transparent);
+  z-index: 1;
+}
+
+/* Neon Text Effects */
+.neon-text {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(16, 185, 129, 0.3);
+  animation: neon-pulse 3s ease-in-out infinite;
+}
+
+/* Section Backgrounds with Neon Glow */
+section {
+  position: relative;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), rgba(16, 185, 129, 0.5), transparent);
+  z-index: 1;
 }

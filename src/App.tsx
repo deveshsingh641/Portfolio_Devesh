@@ -177,7 +177,7 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen font-sans text-gray-900 bg-slate-50 selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen font-sans text-gray-900 bg-gradient-to-br from-slate-950 via-violet-950 to-slate-950 selection:bg-violet-600 selection:text-white">
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -295,18 +295,18 @@ function App() {
               Open to Work
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight animate-slideInUp">
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 leading-tight animate-slideInUp">
               Crafting{" "}
-              <span className="bg-gradient-to-r from-violet-600 via-emerald-500 via-cyan-400 to-violet-600 bg-clip-text text-transparent drop-shadow-sm animate-gradient">
+              <span className="bg-gradient-to-r from-violet-400 via-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent drop-shadow-sm animate-gradient">
                 Digital Reality
               </span>{" "}
               with Code.
             </h1>
 
             {/* TYPEWRITER EFFECT */}
-            <div className="text-xl md:text-2xl text-gray-600 font-medium mb-10 max-w-3xl mx-auto leading-relaxed h-20 md:h-auto">
+            <div className="text-xl md:text-2xl text-gray-200 font-medium mb-10 max-w-3xl mx-auto leading-relaxed h-20 md:h-auto">
               I am a{" "}
-              <span className="bg-gradient-to-r from-violet-600 to-emerald-500 bg-clip-text text-transparent font-bold block md:inline mt-2 md:mt-0">
+              <span className="bg-gradient-to-r from-violet-400 to-emerald-400 bg-clip-text text-transparent font-bold block md:inline mt-2 md:mt-0">
                 <TypeAnimation
                   sequence={[
                     "Full Stack Developer",
@@ -353,12 +353,12 @@ function App() {
         {/* ABOUT SECTION */}
         <section
           id="about"
-          className="py-24 bg-gradient-to-b from-white via-violet-50/20 to-emerald-50/20 backdrop-blur-sm relative px-6 md:px-20"
+          className="py-24 bg-gradient-to-b from-slate-900/50 via-violet-900/20 to-slate-900/50 backdrop-blur-sm relative px-6 md:px-20"
         >
           <div className="max-w-6xl mx-auto">
             <div className="flex flex-col md:flex-row gap-16 items-center">
               <div className="w-full md:w-1/2">
-                <h2 className="text-4xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <h2 className="text-4xl font-bold text-white mb-6 flex items-center gap-3">
                   About Me{" "}
                   <Sparkles
                     className="text-transparent bg-gradient-to-r from-violet-500 to-emerald-500 bg-clip-text animate-pulse"
@@ -366,7 +366,7 @@ function App() {
                   />
                 </h2>
 
-                <div className="space-y-6 text-lg text-gray-600 leading-relaxed mb-10">
+                <div className="space-y-6 text-lg text-gray-200 leading-relaxed mb-10">
                   <p>
                     I am a developer who{" "}
                     <span className="text-gray-900 font-bold">
@@ -404,7 +404,7 @@ function App() {
                   </p>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                   <GraduationCap className="text-transparent bg-gradient-to-r from-violet-600 to-emerald-500 bg-clip-text" size={24} />{" "}
                   <span className="bg-gradient-to-r from-violet-700 to-emerald-600 bg-clip-text text-transparent">Education Journey</span>
                 </h3>
@@ -485,13 +485,13 @@ function App() {
         </section>
 
         {/* SKILLS SECTION */}
-        <section id="skills" className="py-24 relative overflow-hidden">
+        <section id="skills" className="py-24 bg-gradient-to-b from-slate-900/40 via-emerald-900/20 to-slate-900/40 relative overflow-hidden">
           <div className="hidden lg:block absolute right-0 top-1/4 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
           <div className="hidden lg:block absolute left-0 bottom-1/4 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
 
           <div className="max-w-6xl mx-auto px-4 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-4xl font-bold text-white mb-4">
                 Technical Arsenal
               </h2>
               <div className="w-24 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50"></div>
@@ -572,10 +572,10 @@ function App() {
         </section>
 
         {/* CERTIFICATIONS SECTION */}
-        <section id="certifications" className="py-24 bg-white/60 relative">
+        <section id="certifications" className="py-24 bg-gradient-to-b from-slate-900/50 via-violet-900/20 to-slate-900/50 relative">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 Certifications & Badges
               </h2>
               <div className="w-20 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-emerald-400/50"></div>
@@ -636,13 +636,13 @@ function App() {
         </section>
 
         {/* PROJECTS SECTION */}
-        <section id="projects" className="py-24 bg-gradient-to-br from-white via-emerald-50/20 to-violet-50/20">
+        <section id="projects" className="py-24 bg-gradient-to-b from-slate-900/40 via-cyan-900/20 to-slate-900/40">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-4xl font-bold text-white mb-4">
                 Featured Work
               </h2>
-              <p className="text-gray-500">Some things I've built</p>
+              <p className="text-gray-300">Some things I've built</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-10 stagger-animation">
@@ -744,7 +744,7 @@ function App() {
         {/* CONTACT SECTION */}
         <section
           id="contact"
-          className="py-24 bg-slate-50 relative overflow-hidden"
+          className="py-24 bg-gradient-to-b from-slate-900/40 via-violet-900/30 to-slate-900/40 relative overflow-hidden"
         >
           <div className="max-w-4xl mx-auto px-4 relative z-10">
             <Tilt
@@ -756,10 +756,10 @@ function App() {
             >
               <div className="bg-gradient-to-br from-white via-violet-50/50 to-emerald-50/30 rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-100/50">
                 <div className="text-center mb-10">
-                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-violet-600 to-emerald-600 bg-clip-text text-transparent">
+                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white via-violet-300 to-emerald-300 bg-clip-text text-transparent">
                     Let's Work Together
                   </h2>
-                  <p className="text-gray-500 mt-3 text-lg">
+                  <p className="text-gray-300 mt-3 text-lg">
                     Have a project in mind? Let's discuss and create something amazing.
                   </p>
                 </div>
@@ -809,7 +809,7 @@ function App() {
         </section>
 
         {/* Footer */}
-        <footer className="bg-white py-8 border-t border-gray-100 text-center text-gray-500 text-sm">
+        <footer className="bg-slate-950 py-8 border-t border-violet-500/30 text-center text-gray-400 text-sm">
           <p>© 2025 Devesh Singh. Crafted with React & Tailwind.</p>
         </footer>
       </main>
