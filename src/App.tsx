@@ -195,7 +195,7 @@ function App() {
 
       {/* SCROLL PROGRESS BAR */}
       <div
-        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-violet-600 via-emerald-500 via-cyan-400 to-violet-600 z-[100] transition-all duration-100 ease-out shadow-lg shadow-violet-500/50"
+        className="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-violet-600 via-emerald-500 via-cyan-400 to-violet-600 z-[100] transition-all duration-100 ease-out"
         style={{ width: `${scrollProgress}%` }}
       ></div>
 
@@ -235,8 +235,8 @@ function App() {
                   onClick={() => scrollToSection(item)}
                   className={`px-5 py-2 rounded-full capitalize transition-all font-medium text-sm ${
                     activeSection === item
-                      ? "bg-gradient-to-r from-violet-100 to-emerald-100 text-transparent bg-clip-text font-bold shadow-md transform scale-105"
-                      : "text-gray-600 hover:bg-gradient-to-r hover:from-violet-100 hover:to-cyan-100 hover:text-transparent hover:bg-clip-text"
+                      ? "bg-white text-violet-700 shadow-md transform scale-105 font-bold"
+                      : "text-gray-600 hover:text-violet-600"
                   }`}
                 >
                   {item}
@@ -290,9 +290,9 @@ function App() {
           </div>
 
           <div className="relative z-10 w-full max-w-5xl mx-auto text-center md:text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-violet-50 to-emerald-50 border border-violet-200 text-transparent bg-clip-text font-bold tracking-wide uppercase mb-6 animate-fade-in-up">
-              <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-violet-600 to-emerald-500 animate-pulse shadow-lg"></span>
-              <span className="bg-gradient-to-r from-violet-600 to-emerald-600">Open to Work</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border-2 border-violet-200 text-violet-700 text-xs font-bold tracking-wide uppercase mb-8 animate-fade-in-up shadow-sm">
+              <span className="w-2.5 h-2.5 rounded-full bg-violet-600 animate-pulse"></span>
+              Open to Work
             </div>
 
             <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight animate-slideInUp">
