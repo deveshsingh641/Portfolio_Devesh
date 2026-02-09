@@ -409,7 +409,7 @@ function App() {
                   <span className="bg-gradient-to-r from-violet-700 to-emerald-600 bg-clip-text text-transparent">Education Journey</span>
                 </h3>
 
-                <div className="space-y-4 relative pl-4 border-l-2 border-transparent bg-gradient-to-b from-violet-200 to-emerald-200 bg-clip-border">
+                <div className="space-y-4 relative pl-4 border-l-2 border-gradient-to-b from-violet-400/50 to-emerald-400/50">
                   {education.map((edu, index) => (
                     <Tilt
                       key={index}
@@ -417,26 +417,26 @@ function App() {
                       scale={1.03}
                       transitionSpeed={200}
                     >
-                      <div className="relative group p-6 bg-gradient-to-br from-white to-indigo-50/40 rounded-xl border border-gray-100 shadow-md hover:shadow-xl hover:border-indigo-200 transition-all cursor-default mb-4 hover:-translate-y-1">
-                        <div className="absolute top-7 -left-[25px] w-5 h-5 bg-gradient-to-br from-indigo-500 to-cyan-500 border-4 border-white rounded-full shadow-lg group-hover:scale-125 transition-transform"></div>
+                      <div className="relative group p-6 bg-gradient-to-br from-slate-800 via-violet-900/40 to-slate-900 rounded-xl border border-violet-500/30 shadow-md hover:shadow-xl hover:border-emerald-400/50 transition-all cursor-default mb-4 hover:-translate-y-1">
+                        <div className="absolute top-7 -left-[25px] w-5 h-5 bg-gradient-to-br from-violet-500 via-emerald-500 to-cyan-400 border-4 border-slate-950 rounded-full shadow-lg shadow-violet-400/50 group-hover:scale-125 transition-transform"></div>
                         <div className="flex justify-between items-start flex-wrap gap-2">
                           <div>
-                            <h4 className="font-bold text-gray-900 text-lg group-hover:text-violet-600 transition-colors">
+                            <h4 className="font-bold text-white text-lg group-hover:text-emerald-400 transition-colors">
                               {edu.degree}
                             </h4>
-                            <p className="text-gray-600 font-medium">
+                            <p className="text-gray-300 font-medium">
                               {edu.school}
                             </p>
                           </div>
                           <div className="text-right">
-                            <span className="inline-block px-3 py-1 bg-gradient-to-r from-indigo-50 to-cyan-50 text-gray-600 text-xs font-bold rounded-full border border-indigo-100 group-hover:border-indigo-300 transition-all">
+                            <span className="inline-block px-3 py-1 bg-gradient-to-r from-violet-500/30 to-emerald-500/30 text-gray-200 text-xs font-bold rounded-full border border-violet-400/50 group-hover:border-emerald-400/50 transition-all shadow-sm">
                               {edu.year}
                             </span>
                           </div>
                         </div>
                         <div className="mt-4 flex items-center gap-2">
-                          <Award size={16} className="text-green-600" />
-                          <span className="text-sm text-green-700 font-bold bg-green-50/80 px-3 py-1 rounded-md border border-green-200">
+                          <Award size={16} className="text-emerald-400" />
+                          <span className="text-sm text-emerald-300 font-bold bg-emerald-500/20 px-3 py-1 rounded-md border border-emerald-400/50">
                             {edu.score}
                           </span>
                         </div>
@@ -754,9 +754,9 @@ function App() {
               glareMaxOpacity={0.05}
               disabled={isMobile}
             >
-              <div className="bg-gradient-to-br from-white via-violet-50/50 to-emerald-50/30 rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-100/50">
+              <div className="bg-gradient-to-br from-slate-800 via-violet-900/40 to-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl border border-violet-500/30">
                 <div className="text-center mb-10">
-                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white via-violet-300 to-emerald-300 bg-clip-text text-transparent">
+                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-300 via-emerald-300 to-cyan-300 bg-clip-text text-transparent">
                     Let's Work Together
                   </h2>
                   <p className="text-gray-300 mt-3 text-lg">
@@ -769,28 +769,28 @@ function App() {
                     <input
                       type="text"
                       placeholder="Your Name"
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent focus:bg-violet-50/30 outline-none transition-all shadow-sm hover:border-gray-300"
+                      className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400"
                     />
                     <input
                       type="email"
                       placeholder="Your Email"
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent focus:bg-violet-50/30 outline-none transition-all shadow-sm hover:border-gray-300"
+                      className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400"
                     />
                   </div>
                   <textarea
                     rows={4}
                     placeholder="Tell me about your project..."
-                    className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent focus:bg-violet-50/30 outline-none transition-all resize-none shadow-sm hover:border-gray-300"
+                    className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all resize-none shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400"
                   ></textarea>
                   <button className="w-full bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg hover:shadow-violet-500/50">
                     Send Message
                   </button>
                 </form>
 
-                <div className="mt-12 flex flex-col md:flex-row justify-center gap-6 pt-8 border-t border-gray-200">
+                <div className="mt-12 flex flex-col md:flex-row justify-center gap-6 pt-8 border-t border-violet-500/30">
                   <a
                     href="mailto:deveshsingh20666@gmail.com"
-                    className="flex items-center justify-center md:justify-start gap-2 text-gray-600 hover:text-violet-600 transition-all hover:scale-105 font-semibold group"
+                    className="flex items-center justify-center md:justify-start gap-2 text-gray-300 hover:text-emerald-400 transition-all hover:scale-105 font-semibold group"
                   >
                     <Mail size={18} className="group-hover:animate-pulse" /> deveshsingh20666@gmail.com
                   </a>
@@ -798,7 +798,7 @@ function App() {
                     href="https://linkedin.com/in/devesh-singh-0b234928b"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center md:justify-start gap-2 text-gray-600 hover:text-violet-600 transition-all hover:scale-105 font-semibold group"
+                    className="flex items-center justify-center md:justify-start gap-2 text-gray-300 hover:text-emerald-400 transition-all hover:scale-105 font-semibold group"
                   >
                     <Linkedin size={18} className="group-hover:animate-pulse" /> LinkedIn
                   </a>
