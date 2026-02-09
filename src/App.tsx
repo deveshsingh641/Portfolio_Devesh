@@ -394,7 +394,7 @@ function App() {
                   </p>
                   <p>
                     When I'm not debugging, I'm refining my{" "}
-                    <span className="text-gray-900 font-semibold">
+                    <span className="text-emerald-300 font-semibold">
                       DSA skills
                     </span>{" "}
                     (solving problems on LeetCode) or exploring Cloud
@@ -547,18 +547,18 @@ function App() {
                   scale={1.03}
                   className="h-full"
                 >
-                  <div className="glass p-8 rounded-2xl h-full border border-white/60 shadow-xl hover:shadow-2xl backdrop-blur-md transition-all duration-300 group hover:-translate-y-2 bg-gradient-to-br from-white via-violet-50/20 to-emerald-50/20">
+                  <div className="glass p-8 rounded-2xl h-full border border-violet-400/40 shadow-xl hover:shadow-2xl hover:shadow-violet-500/30 backdrop-blur-md transition-all duration-300 group hover:-translate-y-2 bg-gradient-to-br from-slate-800 via-violet-900/40 to-slate-800">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${category.gradient} p-2.5 mb-4 group-hover:scale-110 transition-transform duration-300`}>
                       <category.icon size={24} className="text-white" />
                     </div>
-                    <h3 className={`text-xl font-bold mb-6 ${category.color}`}>
+                    <h3 className="text-xl font-bold mb-6 text-white">
                       {category.title}
                     </h3>
                     <div className="flex flex-wrap gap-3">
                       {category.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className="px-4 py-2 bg-white/80 border border-white/50 rounded-lg text-sm font-semibold text-gray-700 shadow-sm hover:shadow-md hover:scale-105 transition-all cursor-default hover:bg-white"
+                          className="px-4 py-2 bg-gradient-to-r from-violet-500/20 to-emerald-500/20 border border-emerald-400/60 rounded-lg text-sm font-semibold text-emerald-100 shadow-sm hover:shadow-md hover:shadow-emerald-500/30 hover:scale-105 transition-all cursor-default hover:from-emerald-500/30 hover:to-emerald-500/40"
                         >
                           {skill.name}
                         </span>
@@ -593,21 +593,21 @@ function App() {
                     glareEnable={true}
                     glareMaxOpacity={0.1}
                   >
-                    <div className="glass p-6 rounded-2xl shadow-lg border border-white/60 group h-full backdrop-blur-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-white via-violet-50/30 to-emerald-50/30">
+                    <div className="glass p-6 rounded-2xl shadow-lg border border-emerald-400/40 group h-full backdrop-blur-md hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-slate-800 via-violet-900/40 to-slate-800">
                       <div className="flex items-start gap-4">
                         <div className="w-14 h-14 bg-gradient-to-br from-violet-500 via-emerald-500 to-cyan-400 rounded-xl flex items-center justify-center text-white shadow-lg shadow-violet-400/50 shrink-0 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300">
                           <IconComponent size={28} />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 group-hover:text-violet-600 transition-colors">
+                          <h3 className="font-bold text-white text-lg leading-tight mb-1 group-hover:text-emerald-300 transition-colors">
                             {cert.name}
                           </h3>
                           <div className="flex justify-between items-center mb-2">
-                            <p className="text-sm font-semibold text-violet-600">
+                            <p className="text-sm font-semibold text-emerald-300">
                               {cert.source}
                             </p>
                             {cert.year && (
-                              <span className="text-xs text-gray-500 flex items-center gap-1">
+                              <span className="text-xs text-cyan-300 flex items-center gap-1">
                                 <Calendar size={12} /> {cert.year}
                               </span>
                             )}
@@ -618,7 +618,7 @@ function App() {
                               {cert.badges.map((badge, badgeIndex) => (
                                 <span
                                   key={badgeIndex}
-                                  className="px-2 py-1 bg-gradient-to-r from-violet-50 via-emerald-50 to-cyan-50 border border-violet-200 text-gray-700 text-[11px] uppercase tracking-wider font-bold rounded-md shadow-sm hover:shadow-md transition-all"
+                                  className="px-2 py-1 bg-gradient-to-r from-violet-500/20 to-emerald-500/20 border border-violet-400/60 text-violet-200 text-[11px] uppercase tracking-wider font-bold rounded-md shadow-sm hover:shadow-md hover:shadow-violet-500/30 transition-all hover:from-violet-500/40 hover:to-emerald-500/30"
                                 >
                                   {badge}
                                 </span>
@@ -657,7 +657,7 @@ function App() {
                   className="h-full"
                   disabled={isMobile}
                 >
-                  <div className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-xl hover:shadow-2xl h-full flex flex-col transform-style-3d transition-all duration-300 hover:-translate-y-3 hover:border-emerald-200">
+                  <div className="group relative bg-gradient-to-br from-slate-800 via-violet-900/40 to-slate-800 rounded-3xl overflow-hidden border border-emerald-400/40 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/30 h-full flex flex-col transform-style-3d transition-all duration-300 hover:-translate-y-3 hover:border-emerald-300/60">
                     <div className="h-64 overflow-hidden relative">
                       <div
                         className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10"
@@ -665,7 +665,7 @@ function App() {
                       ></div>
 
                       {project.title === "Blinkit Clone" && (
-                        <div className="absolute top-4 left-4 z-30 bg-white/95 text-xs md:text-sm font-bold px-3 py-1 rounded-md shadow-lg backdrop-blur-sm">
+                        <div className="absolute top-4 left-4 z-30 bg-violet-500/90 text-xs md:text-sm font-bold px-3 py-1 rounded-md shadow-lg backdrop-blur-sm text-white border border-violet-300/60">
                           Featured Project
                         </div>
                       )}
@@ -692,14 +692,14 @@ function App() {
                       </div>
                     </div>
                     <div className="p-8 flex-1 flex flex-col">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-3 flex justify-between items-center group-hover:text-violet-600 transition-colors">
+                      <h3 className="text-2xl font-bold text-white mb-3 flex justify-between items-center group-hover:text-emerald-300 transition-colors">
                         {project.title}
                         <div
                           className="flex gap-3"
                           style={{ transform: "translateZ(50px)" }}
                         >
                           <div
-                            className="text-gray-400 hover:text-gray-900 hover:scale-125 transition-all duration-300 z-50 cursor-pointer"
+                            className="text-cyan-400 hover:text-cyan-300 hover:scale-125 transition-all duration-300 z-50 cursor-pointer"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
@@ -714,7 +714,7 @@ function App() {
                             <Github size={24} />
                           </div>
                           <div
-                            className="text-gray-400 hover:text-blue-600 hover:scale-125 transition-all duration-300 z-50 cursor-pointer"
+                            className="text-emerald-400 hover:text-emerald-300 hover:scale-125 transition-all duration-300 z-50 cursor-pointer"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
@@ -730,7 +730,7 @@ function App() {
                           </div>
                         </div>
                       </h3>
-                      <p className="text-gray-600 leading-relaxed flex-grow">
+                      <p className="text-gray-300 leading-relaxed flex-grow">
                         {project.description}
                       </p>
                     </div>
