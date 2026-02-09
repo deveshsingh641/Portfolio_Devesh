@@ -603,7 +603,7 @@ function App() {
                     glareEnable={true}
                     glareMaxOpacity={0.1}
                   >
-                    <div className="glass p-7 rounded-2xl shadow-lg border border-gradient-to-r from-cyan-400 to-emerald-400 border-opacity-60 group h-full backdrop-blur-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-slate-800/90 via-slate-800/70 to-violet-900/40">
+                    <div className="glass p-7 rounded-2xl shadow-lg border border-cyan-400/60 group h-full backdrop-blur-lg hover:shadow-2xl hover:shadow-cyan-500/60 transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-slate-800 via-slate-800/80 to-violet-900/50">
                       <div className="flex items-start gap-4">
                         <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 via-emerald-500 to-violet-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-cyan-400/70 shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                           <IconComponent size={32} />
@@ -613,22 +613,22 @@ function App() {
                             {cert.name}
                           </h3>
                           <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-                            <p className="text-sm font-bold text-emerald-300 bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-400/50">
+                            <p className="text-sm font-bold text-emerald-300 bg-emerald-600/40 px-3 py-1.5 rounded-full border border-emerald-400/70">
                               {cert.source}
                             </p>
                             {cert.year && (
-                              <span className="text-xs text-cyan-300 font-semibold bg-cyan-500/20 px-3 py-1 rounded-full border border-cyan-400/50 flex items-center gap-1">
+                              <span className="text-xs text-cyan-300 font-semibold bg-cyan-600/40 px-3 py-1.5 rounded-full border border-cyan-400/70 flex items-center gap-1">
                                 <Calendar size={12} /> {cert.year}
                               </span>
                             )}
                           </div>
 
                           {cert.badges && (
-                            <div className="mt-4 flex flex-wrap gap-2">
+                            <div className="mt-4 flex flex-wrap gap-3">
                               {cert.badges.map((badge, badgeIndex) => (
                                 <span
                                   key={badgeIndex}
-                                  className="px-3 py-2 bg-gradient-to-r from-violet-600/50 to-cyan-600/50 border border-violet-300/80 text-white text-[12px] uppercase tracking-wider font-bold rounded-lg shadow-md hover:shadow-lg hover:shadow-violet-500/60 transition-all hover:from-violet-600/70 hover:to-cyan-600/70 hover:border-violet-200 hover:scale-105"
+                                  className="px-3 py-2 bg-gradient-to-r from-violet-600/60 to-cyan-600/60 border-2 border-violet-400/80 text-white text-[12px] uppercase tracking-wider font-bold rounded-lg shadow-md hover:shadow-lg hover:shadow-violet-500/70 transition-all hover:from-violet-600/80 hover:to-cyan-600/80 hover:border-violet-300 hover:scale-105"
                                 >
                                   {badge}
                                 </span>
