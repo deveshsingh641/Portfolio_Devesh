@@ -161,7 +161,7 @@ function App() {
         "A web-based Lecture Feedback System that lets students submit anonymous feedback and ratings for lectures, while instructors get aggregated analytics and actionable insights. Features include anonymous submissions, sentiment summary, CSV export, and role-based access control.",
       tech: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
       github: "https://github.com/deveshsingh641/lecture_feedback_system",
-      live: "#",
+      live: "https://lecture-feedback-system.vercel.app/",
       image: "/lecture-feedback.svg",
     },
     {
