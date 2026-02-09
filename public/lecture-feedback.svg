@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0" stop-color="#fff6a8" />
+      <stop offset="1" stop-color="#ffd6e0" />
+    </linearGradient>
+    <linearGradient id="g2" x1="0" x2="1">
+      <stop offset="0" stop-color="#c7f0ff" />
+      <stop offset="1" stop-color="#d9c9ff" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="700" rx="24" fill="#fff" />
+
+  <!-- Laptop -->
+  <rect x="120" y="160" width="960" height="360" rx="18" fill="#f5f7fb" stroke="#e2e8f0" stroke-width="2" />
+  <rect x="160" y="200" width="880" height="260" rx="12" fill="url(#g1)" />
+
+  <!-- Screen title -->
+  <text x="240" y="260" font-family="Outfit, sans-serif" font-weight="700" font-size="48" fill="#0f172a">Feedback</text>
+
+  <!-- Feedback cards -->
+  <g transform="translate(240,300)">
+    <rect width="820" height="140" rx="12" fill="#ffffff" stroke="#e6eefc" stroke-width="2" />
+    <circle cx="60" cy="70" r="28" fill="#ffd166" />
+    <circle cx="180" cy="70" r="28" fill="#06b6d4" />
+    <circle cx="300" cy="70" r="28" fill="#ef476f" />
+
+    <text x="420" y="52" font-family="Plus Jakarta Sans, sans-serif" font-size="20" fill="#0f172a">Anonymous ratings & comments</text>
+    <text x="420" y="92" font-family="Plus Jakarta Sans, sans-serif" font-size="16" fill="#475569">Sentiment summary · CSV export · Instructor analytics</text>
+  </g>
+
+  <!-- Speech bubble -->
+  <path d="M360 120 C 400 90, 520 90, 560 120 C 600 150, 600 210, 560 240 L 520 240 L 480 280 L 480 240 L 360 240 Z" fill="url(#g2)" opacity="0.95"/>
+  <text x="380" y="160" font-family="Plus Jakarta Sans, sans-serif" font-size="18" fill="#05264c">How was today's lecture?</text>
+
+  <!-- Footer laptop base -->
+  <rect x="80" y="540" width="1040" height="28" rx="6" fill="#0f172a" opacity="0.05" />
+
+  <!-- Decorative icons on right -->
+  <g transform="translate(880,120)">
+    <rect x="0" y="0" width="140" height="140" rx="16" fill="#fff" stroke="#f0f6ff"/>
+    <text x="70" y="85" font-size="72" text-anchor="middle" font-family="Outfit, sans-serif">😊</text>
+  </g>
+  <g transform="translate(720,60)">
+    <rect x="0" y="0" width="120" height="120" rx="14" fill="#fff" stroke="#fff4f0"/>
+    <text x="60" y="74" font-size="56" text-anchor="middle" font-family="Outfit, sans-serif">😐</text>
+  </g>
+  <g transform="translate(720,200)">
+    <rect x="0" y="0" width="120" height="120" rx="14" fill="#fff" stroke="#f7f0ff"/>
+    <text x="60" y="74" font-size="56" text-anchor="middle" font-family="Outfit, sans-serif">😞</text>
+  </g>
+
+</svg>

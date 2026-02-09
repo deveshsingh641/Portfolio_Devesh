@@ -156,13 +156,13 @@ function App() {
 
   const projects = [
     {
-      title: "Blinkit Clone",
+      title: "Lecture Feedback System",
       description:
-        "A full-stack clone of Blinkit providing seamless user experience. Implemented product listings, cart management, and responsive UI.",
-      tech: ["JavaScript", "Node.js", "HTML", "CSS"],
-      github: "https://github.com/deveshsingh641/blinkit_clone",
+        "A web-based Lecture Feedback System that lets students submit anonymous feedback and ratings for lectures, while instructors get aggregated analytics and actionable insights. Features include anonymous submissions, sentiment summary, CSV export, and role-based access control.",
+      tech: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+      github: "https://github.com/deveshsingh641/lecture_feedback_system",
       live: "#",
-      image: "/image.png",
+      image: "/lecture-feedback.svg",
     },
     {
       title: "Online Fraud Detection (ML)",
