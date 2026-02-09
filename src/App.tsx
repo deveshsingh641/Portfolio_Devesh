@@ -446,7 +446,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="order-1 md:order-2 flex justify-center md:justify-start w-full">
+              <div className="order-1 md:order-2 w-full flex justify-center md:justify-start">
                 <Tilt
                   tiltMaxAngleX={10}
                   tiltMaxAngleY={10}
@@ -455,26 +455,24 @@ function App() {
                   scale={1.02}
                   disabled={isMobile}
                 >
-                  <div className="relative group cursor-pointer w-full max-w-xs sm:max-w-sm md:max-w-md">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                    <div className="relative">
+                  <div className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-gradient-to-r from-blue-600 to-purple-600 p-1">
+                    <div className="rounded-xl overflow-hidden">
                       <img
                         src="/profile.jpg"
                         alt="Profile"
-                        className="rounded-2xl shadow-2xl w-full h-auto object-cover border-2 border-white"
+                        className="w-full h-auto block object-cover"
                         loading="lazy"
                         decoding="async"
-                        style={{ aspectRatio: "3/4" }}
                       />
-                      <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-lg border border-gray-100 flex items-center gap-2 animate-bounce-slow">
-                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                        <span className="text-xs font-bold text-gray-800">
-                          Open to Work
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </Tilt>
+                <div className="absolute bottom-8 right-8 md:relative md:bottom-auto md:right-auto md:mt-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-lg border border-gray-100 flex items-center gap-2 animate-bounce-slow">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                  <span className="text-xs font-bold text-gray-800">
+                    Open to Work
+                  </span>
+                </div>
               </div>
             </div>
           </div>
