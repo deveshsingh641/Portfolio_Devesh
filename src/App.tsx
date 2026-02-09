@@ -195,7 +195,7 @@ function App() {
 
       {/* SCROLL PROGRESS BAR */}
       <div
-        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-indigo-600 via-cyan-500 to-blue-600 z-[100] transition-all duration-100 ease-out"
+        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-violet-600 via-emerald-500 via-cyan-400 to-violet-600 z-[100] transition-all duration-100 ease-out shadow-lg shadow-violet-500/50"
         style={{ width: `${scrollProgress}%` }}
       ></div>
 
@@ -213,10 +213,10 @@ function App() {
               className="text-2xl font-extrabold tracking-tight cursor-pointer flex items-center gap-2"
               onClick={() => scrollToSection("home")}
             >
-              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white text-lg shadow-lg">
+              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 via-emerald-500 to-cyan-400 flex items-center justify-center text-white text-lg shadow-lg shadow-violet-500/50">
                 D
               </span>
-              <span className="bg-gradient-to-r from-indigo-900 to-blue-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-violet-700 via-emerald-600 to-cyan-500 bg-clip-text text-transparent">
                 Devesh
               </span>
             </div>
@@ -235,8 +235,8 @@ function App() {
                   onClick={() => scrollToSection(item)}
                   className={`px-5 py-2 rounded-full capitalize transition-all font-medium text-sm ${
                     activeSection === item
-                      ? "bg-white text-indigo-600 shadow-md transform scale-105"
-                      : "text-gray-600 hover:text-indigo-600"
+                      ? "bg-gradient-to-r from-violet-100 to-emerald-100 text-transparent bg-clip-text font-bold shadow-md transform scale-105"
+                      : "text-gray-600 hover:bg-gradient-to-r hover:from-violet-100 hover:to-cyan-100 hover:text-transparent hover:bg-clip-text"
                   }`}
                 >
                   {item}
@@ -290,14 +290,14 @@ function App() {
           </div>
 
           <div className="relative z-10 w-full max-w-5xl mx-auto text-center md:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-bold tracking-wide uppercase mb-6 animate-fade-in-up">
-              <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
-              Open to Work
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-violet-50 to-emerald-50 border border-violet-200 text-transparent bg-clip-text font-bold tracking-wide uppercase mb-6 animate-fade-in-up">
+              <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-violet-600 to-emerald-500 animate-pulse shadow-lg"></span>
+              <span className="bg-gradient-to-r from-violet-600 to-emerald-600">Open to Work</span>
             </div>
 
             <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight animate-slideInUp">
               Crafting{" "}
-              <span className="bg-gradient-to-r from-indigo-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent drop-shadow-sm animate-gradient">
+              <span className="bg-gradient-to-r from-violet-600 via-emerald-500 via-cyan-400 to-violet-600 bg-clip-text text-transparent drop-shadow-sm animate-gradient">
                 Digital Reality
               </span>{" "}
               with Code.
@@ -306,7 +306,7 @@ function App() {
             {/* TYPEWRITER EFFECT */}
             <div className="text-xl md:text-2xl text-gray-600 font-medium mb-10 max-w-3xl mx-auto leading-relaxed h-20 md:h-auto">
               I am a{" "}
-              <span className="text-indigo-600 font-bold block md:inline mt-2 md:mt-0">
+              <span className="bg-gradient-to-r from-violet-600 to-emerald-500 bg-clip-text text-transparent font-bold block md:inline mt-2 md:mt-0">
                 <TypeAnimation
                   sequence={[
                     "Full Stack Developer",
@@ -328,9 +328,9 @@ function App() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slideInUp">
               <button
                 onClick={() => scrollToSection("projects")}
-                className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 via-cyan-500 to-blue-600 rounded-full text-white font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all overflow-hidden w-full sm:w-auto"
+                className="group relative px-8 py-4 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 rounded-full text-white font-semibold shadow-2xl shadow-violet-500/50 hover:shadow-3xl hover:shadow-emerald-500/50 hover:-translate-y-2 transition-all overflow-hidden w-full sm:w-auto"
               >
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-violet-700 via-emerald-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="relative flex items-center justify-center gap-2">
                   View Projects <ChevronRight size={18} />
                 </span>
@@ -353,7 +353,7 @@ function App() {
         {/* ABOUT SECTION */}
         <section
           id="about"
-          className="py-24 bg-gradient-to-b from-white via-white/80 to-blue-50/30 backdrop-blur-sm relative px-6 md:px-20"
+          className="py-24 bg-gradient-to-b from-white via-violet-50/20 to-emerald-50/20 backdrop-blur-sm relative px-6 md:px-20"
         >
           <div className="max-w-6xl mx-auto">
             <div className="flex flex-col md:flex-row gap-16 items-center">
@@ -361,7 +361,7 @@ function App() {
                 <h2 className="text-4xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   About Me{" "}
                   <Sparkles
-                    className="text-cyan-500 animate-pulse"
+                    className="text-transparent bg-gradient-to-r from-violet-500 to-emerald-500 bg-clip-text animate-pulse"
                     size={28}
                   />
                 </h2>
@@ -373,7 +373,7 @@ function App() {
                       thinks in data
                     </span>
                     . Currently pursuing my B.Tech in IT at{" "}
-                    <span className="text-indigo-600 font-semibold">
+                    <span className="bg-gradient-to-r from-violet-600 to-emerald-600 bg-clip-text text-transparent font-semibold">
                       ABES Engineering College
                     </span>
                     , I focus on building applications that are not just
@@ -381,11 +381,11 @@ function App() {
                   </p>
                   <p>
                     My passion lies at the intersection of{" "}
-                    <span className="text-cyan-600 font-semibold">
+                    <span className="bg-gradient-to-r from-emerald-600 to-cyan-500 bg-clip-text text-transparent font-semibold">
                       Full-Stack Engineering
                     </span>{" "}
                     and{" "}
-                    <span className="text-cyan-600 font-semibold">
+                    <span className="bg-gradient-to-r from-emerald-600 to-cyan-500 bg-clip-text text-transparent font-semibold">
                       Machine Learning
                     </span>
                     . Whether it's architecting a seamless e-commerce frontend
@@ -405,11 +405,11 @@ function App() {
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <GraduationCap className="text-indigo-600" size={24} />{" "}
-                  Education Journey
+                  <GraduationCap className="text-transparent bg-gradient-to-r from-violet-600 to-emerald-500 bg-clip-text" size={24} />{" "}
+                  <span className="bg-gradient-to-r from-violet-700 to-emerald-600 bg-clip-text text-transparent">Education Journey</span>
                 </h3>
 
-                <div className="space-y-4 relative pl-4 border-l-2 border-gradient-to-b from-blue-400 to-purple-400">
+                <div className="space-y-4 relative pl-4 border-l-2 border-transparent bg-gradient-to-b from-violet-200 to-emerald-200 bg-clip-border">
                   {education.map((edu, index) => (
                     <Tilt
                       key={index}
@@ -421,7 +421,7 @@ function App() {
                         <div className="absolute top-7 -left-[25px] w-5 h-5 bg-gradient-to-br from-indigo-500 to-cyan-500 border-4 border-white rounded-full shadow-lg group-hover:scale-125 transition-transform"></div>
                         <div className="flex justify-between items-start flex-wrap gap-2">
                           <div>
-                            <h4 className="font-bold text-gray-900 text-lg group-hover:text-indigo-600 transition-colors">
+                            <h4 className="font-bold text-gray-900 text-lg group-hover:text-violet-600 transition-colors">
                               {edu.degree}
                             </h4>
                             <p className="text-gray-600 font-medium">
@@ -458,7 +458,7 @@ function App() {
                   glareMaxOpacity={0.2}
                   disabled={isMobile}
                 >
-                  <div className="w-[220px] md:w-[380px] rounded-3xl overflow-hidden shadow-2xl border-2 border-white bg-gradient-to-br from-indigo-600 via-cyan-500 to-blue-600 p-1 hover:shadow-3xl transition-all duration-300">
+                  <div className="w-[220px] md:w-[380px] rounded-3xl overflow-hidden shadow-2xl border-2 border-white bg-gradient-to-br from-violet-600 via-emerald-500 to-cyan-400 p-1 hover:shadow-3xl hover:shadow-violet-400/50 transition-all duration-300">
                     <div className="rounded-3xl overflow-hidden bg-white">
                       <img
                         src="/profile.jpg"
@@ -494,7 +494,7 @@ function App() {
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
                 Technical Arsenal
               </h2>
-              <div className="w-24 h-1.5 bg-gradient-to-r from-indigo-600 to-cyan-500 mx-auto rounded-full"></div>
+              <div className="w-24 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50"></div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 will-change-auto stagger-animation">
@@ -503,17 +503,17 @@ function App() {
                   title: "Languages",
                   icon: Code,
                   skills: programmingSkills,
-                  color: "text-indigo-600",
-                  bg: "bg-indigo-50",
-                  gradient: "from-indigo-500 to-indigo-600",
+                  color: "text-violet-600",
+                  bg: "bg-violet-50",
+                  gradient: "from-violet-500 to-violet-600",
                 },
                 {
                   title: "Web Development",
                   icon: Globe,
                   skills: webDevSkills,
-                  color: "text-cyan-600",
-                  bg: "bg-cyan-50",
-                  gradient: "from-cyan-500 to-cyan-600",
+                  color: "text-emerald-600",
+                  bg: "bg-emerald-50",
+                  gradient: "from-emerald-500 to-emerald-600",
                 },
                 {
                   title: "Core Concepts",
@@ -522,9 +522,9 @@ function App() {
                     { name: "DSA", icon: Brain },
                     { name: "OOP", icon: Brain },
                   ],
-                  color: "text-blue-600",
-                  bg: "bg-blue-50",
-                  gradient: "from-blue-500 to-blue-600",
+                  color: "text-cyan-600",
+                  bg: "bg-cyan-50",
+                  gradient: "from-cyan-500 to-cyan-600",
                 },
                 {
                   title: "Tools",
@@ -533,9 +533,9 @@ function App() {
                     { name: "Git", icon: Layers },
                     { name: "Figma", icon: Layers },
                   ],
-                  color: "text-indigo-600",
-                  bg: "bg-indigo-50",
-                  gradient: "from-indigo-500 to-indigo-600",
+                  color: "text-violet-600",
+                  bg: "bg-violet-50",
+                  gradient: "from-violet-500 via-emerald-500 to-cyan-500",
                 },
               ].map((category, idx) => (
                 <Tilt
@@ -547,7 +547,7 @@ function App() {
                   scale={1.03}
                   className="h-full"
                 >
-                  <div className="glass p-8 rounded-2xl h-full border border-white/60 shadow-xl hover:shadow-2xl backdrop-blur-md transition-all duration-300 group hover:-translate-y-2">
+                  <div className="glass p-8 rounded-2xl h-full border border-white/60 shadow-xl hover:shadow-2xl backdrop-blur-md transition-all duration-300 group hover:-translate-y-2 bg-gradient-to-br from-white via-violet-50/20 to-emerald-50/20">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${category.gradient} p-2.5 mb-4 group-hover:scale-110 transition-transform duration-300`}>
                       <category.icon size={24} className="text-white" />
                     </div>
@@ -578,7 +578,7 @@ function App() {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Certifications & Badges
               </h2>
-              <div className="w-20 h-1.5 bg-gradient-to-r from-indigo-600 to-cyan-500 mx-auto rounded-full"></div>
+              <div className="w-20 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-emerald-400/50"></div>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 stagger-animation">
@@ -593,17 +593,17 @@ function App() {
                     glareEnable={true}
                     glareMaxOpacity={0.1}
                   >
-                    <div className="glass p-6 rounded-2xl shadow-lg border border-white/60 group h-full backdrop-blur-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="glass p-6 rounded-2xl shadow-lg border border-white/60 group h-full backdrop-blur-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-white via-violet-50/30 to-emerald-50/30">
                       <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 via-cyan-500 to-blue-500 rounded-xl flex items-center justify-center text-white shadow-lg shrink-0 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300">
+                        <div className="w-14 h-14 bg-gradient-to-br from-violet-500 via-emerald-500 to-cyan-400 rounded-xl flex items-center justify-center text-white shadow-lg shadow-violet-400/50 shrink-0 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300">
                           <IconComponent size={28} />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 group-hover:text-indigo-600 transition-colors">
+                          <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 group-hover:text-violet-600 transition-colors">
                             {cert.name}
                           </h3>
                           <div className="flex justify-between items-center mb-2">
-                            <p className="text-sm font-semibold text-indigo-600">
+                            <p className="text-sm font-semibold text-violet-600">
                               {cert.source}
                             </p>
                             {cert.year && (
@@ -618,7 +618,7 @@ function App() {
                               {cert.badges.map((badge, badgeIndex) => (
                                 <span
                                   key={badgeIndex}
-                                  className="px-2 py-1 bg-gradient-to-r from-indigo-50 to-cyan-50 border border-indigo-100 text-gray-700 text-[11px] uppercase tracking-wider font-bold rounded-md shadow-sm hover:shadow-md transition-all"
+                                  className="px-2 py-1 bg-gradient-to-r from-violet-50 via-emerald-50 to-cyan-50 border border-violet-200 text-gray-700 text-[11px] uppercase tracking-wider font-bold rounded-md shadow-sm hover:shadow-md transition-all"
                                 >
                                   {badge}
                                 </span>
@@ -636,7 +636,7 @@ function App() {
         </section>
 
         {/* PROJECTS SECTION */}
-        <section id="projects" className="py-24 bg-gradient-to-br from-white via-indigo-50/30 to-white">
+        <section id="projects" className="py-24 bg-gradient-to-br from-white via-emerald-50/20 to-violet-50/20">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -657,7 +657,7 @@ function App() {
                   className="h-full"
                   disabled={isMobile}
                 >
-                  <div className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-xl hover:shadow-2xl h-full flex flex-col transform-style-3d transition-all duration-300 hover:-translate-y-3 hover:border-indigo-200">
+                  <div className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-xl hover:shadow-2xl h-full flex flex-col transform-style-3d transition-all duration-300 hover:-translate-y-3 hover:border-emerald-200">
                     <div className="h-64 overflow-hidden relative">
                       <div
                         className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10"
@@ -692,7 +692,7 @@ function App() {
                       </div>
                     </div>
                     <div className="p-8 flex-1 flex flex-col">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-3 flex justify-between items-center group-hover:text-indigo-600 transition-colors">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3 flex justify-between items-center group-hover:text-violet-600 transition-colors">
                         {project.title}
                         <div
                           className="flex gap-3"
@@ -754,9 +754,9 @@ function App() {
               glareMaxOpacity={0.05}
               disabled={isMobile}
             >
-              <div className="bg-gradient-to-br from-white via-indigo-50/50 to-cyan-50/30 rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-100/50">
+              <div className="bg-gradient-to-br from-white via-violet-50/50 to-emerald-50/30 rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-100/50">
                 <div className="text-center mb-10">
-                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-indigo-600 to-cyan-600 bg-clip-text text-transparent">
+                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-violet-600 to-emerald-600 bg-clip-text text-transparent">
                     Let's Work Together
                   </h2>
                   <p className="text-gray-500 mt-3 text-lg">
@@ -769,20 +769,20 @@ function App() {
                     <input
                       type="text"
                       placeholder="Your Name"
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-indigo-50/30 outline-none transition-all shadow-sm hover:border-gray-300"
+                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent focus:bg-violet-50/30 outline-none transition-all shadow-sm hover:border-gray-300"
                     />
                     <input
                       type="email"
                       placeholder="Your Email"
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-indigo-50/30 outline-none transition-all shadow-sm hover:border-gray-300"
+                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent focus:bg-violet-50/30 outline-none transition-all shadow-sm hover:border-gray-300"
                     />
                   </div>
                   <textarea
                     rows={4}
                     placeholder="Tell me about your project..."
-                    className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-indigo-50/30 outline-none transition-all resize-none shadow-sm hover:border-gray-300"
+                    className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent focus:bg-violet-50/30 outline-none transition-all resize-none shadow-sm hover:border-gray-300"
                   ></textarea>
-                  <button className="w-full bg-gradient-to-r from-indigo-600 via-cyan-500 to-blue-600 text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg">
+                  <button className="w-full bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg hover:shadow-violet-500/50">
                     Send Message
                   </button>
                 </form>
@@ -790,7 +790,7 @@ function App() {
                 <div className="mt-12 flex flex-col md:flex-row justify-center gap-6 pt-8 border-t border-gray-200">
                   <a
                     href="mailto:deveshsingh20666@gmail.com"
-                    className="flex items-center justify-center md:justify-start gap-2 text-gray-600 hover:text-indigo-600 transition-all hover:scale-105 font-semibold group"
+                    className="flex items-center justify-center md:justify-start gap-2 text-gray-600 hover:text-violet-600 transition-all hover:scale-105 font-semibold group"
                   >
                     <Mail size={18} className="group-hover:animate-pulse" /> deveshsingh20666@gmail.com
                   </a>
@@ -798,7 +798,7 @@ function App() {
                     href="https://linkedin.com/in/devesh-singh-0b234928b"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center md:justify-start gap-2 text-gray-600 hover:text-indigo-600 transition-all hover:scale-105 font-semibold group"
+                    className="flex items-center justify-center md:justify-start gap-2 text-gray-600 hover:text-violet-600 transition-all hover:scale-105 font-semibold group"
                   >
                     <Linkedin size={18} className="group-hover:animate-pulse" /> LinkedIn
                   </a>
