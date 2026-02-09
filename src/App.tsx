@@ -156,13 +156,13 @@ function App() {
 
   const projects = [
     {
-      title: "Lecture Feedback System",
+      title: "Blinkit Clone",
       description:
-        "A web-based Lecture Feedback System that lets students submit anonymous feedback and ratings for lectures, while instructors get aggregated analytics and actionable insights. Features include anonymous submissions, sentiment summary, CSV export, and role-based access control.",
-      tech: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
-      github: "https://github.com/deveshsingh641/lecture_feedback_system",
-      live: "https://lecture-feedback-system.vercel.app/",
-      image: "/lecture-feedback.svg",
+        "A full-stack clone of Blinkit providing seamless user experience. Implemented product listings, cart management, and responsive UI with real-time updates.",
+      tech: ["JavaScript", "Node.js", "HTML", "CSS"],
+      github: "https://github.com/deveshsingh641/Blinkit-clone",
+      live: "#",
+      image: "/image.png",
     },
     {
       title: "Online Fraud Detection (ML)",
@@ -657,12 +657,12 @@ function App() {
                     <div className="h-64 overflow-hidden relative">
                       <div
                         className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10"
-                        style={{ opacity: project.title === "Lecture Feedback System" ? 0.25 : 0.6 }}
+                        style={{ opacity: 0.3 }}
                       ></div>
 
-                      {project.title === "Lecture Feedback System" && (
+                      {project.title === "Blinkit Clone" && (
                         <div className="absolute top-4 left-4 z-30 bg-white/90 text-xs md:text-sm font-bold px-3 py-1 rounded-md shadow">
-                          Lecture Feedback
+                          Featured Project
                         </div>
                       )}
 
