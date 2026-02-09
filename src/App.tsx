@@ -356,38 +356,8 @@ function App() {
           className="py-24 bg-white/50 backdrop-blur-sm relative"
         >
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-16 items-start">
-              <div className="static md:sticky md:top-24 z-0">
-                <Tilt
-                  tiltMaxAngleX={10}
-                  tiltMaxAngleY={10}
-                  perspective={1000}
-                  transitionSpeed={1000}
-                  scale={1.02}
-                  disabled={isMobile}
-                >
-                  <div className="relative group cursor-pointer">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                    <div className="relative">
-                      <img
-                        src="/profile.jpg"
-                        alt="Profile"
-                        className="relative rounded-2xl shadow-2xl w-full max-w-md mx-auto object-cover aspect-[3/4] border-2 border-white"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2 animate-bounce-slow">
-                        <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-                        <span className="text-sm font-bold text-gray-800">
-                          Open to Work
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Tilt>
-              </div>
-
-              <div>
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+              <div className="order-2 md:order-1">
                 <h2 className="text-4xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   About Me{" "}
                   <Sparkles
@@ -474,6 +444,36 @@ function App() {
                     </Tilt>
                   ))}
                 </div>
+              </div>
+
+              <div className="order-1 md:order-2 flex justify-center md:justify-start">
+                <Tilt
+                  tiltMaxAngleX={10}
+                  tiltMaxAngleY={10}
+                  perspective={1000}
+                  transitionSpeed={1000}
+                  scale={1.02}
+                  disabled={isMobile}
+                >
+                  <div className="relative group cursor-pointer w-full max-w-sm">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                    <div className="relative">
+                      <img
+                        src="/profile.jpg"
+                        alt="Profile"
+                        className="relative rounded-2xl shadow-2xl w-full object-cover aspect-[3/4] border-2 border-white"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2 animate-bounce-slow">
+                        <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                        <span className="text-sm font-bold text-gray-800">
+                          Open to Work
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Tilt>
               </div>
             </div>
           </div>
