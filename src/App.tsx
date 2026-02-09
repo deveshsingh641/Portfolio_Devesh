@@ -281,15 +281,15 @@ function App() {
         {/* HERO SECTION */}
         <section
           id="home"
-          className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
+          className="min-h-screen h-auto flex flex-col md:flex-row items-center justify-center relative overflow-hidden px-6 md:px-20 py-10 gap-10"
         >
-          <div className="absolute top-0 w-full h-full overflow-hidden z-0">
+          <div className="hidden md:block absolute top-0 w-full h-full overflow-hidden z-0">
             <div className="absolute top-0 left-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob motion-reduce:animate-none"></div>
             <div className="absolute top-0 right-1/4 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 motion-reduce:animate-none"></div>
             <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000 motion-reduce:animate-none"></div>
           </div>
 
-          <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
+          <div className="relative z-10 w-full max-w-5xl mx-auto text-center md:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold tracking-wide uppercase mb-6 animate-fade-in-up">
               <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
               Open to Work
@@ -353,11 +353,11 @@ function App() {
         {/* ABOUT SECTION */}
         <section
           id="about"
-          className="py-24 bg-white/50 backdrop-blur-sm relative"
+          className="py-24 bg-white/50 backdrop-blur-sm relative px-6 md:px-20"
         >
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
-              <div className="order-2 md:order-1">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-16 items-start">
+              <div className="w-full md:w-1/2">
                 <h2 className="text-4xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   About Me{" "}
                   <Sparkles
@@ -446,7 +446,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="order-1 md:order-2 w-full flex justify-center md:justify-start">
+              <div className="relative md:absolute md:right-20 md:top-32 w-full md:w-auto mt-10 md:mt-0">
                 <Tilt
                   tiltMaxAngleX={10}
                   tiltMaxAngleY={10}
@@ -455,7 +455,7 @@ function App() {
                   scale={1.02}
                   disabled={isMobile}
                 >
-                  <div className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-gradient-to-r from-blue-600 to-purple-600 p-1">
+                  <div className="w-[220px] md:w-[420px] rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-gradient-to-r from-blue-600 to-purple-600 p-1 mx-auto md:mx-0">
                     <div className="rounded-xl overflow-hidden">
                       <img
                         src="/profile.jpg"
@@ -466,13 +466,15 @@ function App() {
                       />
                     </div>
                   </div>
+                  <div className="mt-6 md:mt-8 flex justify-center md:block">
+                    <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg border border-gray-100 flex items-center gap-2 animate-bounce-slow w-fit">
+                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                      <span className="text-xs font-bold text-gray-800">
+                        Open to Work
+                      </span>
+                    </div>
+                  </div>
                 </Tilt>
-                <div className="absolute bottom-8 right-8 md:relative md:bottom-auto md:right-auto md:mt-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-lg border border-gray-100 flex items-center gap-2 animate-bounce-slow">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                  <span className="text-xs font-bold text-gray-800">
-                    Open to Work
-                  </span>
-                </div>
               </div>
             </div>
           </div>
