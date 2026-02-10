@@ -18,11 +18,14 @@ import {
   ChevronRight,
   Calendar,
   Download,
+  CheckCircle,
+  AlertCircle,
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import Tilt from "react-parallax-tilt";
 // import GitHubCalendar from "react-github-calendar"; // <--- Commented out to fix the crash
 import { TypeAnimation } from "react-type-animation";
+import emailjs from "emailjs-com";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,6 +33,22 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const isMobile = useMemo(() => window.innerWidth < 768, []);
+
+  // Contact form states
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [formStatus, setFormStatus] = useState({
+    status: "", // "idle", "sending", "success", "error"
+    message: "",
+  });
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -88,6 +107,60 @@ function App() {
       window.scrollTo({ top: offsetPosition, behavior: "smooth" });
     }
     setIsMenuOpen(false);
+  };
+
+  // Handle form input changes
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormStatus({ status: "sending", message: "Sending your message..." });
+
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          to_email: import.meta.env.VITE_RECEIVE_EMAIL,
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          title: "New Portfolio Inquiry",
+        }
+      );
+
+      setFormStatus({
+        status: "success",
+        message: "Message sent successfully! I'll get back to you soon.",
+      });
+      setFormData({ name: "", email: "", message: "" });
+
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setFormStatus({ status: "", message: "" });
+      }, 5000);
+    } catch (error) {
+      console.error("Email sending failed:", error);
+      setFormStatus({
+        status: "error",
+        message:
+          "Failed to send message. Please try again or contact me directly at deveshsingh20666@gmail.com",
+      });
+
+      // Clear error message after 7 seconds
+      setTimeout(() => {
+        setFormStatus({ status: "", message: "" });
+      }, 7000);
+    }
   };
 
   // --- DATA ---
@@ -156,13 +229,13 @@ function App() {
 
   const projects = [
     {
-      title: "Blinkit Clone",
+      title: "Lecture Feedback System",
       description:
-        "A full-stack clone of Blinkit providing seamless user experience. Implemented product listings, cart management, and responsive UI with real-time updates.",
-      tech: ["JavaScript", "Node.js", "HTML", "CSS"],
-      github: "https://github.com/deveshsingh641/Blinkit-clone",
-      live: "#",
-      image: "/image.png",
+        "A comprehensive full-stack platform for collecting and analyzing student feedback on lectures in real-time. Features include anonymous feedback submission, instructor dashboard with analytics, sentiment analysis, and actionable insights to improve teaching quality.",
+      tech: ["JavaScript", "Node.js", "Express.js", "MongoDB", "React"],
+      github: "https://github.com/deveshsingh641/lecture_feedback_system",
+      live: "https://lecture-feedback-system.demo",
+      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     },
     {
       title: "Online Fraud Detection (ML)",
@@ -774,26 +847,68 @@ function App() {
                   </p>
                 </div>
 
-                <form className="space-y-6">
+                {/* Status Messages */}
+                {formStatus.status && (
+                  <div
+                    className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
+                      formStatus.status === "success"
+                        ? "bg-emerald-500/20 border border-emerald-400/50 text-emerald-300"
+                        : formStatus.status === "error"
+                        ? "bg-red-500/20 border border-red-400/50 text-red-300"
+                        : "bg-blue-500/20 border border-blue-400/50 text-blue-300"
+                    }`}
+                  >
+                    {formStatus.status === "success" && (
+                      <CheckCircle size={20} className="flex-shrink-0" />
+                    )}
+                    {formStatus.status === "error" && (
+                      <AlertCircle size={20} className="flex-shrink-0" />
+                    )}
+                    <span className="text-sm font-medium">{formStatus.message}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleFormSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <input
                       type="text"
+                      name="name"
                       placeholder="Your Name"
-                      className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400"
+                      value={formData.name}
+                      onChange={handleFormChange}
+                      required
+                      disabled={formStatus.status === "sending"}
+                      className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400 disabled:opacity-60"
                     />
                     <input
                       type="email"
+                      name="email"
                       placeholder="Your Email"
-                      className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400"
+                      value={formData.email}
+                      onChange={handleFormChange}
+                      required
+                      disabled={formStatus.status === "sending"}
+                      className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400 disabled:opacity-60"
                     />
                   </div>
                   <textarea
+                    name="message"
                     rows={4}
                     placeholder="Tell me about your project..."
-                    className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all resize-none shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400"
+                    value={formData.message}
+                    onChange={handleFormChange}
+                    required
+                    disabled={formStatus.status === "sending"}
+                    className="w-full px-6 py-4 bg-slate-700/50 border border-violet-400/30 rounded-xl focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-slate-700/80 outline-none transition-all resize-none shadow-sm hover:border-emerald-400/30 text-white placeholder-gray-400 disabled:opacity-60"
                   ></textarea>
-                  <button className="w-full bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg hover:shadow-violet-500/50">
-                    Send Message
+                  <button
+                    type="submit"
+                    disabled={formStatus.status === "sending"}
+                    className="w-full bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg hover:shadow-violet-500/50 disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {formStatus.status === "sending"
+                      ? "Sending..."
+                      : "Send Message"}
                   </button>
                 </form>
 
