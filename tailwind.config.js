@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -10,7 +11,7 @@ export default {
         // This sets the default font-sans to Lato
         sans: ['Lato', 'sans-serif'],
         // This allows you to use font-poppins in your classNames
-        poppins: ['Poppins', 'sans-serif'], 
+        poppins: ['Poppins', 'sans-serif'],
       },
     },
   },
