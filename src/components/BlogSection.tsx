@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { createPortal } from "react-dom";
 import ReactMarkdown from "react-markdown";
 import {
   BookOpen,
@@ -183,12 +184,19 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
     load();
   }, []);
 
-  /* ---- Lock scroll when modal open ---- */
+  /* ---- Lock scroll when modal open + Escape to close ---- */
   useEffect(() => {
     if (!selected) return;
     const orig = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = orig; };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      document.body.style.overflow = orig;
+      window.removeEventListener("keydown", handleKey);
+    };
   }, [selected]);
 
   /* ---- Derived: categories ---- */
@@ -424,45 +432,66 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
         })}
       </div>
 
-      {/* ===== FULL ARTICLE MODAL ===== */}
-      {selected && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 md:p-8 overflow-y-auto">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setSelected(null)} />
+      {/* ===== FULL ARTICLE MODAL — rendered via portal to escape stacking contexts ===== */}
+      {selected && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm overflow-y-auto"
+          onClick={() => setSelected(null)}
+          style={{ isolation: "isolate" }}
+        >
+          {/* Fixed close button — always visible top-right */}
+          <button
+            type="button"
+            onClick={() => setSelected(null)}
+            className="fixed top-4 right-4 z-[10001] flex items-center gap-2 px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-semibold text-sm shadow-lg transition-colors"
+            aria-label="Close article"
+          >
+            <X size={16} /> Close
+          </button>
 
-          <div className="relative max-w-4xl w-full bg-gradient-to-b from-slate-900 to-slate-950 rounded-2xl shadow-2xl border border-slate-700/50 my-4 overflow-hidden">
-            {/* Header bar */}
-            <div className="sticky top-0 z-20 flex items-center justify-between px-6 md:px-8 py-4 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50">
-              <div className="flex items-center gap-3 min-w-0">
+          {/* Article container — scrolls naturally with the page */}
+          <div
+            className="relative max-w-3xl mx-auto my-8 px-4 sm:px-6 pb-12"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-gradient-to-b from-slate-900 to-slate-950 rounded-2xl shadow-2xl border border-slate-700/50 overflow-hidden">
+              {/* Article header */}
+              <div className="px-6 md:px-10 pt-8 pb-6 border-b border-slate-800/60">
                 {(() => {
                   const s = getCategoryStyle(selected.category);
                   return (
-                    <span className={`hidden sm:inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border shrink-0 ${s.bg} ${s.text} ${s.border}`}>
+                    <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border mb-4 ${s.bg} ${s.text} ${s.border}`}>
                       {selected.category}
                     </span>
                   );
                 })()}
-                <span className="text-sm font-semibold text-slate-200 truncate">{selected.title}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="hidden sm:inline-flex items-center gap-1 text-xs text-slate-400">
-                  <Clock3 size={12} /> {selected.readTime} min read
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setSelected(null)}
-                  className="p-1.5 rounded-lg hover:bg-slate-700/60 text-slate-400 hover:text-slate-200 transition-colors"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-            </div>
 
-            <div className="flex flex-col lg:flex-row">
-              {/* Table of Contents (sidebar on desktop) */}
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-100 mb-4 leading-tight">{selected.title}</h1>
+
+                <div className="flex items-center gap-3 flex-wrap text-sm text-slate-400 mb-4">
+                  <span className="inline-flex items-center gap-1"><Calendar size={13} /> {selected.date}</span>
+                  <span>•</span>
+                  <span className="inline-flex items-center gap-1"><Clock3 size={13} /> {selected.readTime} min read</span>
+                  <span>•</span>
+                  <span>{selected.wordCount.toLocaleString()} words</span>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {selected.tags.map((t) => (
+                    <span key={t} className="px-2.5 py-1 text-xs font-semibold rounded-md bg-violet-500/10 text-violet-200 border border-violet-400/30">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Table of Contents (inline, collapsible) */}
               {toc.length > 0 && (
-                <aside className="hidden lg:block w-56 shrink-0 p-6 border-r border-slate-800/60 sticky top-16 self-start max-h-[calc(100vh-8rem)] overflow-y-auto">
-                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-3">On this page</h4>
-                  <nav className="flex flex-col gap-1.5">
+                <details className="px-6 md:px-10 py-4 border-b border-slate-800/60 bg-slate-950/40">
+                  <summary className="text-[10px] font-bold uppercase tracking-widest text-slate-500 cursor-pointer select-none hover:text-slate-300 transition-colors">
+                    Table of Contents
+                  </summary>
+                  <nav className="flex flex-col gap-1.5 mt-3">
                     {toc.map((h) => (
                       <a
                         key={h.id}
@@ -471,48 +500,26 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
                           e.preventDefault();
                           document.getElementById(h.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
                         }}
-                        className={`text-xs text-slate-400 hover:text-cyan-300 transition-colors truncate ${
-                          h.level === 3 ? "pl-3" : h.level === 4 ? "pl-6" : ""
-                        }`}
+                        className={`text-xs text-slate-400 hover:text-cyan-300 transition-colors ${h.level === 3 ? "pl-4" : h.level === 4 ? "pl-8" : ""}`}
                       >
                         {h.text}
                       </a>
                     ))}
                   </nav>
-                </aside>
+                </details>
               )}
 
-              {/* Article content */}
-              <div className="flex-1 p-6 md:p-8">
-                {/* Meta */}
-                <div className="flex items-center gap-3 flex-wrap mb-2 text-sm text-slate-400">
-                  <span className="inline-flex items-center gap-1"><Calendar size={13} /> {selected.date}</span>
-                  <span>•</span>
-                  <span className="inline-flex items-center gap-1"><Clock3 size={13} /> {selected.readTime} min read</span>
-                  <span>•</span>
-                  <span>{selected.wordCount.toLocaleString()} words</span>
-                </div>
-
-                <h1 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4 leading-tight">{selected.title}</h1>
-
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {selected.tags.map((t) => (
-                    <span key={t} className="px-2.5 py-1 text-xs font-semibold rounded-md bg-violet-500/10 text-violet-200 border border-violet-400/30">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Rendered Markdown */}
-                <div className="prose prose-invert prose-lg max-w-none
+              {/* Rendered Markdown */}
+              <div className="px-6 md:px-10 py-8">
+                <div className="prose prose-invert prose-base sm:prose-lg max-w-none
                   prose-headings:font-bold prose-headings:text-slate-100
-                  prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-slate-800/60 prose-h2:pb-2
-                  prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
+                  prose-h2:text-xl sm:prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-slate-800/60 prose-h2:pb-2
+                  prose-h3:text-lg sm:prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
                   prose-p:text-slate-300 prose-p:leading-relaxed
                   prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline
                   prose-strong:text-slate-200
                   prose-code:text-cyan-300 prose-code:bg-slate-800/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-                  prose-pre:bg-slate-950/80 prose-pre:border prose-pre:border-slate-700/50 prose-pre:rounded-xl
+                  prose-pre:bg-slate-950/80 prose-pre:border prose-pre:border-slate-700/50 prose-pre:rounded-xl prose-pre:overflow-x-auto
                   prose-li:text-slate-300 prose-li:marker:text-cyan-500
                   prose-blockquote:border-cyan-500 prose-blockquote:text-slate-400
                 ">
@@ -539,7 +546,7 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
                   <button
                     type="button"
                     onClick={() => setSelected(null)}
-                    className="text-sm text-slate-400 hover:text-slate-200 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium transition-colors"
                   >
                     ← Back to articles
                   </button>
@@ -548,7 +555,8 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

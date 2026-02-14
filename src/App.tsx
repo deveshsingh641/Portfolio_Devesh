@@ -20,6 +20,7 @@ import {
   Moon,
   Twitter,
   Instagram,
+  Search,
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import Tilt from "react-parallax-tilt";
@@ -28,6 +29,12 @@ import { TypeAnimation } from "react-type-animation";
 import NeonBackground from "./components/NeonBackground";
 import BlogSection from "./components/BlogSection";
 import ProjectPreview from "./components/ProjectPreview";
+import CommandPalette from "./components/CommandPalette";
+import SkillsGraph from "./components/SkillsGraph";
+import Playground from "./components/Playground";
+import MissionControl from "./components/MissionControl";
+import BugReportButton from "./components/BugReportButton";
+import SupporterRewards from "./components/SupporterRewards";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,13 +42,7 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [heroParallax, setHeroParallax] = useState({ x: 0, y: 0 });
-  const [isLoading, setIsLoading] = useState(() => {
-    try {
-      return sessionStorage.getItem("portfolio_intro_seen") !== "true";
-    } catch {
-      return true;
-    }
-  });
+  const [isLoading, setIsLoading] = useState(true);
   const [greetingIndex, setGreetingIndex] = useState(0);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
@@ -49,6 +50,7 @@ function App() {
   const [cursorLabel, setCursorLabel] = useState("");
   const isMobile = useMemo(() => window.innerWidth < 768, []);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const greetings = useMemo(
     () => ["Hello", "Namaste", "Bonjour", "Hola", "Ciao"],
     []
@@ -83,11 +85,6 @@ function App() {
     if (!isLoading) return;
     const timer = window.setTimeout(() => {
       setIsLoading(false);
-      try {
-        sessionStorage.setItem("portfolio_intro_seen", "true");
-      } catch {
-        // no-op
-      }
     }, 2800);
     return () => window.clearTimeout(timer);
   }, [isLoading]);
@@ -99,6 +96,24 @@ function App() {
     }, 450);
     return () => window.clearInterval(interval);
   }, [greetings.length, isLoading]);
+
+  // Command Palette keyboard shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+K on Mac or Ctrl+K on Windows/Linux
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setCommandPaletteOpen((prev) => !prev);
+      }
+      // Escape to close
+      if (e.key === "Escape" && commandPaletteOpen) {
+        setCommandPaletteOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [commandPaletteOpen]);
 
   useEffect(() => {
     if (window.innerWidth < 768) return;
@@ -193,9 +208,13 @@ function App() {
             "home",
             "about",
             "skills",
+            "skills-graph",
             "blog",
+            "playground",
             "projects",
+            "now-tracker",
             "certifications",
+            "supporter-rewards",
             "contact",
           ];
           const scrollPosition = window.scrollY + 100;
@@ -599,7 +618,7 @@ function App() {
 
       {/* SCROLL PROGRESS BAR */}
       <div
-        className="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-violet-600 via-emerald-500 via-cyan-400 to-violet-600 z-[100] transition-all duration-100 ease-out"
+        className="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-violet-600 to-cyan-400 z-[100] transition-all duration-100 ease-out"
         style={{ width: `${scrollProgress}%` }}
       ></div>
 
@@ -633,6 +652,22 @@ function App() {
             </div>
 
             <div className="flex items-center gap-4">
+              <button
+                onClick={() => setCommandPaletteOpen(true)}
+                data-cursor-label="Search"
+                className={`hidden md:flex items-center gap-2 px-3 py-2 rounded-lg border transition-all ${
+                  theme === 'dark'
+                    ? (scrolled ? 'bg-slate-800/60 border-slate-600 hover:border-cyan-400/50' : 'bg-black/20 border-white/10 hover:border-cyan-400/50')
+                    : (scrolled ? 'bg-slate-50 border-slate-200 hover:border-violet-400/50' : 'bg-white/20 border-slate-300/30 hover:border-violet-400/50')
+                }`}
+                aria-label="Open command palette"
+              >
+                <Search size={16} className={theme === 'dark' ? 'text-slate-400' : 'text-slate-600'} />
+                <span className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                  ⌘K
+                </span>
+              </button>
+
               <button
                 onClick={toggleTheme}
                 data-cursor-label="Theme"
@@ -703,7 +738,7 @@ function App() {
         {isMenuOpen && (
           <div
             id="mobile-navigation"
-            className={`md:hidden backdrop-blur-xl border-t shadow-xl absolute w-full animate-fade-in-down ${theme === 'dark' ? 'bg-slate-950/95 border-cyan-400/20' : 'bg-white/95 border-slate-200'}`}
+            className={`md:hidden backdrop-blur-xl border-t shadow-xl absolute w-full animate-slideInDown ${theme === 'dark' ? 'bg-slate-950/95 border-cyan-400/20' : 'bg-white/95 border-slate-200'}`}
           >
             <div className="px-4 py-4 space-y-2">
               {[
@@ -743,7 +778,7 @@ function App() {
           </div>
 
           <div className="relative z-10 w-full max-w-5xl mx-auto text-center">
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-bold tracking-wide uppercase mb-8 animate-fade-in-up shadow-sm ${theme === 'dark' ? 'bg-slate-950/80 border-cyan-300/50 text-cyan-100' : 'bg-white/90 border-violet-300/50 text-violet-700'}`}>
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-bold tracking-wide uppercase mb-8 animate-fadeInUp shadow-sm ${theme === 'dark' ? 'bg-slate-950/80 border-cyan-300/50 text-cyan-100' : 'bg-white/90 border-violet-300/50 text-violet-700'}`}>
               <span className="w-2.5 h-2.5 rounded-full bg-violet-600 animate-pulse"></span>
               Open to Work
             </div>
@@ -755,7 +790,7 @@ function App() {
               }}
             >
               Crafting{" "}
-              <span className="bg-gradient-to-r from-violet-400 via-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent drop-shadow-sm animate-gradient">
+              <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-sm animate-gradient">
                 Digital Reality
               </span>{" "}
               with Code.
@@ -1143,6 +1178,13 @@ function App() {
           </div>
         </section>
 
+        {/* SKILLS GRAPH SECTION */}
+        <section id="skills-graph" data-reveal className={`reveal-section ${visibleSections.has('skills-graph') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/15 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-violet-50/15 to-slate-100/40'}`}>
+          <div className="max-w-6xl mx-auto px-4">
+            <SkillsGraph theme={theme!} />
+          </div>
+        </section>
+
         {/* BLOG SECTION */}
         <section id="blog" data-reveal className={`reveal-section ${visibleSections.has('blog') ? 'is-visible' : ''} py-24 transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/10 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-violet-50/10 to-slate-100/40'}`}>
           <div className="max-w-6xl mx-auto px-4">
@@ -1155,6 +1197,13 @@ function App() {
             </div>
 
             <BlogSection theme={theme!} />
+          </div>
+        </section>
+
+        {/* PLAYGROUND SECTION */}
+        <section id="playground" data-reveal className={`reveal-section ${visibleSections.has('playground') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-cyan-900/15 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-cyan-50/15 to-slate-100/40'}`}>
+          <div className="max-w-6xl mx-auto px-4">
+            <Playground theme={theme!} />
           </div>
         </section>
 
@@ -1348,6 +1397,20 @@ function App() {
                 );
               })}
             </div>
+          </div>
+        </section>
+
+        {/* NOW TRACKER SECTION */}
+        <section id="now-tracker" data-reveal className={`reveal-section ${visibleSections.has('now-tracker') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-emerald-900/15 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-emerald-50/15 to-slate-100/40'}`}>
+          <div className="max-w-6xl mx-auto px-4">
+            <MissionControl theme={theme!} />
+          </div>
+        </section>
+
+        {/* SUPPORTER REWARDS SECTION */}
+        <section id="supporter-rewards" data-reveal className={`reveal-section ${visibleSections.has('supporter-rewards') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-amber-900/10 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-amber-50/10 to-slate-100/40'}`}>
+          <div className="max-w-6xl mx-auto px-4">
+            <SupporterRewards theme={theme!} />
           </div>
         </section>
 
@@ -1639,6 +1702,18 @@ function App() {
           </div>
         </footer>
       </main>
+
+      {/* BUG REPORT BUTTON */}
+      <BugReportButton theme={theme!} />
+
+      {/* COMMAND PALETTE */}
+      <CommandPalette
+        theme={theme!}
+        setTheme={setTheme}
+        scrollToSection={scrollToSection}
+        isOpen={commandPaletteOpen}
+        onOpenChange={setCommandPaletteOpen}
+      />
     </div>
   );
 }
