@@ -10,9 +10,142 @@ html {
 
 body {
   font-family: 'Lato', sans-serif;
-  background: radial-gradient(circle at 20% 20%, #112244 0%, #070b1a 45%, #040611 100%);
   overflow-x: hidden;
   min-height: 100vh;
+  transition: background 0.3s ease;
+}
+
+.dark body,
+body {
+  background: radial-gradient(circle at 20% 20%, #112244 0%, #070b1a 45%, #040611 100%);
+}
+
+html:not(.dark) body {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+}
+
+/* ===== LIGHT MODE THEME OVERRIDES ===== */
+
+/* Main backgrounds */
+html:not(.dark) .bg-\[\#050816\] { background-color: #f8fafc !important; }
+html:not(.dark) .bg-\[\#0a0f24\] { background-color: #f1f5f9 !important; }
+html:not(.dark) .bg-\[\#040611\] { background-color: #f8fafc !important; }
+html:not(.dark) .bg-\[\#1e1e2e\] { background-color: #ffffff !important; }
+html:not(.dark) .bg-\[\#181825\] { background-color: #f1f5f9 !important; }
+
+/* Navbar & overlays */
+html:not(.dark) .bg-slate-950\/90 { background-color: rgba(255, 255, 255, 0.92) !important; }
+html:not(.dark) .bg-slate-950\/80 { background-color: rgba(241, 245, 249, 0.9) !important; }
+html:not(.dark) .bg-slate-950\/75 { background-color: rgba(255, 255, 255, 0.85) !important; }
+html:not(.dark) .bg-slate-950\/95 { background-color: rgba(255, 255, 255, 0.97) !important; }
+html:not(.dark) .bg-slate-900\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
+html:not(.dark) .bg-slate-900\/60 { background-color: rgba(241, 245, 249, 0.7) !important; }
+html:not(.dark) .bg-slate-900\/50 { background-color: rgba(241, 245, 249, 0.6) !important; }
+html:not(.dark) .bg-slate-900\/40 { background-color: rgba(241, 245, 249, 0.5) !important; }
+html:not(.dark) .bg-slate-800\/60 { background-color: rgba(226, 232, 240, 0.6) !important; }
+html:not(.dark) .bg-slate-800\/50 { background-color: rgba(226, 232, 240, 0.5) !important; }
+html:not(.dark) .bg-slate-800\/40 { background-color: rgba(226, 232, 240, 0.4) !important; }
+html:not(.dark) .bg-slate-800\/30 { background-color: rgba(226, 232, 240, 0.3) !important; }
+
+/* Text colors */
+html:not(.dark) .text-slate-100 { color: #1e293b !important; }
+html:not(.dark) .text-slate-200 { color: #334155 !important; }
+html:not(.dark) .text-slate-300 { color: #475569 !important; }
+html:not(.dark) .text-slate-400 { color: #64748b !important; }
+html:not(.dark) .text-slate-500 { color: #94a3b8 !important; }
+
+/* Accent text for readability on light bg */
+html:not(.dark) .text-cyan-100 { color: #155e75 !important; }
+html:not(.dark) .text-cyan-300 { color: #0891b2 !important; }
+html:not(.dark) .text-cyan-400 { color: #0e7490 !important; }
+html:not(.dark) .text-emerald-300 { color: #059669 !important; }
+html:not(.dark) .text-emerald-400 { color: #047857 !important; }
+html:not(.dark) .text-violet-300 { color: #7c3aed !important; }
+html:not(.dark) .text-violet-400 { color: #6d28d9 !important; }
+html:not(.dark) .text-orange-300 { color: #c2410c !important; }
+html:not(.dark) .text-sky-400 { color: #0284c7 !important; }
+html:not(.dark) .text-amber-400 { color: #d97706 !important; }
+html:not(.dark) .text-pink-400 { color: #db2777 !important; }
+
+/* Borders */
+html:not(.dark) .border-slate-700\/40,
+html:not(.dark) .border-slate-700\/50,
+html:not(.dark) .border-slate-700\/60,
+html:not(.dark) .border-slate-700\/30 { border-color: rgba(203, 213, 225, 0.6) !important; }
+html:not(.dark) .border-cyan-300\/30,
+html:not(.dark) .border-cyan-400\/20,
+html:not(.dark) .border-cyan-400\/30,
+html:not(.dark) .border-cyan-300\/50 { border-color: rgba(6, 182, 212, 0.3) !important; }
+html:not(.dark) .border-white\/10,
+html:not(.dark) .border-white\/20 { border-color: rgba(148, 163, 184, 0.3) !important; }
+html:not(.dark) .border-violet-300\/35 { border-color: rgba(139, 92, 246, 0.2) !important; }
+html:not(.dark) .border-emerald-500\/30,
+html:not(.dark) .border-emerald-400\/30,
+html:not(.dark) .border-emerald-500\/40 { border-color: rgba(16, 185, 129, 0.3) !important; }
+
+/* Section gradients become transparent */
+html:not(.dark) section.reveal-section { background: transparent !important; }
+
+/* Hero blobs - softer for light */
+html:not(.dark) .bg-purple-300 { background-color: rgba(196, 181, 253, 0.4) !important; }
+html:not(.dark) .bg-yellow-200 { background-color: rgba(253, 230, 138, 0.4) !important; }
+html:not(.dark) .bg-pink-300 { background-color: rgba(249, 168, 212, 0.4) !important; }
+
+/* Cards & shadows */
+html:not(.dark) .shadow-2xl { box-shadow: 0 4px 40px rgba(0, 0, 0, 0.08) !important; }
+html:not(.dark) .shadow-lg { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important; }
+html:not(.dark) .shadow-xl { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08) !important; }
+
+/* Section divider line */
+html:not(.dark) section::before {
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.12), rgba(16, 185, 129, 0.12), transparent) !important;
+}
+
+/* Custom cursor */
+html:not(.dark) .custom-cursor-ring {
+  border-color: rgba(109, 40, 217, 0.5);
+  box-shadow: 0 0 12px rgba(109, 40, 217, 0.2);
+  background: radial-gradient(circle, rgba(109, 40, 217, 0.1), transparent 60%);
+}
+html:not(.dark) .custom-cursor-label {
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(109, 40, 217, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Keep gradient icon containers white text */
+html:not(.dark) [class*="bg-gradient-to"] .text-white { color: white !important; }
+html:not(.dark) .bg-gradient-to-r.from-emerald-500 { color: white !important; }
+
+/* Scrollbar for light mode */
+html:not(.dark) ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+html:not(.dark) ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* GitHub icon - invert for visibility on light bg */
+html:not(.dark) img[src*="github"][src*="original"] { filter: invert(1); }
+
+/* Form inputs in light mode */
+html:not(.dark) input,
+html:not(.dark) textarea {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+  color: #94a3b8 !important;
+}
+html:not(.dark) input:focus,
+html:not(.dark) textarea:focus {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15) !important;
+}
+
+/* Footer in light mode */
+html:not(.dark) footer {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
 }
 
 :root {
@@ -389,6 +522,49 @@ section::before {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), rgba(16, 185, 129, 0.5), transparent);
   z-index: 1;
+}
+
+/* ===== INTRO SCREEN ANIMATIONS ===== */
+@keyframes intro-fade-out {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
+@keyframes intro-greeting-in {
+  0% { opacity: 0; transform: translateY(20px) scale(0.9); filter: blur(4px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes intro-name-reveal {
+  0% { opacity: 0; transform: translateY(10px); }
+  30% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.intro-screen {
+  animation: intro-fade-out 2.8s ease forwards;
+}
+
+.intro-greeting {
+  animation: intro-greeting-in 0.4s ease-out;
+}
+
+.intro-name-reveal {
+  animation: intro-name-reveal 1.5s ease-out;
+}
+
+/* ===== LIGHT MODE: NeonBackground override ===== */
+html:not(.dark) .neon-grid {
+  opacity: 0 !important;
+}
+html:not(.dark) .aurora-layer {
+  opacity: 0.15 !important;
+}
+
+/* ===== LIGHT MODE: Tag and badge overrides ===== */
+html:not(.dark) [class*="bg-violet-500/10"] {
+  background-color: rgba(139, 92, 246, 0.08) !important;
 }
 
 /* Respect reduced motion settings for better perf/accessibility */

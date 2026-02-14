@@ -6,15 +6,11 @@ import {
   ExternalLink,
   Menu,
   X,
-  Code,
   Globe,
   Server,
-  Layers,
-  Brain,
   FileText,
   Award,
   GraduationCap,
-  Sparkles,
   ChevronRight,
   Calendar,
   Download,
@@ -22,15 +18,16 @@ import {
   AlertCircle,
   Sun,
   Moon,
-  BookOpen,
-  Clock3,
-  ArrowRight,
+  Twitter,
+  Instagram,
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import Tilt from "react-parallax-tilt";
 // import GitHubCalendar from "react-github-calendar"; // <--- Commented out to fix the crash
 import { TypeAnimation } from "react-type-animation";
 import NeonBackground from "./components/NeonBackground";
+import BlogSection from "./components/BlogSection";
+import ProjectPreview from "./components/ProjectPreview";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,16 +47,8 @@ function App() {
   const [cursorVisible, setCursorVisible] = useState(false);
   const [cursorActive, setCursorActive] = useState(false);
   const [cursorLabel, setCursorLabel] = useState("");
-  const [selectedBlog, setSelectedBlog] = useState<null | {
-    title: string;
-    platform: string;
-    description: string;
-    date: string;
-    readTime: string;
-    tags: string[];
-    content: string[];
-  }>(null);
   const isMobile = useMemo(() => window.innerWidth < 768, []);
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const greetings = useMemo(
     () => ["Hello", "Namaste", "Bonjour", "Hola", "Ciao"],
     []
@@ -99,7 +88,7 @@ function App() {
       } catch {
         // no-op
       }
-    }, 1700);
+    }, 2800);
     return () => window.clearTimeout(timer);
   }, [isLoading]);
 
@@ -107,7 +96,7 @@ function App() {
     if (!isLoading) return;
     const interval = window.setInterval(() => {
       setGreetingIndex((prev) => (prev + 1) % greetings.length);
-    }, 380);
+    }, 450);
     return () => window.clearInterval(interval);
   }, [greetings.length, isLoading]);
 
@@ -160,26 +149,24 @@ function App() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
+            const id = entry.target.getAttribute('id');
+            if (id) {
+              setVisibleSections(prev => {
+                const next = new Set(prev);
+                next.add(id);
+                return next;
+              });
+            }
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.18, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.12, rootMargin: "0px 0px -20px 0px" }
     );
 
     revealItems.forEach((item) => observer.observe(item));
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    if (!selectedBlog) return;
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, [selectedBlog]);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -373,49 +360,63 @@ function App() {
   };
 
   // --- DATA ---
-  const programmingSkills = [
-    { name: "C++", icon: Code, level: 85 },
-    { name: "Python", icon: Code, level: 88 },
-    { name: "Java", icon: Code, level: 80 },
-    { name: "JavaScript", icon: Code, level: 86 },
-  ];
-
-  const webDevSkills = [
-    { name: "HTML", icon: Globe, level: 90 },
-    { name: "CSS", icon: Globe, level: 86 },
-    { name: "Node.js", icon: Server, level: 82 },
-    { name: "Express.js", icon: Server, level: 80 },
-  ];
-
-  const blogPosts = [
+  const techCategories = [
     {
-      title: "Engineering a Real-Time Lecture Feedback System: From Form Events to Actionable Analytics",
-      platform: "Technical Deep Dive",
-      description:
-        "This post walks through the full architecture of my Lecture Feedback System — React frontend, Express APIs, MongoDB schema strategy, validation and rate-limiting, and how I transformed raw student responses into meaningful instructor insights with sentiment and trend views.",
-      date: "Feb 2026",
-      readTime: "9 min read",
-      tags: ["React", "Express", "MongoDB", "System Design"],
-      content: [
-        "I designed the Lecture Feedback System with a strict separation between presentation, API, and analytics logic so each layer could evolve independently. On the frontend, React handles dynamic form states, section-based feedback input, and instructor dashboards with lightweight charting and trend summaries.",
-        "The backend uses Express with modular route/controller/service architecture. Validation was implemented at both request and schema layers to avoid malformed payloads. I also added basic rate-limiting and anti-spam checks to keep submissions clean and preserve trust in analytics.",
-        "MongoDB was modeled around lecture sessions, feedback documents, and derived aggregates. Instead of only storing raw responses, I introduced computed metrics (sentiment bucket, rating distributions, top concern tags) to support faster dashboard rendering and reduce repeated heavy queries.",
-        "The most important engineering decision was to optimize for actionable output, not just data collection. Instructors get trend direction, weak-topic flags, and comparative snapshots between sessions—helping convert noisy student comments into improvements they can implement immediately.",
+      title: "Languages",
+      techs: [
+        { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
+        { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+        { name: "Java", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
+        { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+        { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
       ],
     },
     {
-      title: "Building an Online Fraud Detection Pipeline with Scikit-learn: Feature Engineering to Threshold Tuning",
-      platform: "ML Case Study",
-      description:
-        "A practical case study on my fraud detection project covering imbalanced-data handling, feature engineering, model selection, precision-recall trade-offs, and why threshold optimization mattered more than raw accuracy for production-like fraud screening.",
-      date: "Feb 2026",
-      readTime: "10 min read",
-      tags: ["Python", "Scikit-learn", "Fraud Detection", "Model Evaluation"],
-      content: [
-        "Fraud detection problems are extremely imbalanced, so I structured the pipeline to prioritize recall and precision behavior rather than headline accuracy. Data preparation included null handling, outlier checks, and feature normalization where model assumptions needed it.",
-        "I experimented with multiple classifiers and compared them with precision-recall curves, confusion matrix behavior, and false-positive costs. Feature engineering focused on transaction patterns and user-behavior deltas that helped separate suspicious activity from legitimate high-volume users.",
-        "A key learning was threshold optimization. The default 0.5 probability cutoff was not business-optimal, so I tuned decision thresholds based on acceptable false-positive rates while maximizing fraud catch rate. This produced a significantly more practical model than accuracy-first tuning.",
-        "The final workflow includes reproducible preprocessing, model serialization, and evaluation reporting that can be reused as a baseline for future fraud datasets. It is structured as a deployment-ready foundation rather than a one-off notebook experiment.",
+      title: "Frontend",
+      techs: [
+        { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+        { name: "Tailwind CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
+        { name: "HTML5", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
+        { name: "CSS3", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
+        { name: "Vite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" },
+        { name: "Three.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" },
+      ],
+    },
+    {
+      title: "Backend",
+      techs: [
+        { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+        { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
+        { name: "REST APIs", icon: "" },
+        { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+      ],
+    },
+    {
+      title: "ML & Data Science",
+      techs: [
+        { name: "Scikit-learn", icon: "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" },
+        { name: "Pandas", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" },
+        { name: "NumPy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" },
+        { name: "TensorFlow", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" },
+        { name: "Jupyter", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" },
+        { name: "Matplotlib", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matplotlib/matplotlib-original.svg" },
+      ],
+    },
+    {
+      title: "Version Control & OS",
+      techs: [
+        { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+        { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
+        { name: "Linux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
+      ],
+    },
+    {
+      title: "Tools",
+      techs: [
+        { name: "VS Code", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
+        { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+        { name: "Postman", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" },
+        { name: "ESLint", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/eslint/eslint-original.svg" },
       ],
     },
   ];
@@ -473,26 +474,45 @@ function App() {
     {
       title: "Lecture Feedback System",
       description:
-        "A comprehensive full-stack platform for collecting and analyzing student feedback on lectures in real-time. Features include anonymous feedback submission, instructor dashboard with analytics, sentiment analysis, and actionable insights to improve teaching quality.",
-      tech: ["JavaScript", "Node.js", "Express.js", "MongoDB", "React"],
+        "A comprehensive full-stack platform for collecting and analyzing student feedback on lectures in real-time. Features anonymous feedback submission, instructor dashboard with analytics, sentiment analysis, and actionable insights to improve teaching quality.",
+      tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
       github: "https://github.com/deveshsingh641/lecture_feedback_system",
       live: "https://lecture-feedback-system.demo",
+      demoUrl: "https://lecture-feedback-system.demo",
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      status: "Completed",
+      category: "Full Stack",
     },
     {
-      title: "Online Fraud Detection (ML)",
+      title: "Online Fraud Detection",
       description:
-        "Machine learning model detecting fraudulent transactions with 95% accuracy using Scikit-learn and Pandas.",
-      tech: ["Python", "Scikit-learn", "Pandas"],
+        "Machine learning pipeline for detecting fraudulent transactions with 95%+ accuracy. Features advanced feature engineering, imbalanced-data handling (SMOTE), model evaluation with precision-recall trade-offs, and threshold optimization for production-ready fraud screening.",
+      tech: ["Python", "Scikit-learn", "Pandas", "NumPy", "Matplotlib"],
       github: "https://github.com/deveshsingh641/Data-Science-Project-",
       live: "#",
+      demoUrl: "",
       image:
         "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      status: "Completed",
+      category: "Machine Learning",
+    },
+    {
+      title: "Developer Portfolio",
+      description:
+        "A modern, responsive developer portfolio built with React and Tailwind CSS. Features dark/light theme toggle, animated intro sequence, parallax effects, custom cursor, embedded blog with markdown rendering, live project previews, and glassmorphic design aesthetic.",
+      tech: ["React", "TypeScript", "Tailwind CSS", "Vite"],
+      github: "https://github.com/deveshsingh641",
+      live: window.location.origin,
+      demoUrl: "",
+      image:
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      status: "Live",
+      category: "Frontend",
     },
   ];
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-300 ${theme === 'dark' ? 'bg-[#050816] text-slate-100 selection:bg-cyan-500 selection:text-slate-950' : 'bg-[#0a0f24] text-slate-100 selection:bg-cyan-500 selection:text-slate-950'}`}>
+    <div className={`min-h-screen font-sans transition-colors duration-500 ${theme === 'dark' ? 'bg-[#050816] text-slate-100 selection:bg-cyan-500 selection:text-slate-950' : 'bg-slate-50 text-slate-900 selection:bg-violet-500 selection:text-white'}`}>
       <div
         className={`custom-cursor hidden md:flex ${cursorVisible ? "opacity-100" : "opacity-0"} ${cursorActive ? "is-active" : ""}`}
         style={{ transform: `translate3d(${cursorPos.x}px, ${cursorPos.y}px, 0)` }}
@@ -503,20 +523,39 @@ function App() {
       </div>
 
       {isLoading && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#040611]">
-          <div className="relative flex flex-col items-center gap-5">
-            <div className="loader-ring" />
-            <div className="loader-core" />
-            <p className="welcome-intro text-3xl md:text-4xl font-bold text-white">
-              {greetings[greetingIndex]}
-            </p>
-            <p className="loader-text text-xs tracking-[0.35em] uppercase text-cyan-300/90">
-              Initializing Portfolio
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#040611] intro-screen">
+          {/* Ambient glow */}
+          <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-cyan-500/15 rounded-full blur-[120px] animate-pulse" />
+
+          <div className="relative flex flex-col items-center gap-6 z-10">
+            {/* Greeting text */}
+            <div className="relative overflow-hidden">
+              <p className="intro-greeting text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-violet-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent animate-gradient">
+                {greetings[greetingIndex]}
+              </p>
+            </div>
+
+            {/* Name reveal */}
+            <div className="intro-name-reveal">
+              <p className="text-lg md:text-xl font-medium text-slate-400 tracking-wide">
+                I'm <span className="text-white font-bold">Devesh Singh</span>
+              </p>
+            </div>
+
+            {/* Loader */}
+            <div className="relative mt-4">
+              <div className="loader-ring" />
+              <div className="loader-core" />
+            </div>
+
+            <p className="loader-text text-xs tracking-[0.35em] uppercase text-cyan-300/90 mt-2">
+              Loading Portfolio
             </p>
           </div>
         </div>
       )}
-      <NeonBackground />
+      {theme === 'dark' && <NeonBackground />}
       <Helmet>
         <html lang="en" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -567,7 +606,7 @@ function App() {
       {/* NAVBAR */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled
-          ? "bg-slate-950/90 backdrop-blur-md shadow-lg py-2 border-b border-cyan-300/30"
+          ? `${theme === 'dark' ? 'bg-slate-950/90 border-cyan-300/30' : 'bg-white/90 border-slate-200'} backdrop-blur-md shadow-lg py-2 border-b`
           : "bg-transparent py-4"
           }`}
       >
@@ -597,17 +636,23 @@ function App() {
               <button
                 onClick={toggleTheme}
                 data-cursor-label="Theme"
-                className={`p-2 rounded-full transition-colors border ${scrolled ? 'border-cyan-400/30 text-slate-100 hover:bg-cyan-500/10' : 'border-white/20 text-white hover:bg-white/10'}`}
+                className={`p-2 rounded-full transition-colors border ${theme === 'dark'
+                  ? (scrolled ? 'border-cyan-400/30 text-slate-100 hover:bg-cyan-500/10' : 'border-white/20 text-white hover:bg-white/10')
+                  : (scrolled ? 'border-slate-300 text-slate-700 hover:bg-slate-100' : 'border-slate-400/30 text-slate-700 hover:bg-slate-200/50')
+                }`}
                 aria-label="Toggle Dark Mode"
               >
                 {theme === "dark" ? (
                   <Sun size={20} className={scrolled ? "text-yellow-500" : "text-yellow-300"} />
                 ) : (
-                  <Moon size={20} className={scrolled ? "text-violet-700" : "text-white"} />
+                  <Moon size={20} className="text-violet-600" />
                 )}
               </button>
 
-              <div className={`hidden md:flex space-x-1 p-1 rounded-full border transition-all duration-300 ${scrolled ? 'bg-slate-900/60 border-cyan-400/20' : 'bg-black/20 border-white/10 backdrop-blur-md'}`}>
+              <div className={`hidden md:flex space-x-1 p-1 rounded-full border transition-all duration-300 ${theme === 'dark'
+                ? (scrolled ? 'bg-slate-900/60 border-cyan-400/20' : 'bg-black/20 border-white/10 backdrop-blur-md')
+                : (scrolled ? 'bg-slate-100/80 border-slate-200' : 'bg-white/30 border-slate-300/30 backdrop-blur-md')
+              }`}>
                 {[
                   "home",
                   "about",
@@ -624,10 +669,10 @@ function App() {
                     onMouseMove={handleMagneticMove}
                     onMouseLeave={handleMagneticLeave}
                     className={`magnetic-nav-item relative px-4 py-1.5 rounded-full capitalize transition-all font-medium text-sm ${activeSection === item
-                      ? "bg-gradient-to-r from-violet-500/25 to-cyan-500/25 text-cyan-200 shadow-md font-bold scale-105 border border-cyan-400/30"
-                      : scrolled
-                        ? "text-slate-200 hover:text-cyan-200"
-                        : "text-gray-200 hover:text-white"
+                      ? `bg-gradient-to-r from-violet-500/25 to-cyan-500/25 ${theme === 'dark' ? 'text-cyan-200' : 'text-violet-700'} shadow-md font-bold scale-105 border border-cyan-400/30`
+                      : theme === 'dark'
+                        ? (scrolled ? "text-slate-200 hover:text-cyan-200" : "text-gray-200 hover:text-white")
+                        : (scrolled ? "text-slate-600 hover:text-violet-600" : "text-slate-700 hover:text-violet-600")
                       }`}
                   >
                     {item}
@@ -644,7 +689,7 @@ function App() {
 
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`md:hidden p-2 transition-colors ${scrolled ? 'text-slate-200' : 'text-white'}`}
+                className={`md:hidden p-2 transition-colors ${theme === 'dark' ? (scrolled ? 'text-slate-200' : 'text-white') : (scrolled ? 'text-slate-700' : 'text-slate-800')}`}
                 aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-navigation"
@@ -658,7 +703,7 @@ function App() {
         {isMenuOpen && (
           <div
             id="mobile-navigation"
-            className="md:hidden bg-slate-950/95 backdrop-blur-xl border-t border-cyan-400/20 shadow-xl absolute w-full animate-fade-in-down"
+            className={`md:hidden backdrop-blur-xl border-t shadow-xl absolute w-full animate-fade-in-down ${theme === 'dark' ? 'bg-slate-950/95 border-cyan-400/20' : 'bg-white/95 border-slate-200'}`}
           >
             <div className="px-4 py-4 space-y-2">
               {[
@@ -673,7 +718,7 @@ function App() {
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
-                  className="block w-full text-left px-4 py-3 capitalize text-slate-200 hover:bg-violet-500/20 rounded-lg transition-colors font-medium"
+                  className={`block w-full text-left px-4 py-3 capitalize rounded-lg transition-colors font-medium ${theme === 'dark' ? 'text-slate-200 hover:bg-violet-500/20' : 'text-slate-700 hover:bg-violet-50'}`}
                 >
                   {item}
                 </button>
@@ -698,13 +743,13 @@ function App() {
           </div>
 
           <div className="relative z-10 w-full max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-950/80 border border-cyan-300/50 text-cyan-100 text-xs font-bold tracking-wide uppercase mb-8 animate-fade-in-up shadow-sm">
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-bold tracking-wide uppercase mb-8 animate-fade-in-up shadow-sm ${theme === 'dark' ? 'bg-slate-950/80 border-cyan-300/50 text-cyan-100' : 'bg-white/90 border-violet-300/50 text-violet-700'}`}>
               <span className="w-2.5 h-2.5 rounded-full bg-violet-600 animate-pulse"></span>
               Open to Work
             </div>
 
             <h1
-              className="text-5xl md:text-7xl font-extrabold text-slate-100 tracking-tight mb-6 leading-tight animate-slideInUp parallax-layer"
+              className={`text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight animate-slideInUp parallax-layer ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}
               style={{
                 transform: `translate3d(${heroParallax.x * 18}px, ${heroParallax.y * 18}px, 0)`,
               }}
@@ -718,7 +763,7 @@ function App() {
 
             {/* TYPEWRITER EFFECT */}
             <div
-              className="text-xl md:text-2xl text-slate-100 font-medium mb-10 max-w-3xl mx-auto text-center leading-relaxed h-20 md:h-auto parallax-layer"
+              className={`text-xl md:text-2xl font-medium mb-10 max-w-3xl mx-auto text-center leading-relaxed h-20 md:h-auto parallax-layer ${theme === 'dark' ? 'text-slate-100' : 'text-slate-700'}`}
               style={{
                 transform: `translate3d(${heroParallax.x * 10}px, ${heroParallax.y * 10}px, 0)`,
               }}
@@ -771,7 +816,7 @@ function App() {
                 data-cursor-label="Resume"
                 onMouseMove={handleMagneticMove}
                 onMouseLeave={handleMagneticLeave}
-                className="magnetic-btn px-8 py-4 bg-slate-950/80 rounded-full text-cyan-100 font-bold border border-cyan-300/40 shadow-md hover:bg-slate-900 hover:border-emerald-300/60 hover:shadow-lg transition-all flex items-center justify-center gap-2 w-full sm:w-auto hover:scale-105"
+                className={`magnetic-btn px-8 py-4 rounded-full font-bold border shadow-md transition-all flex items-center justify-center gap-2 w-full sm:w-auto hover:scale-105 ${theme === 'dark' ? 'bg-slate-950/80 text-cyan-100 border-cyan-300/40 hover:bg-slate-900 hover:border-emerald-300/60' : 'bg-white text-violet-700 border-violet-300/50 hover:bg-violet-50 hover:border-violet-400/60'}`}
               >
                 Resume <Download size={18} />
               </a>
@@ -784,320 +829,471 @@ function App() {
         <section
           id="about"
           data-reveal
-          className="reveal-section py-24 bg-gradient-to-b from-slate-900/40 via-violet-900/20 to-slate-900/40 backdrop-blur-sm relative px-6 md:px-20 transition-colors duration-300"
+          className={`reveal-section ${visibleSections.has('about') ? 'is-visible' : ''} py-28 backdrop-blur-sm relative px-6 md:px-20 transition-colors duration-300 overflow-hidden ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/60 via-violet-100/20 to-slate-100/60'}`}
         >
-          <div className="max-w-6xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-16 items-center">
-              <div className="w-full md:w-1/2">
-                <h2 className="text-4xl font-bold text-slate-100 mb-6 flex items-center gap-3">
-                  About Me{" "}
-                  <Sparkles
-                    className="text-transparent bg-gradient-to-r from-violet-500 to-emerald-500 bg-clip-text animate-pulse"
-                    size={28}
-                  />
-                </h2>
+          {/* Background decorations */}
+          <div className="absolute top-20 -left-40 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 -right-40 w-80 h-80 bg-emerald-600/10 rounded-full blur-3xl"></div>
 
+          <div className="max-w-6xl mx-auto relative z-10">
+            {/* Section Label */}
+            <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-6 text-center">ABOUT_ME</p>
 
+            {/* Big Heading */}
+            <div className="text-center mb-16">
+              <h2 className={`text-4xl md:text-6xl font-black leading-tight ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                BUILDING{" "}
+                <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
+                  SCALABLE
+                </span>
+                <br />
+                <span className={theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}>SYSTEMS.</span>
+              </h2>
+            </div>
 
-                <div className="space-y-6 text-lg text-slate-100 leading-relaxed mb-10">
-                  <p>
-                    I am a developer who{" "}
-                    <span className="text-cyan-300 font-bold">
-                      thinks in data
-                    </span>
-                    . Currently pursuing my B.Tech in IT at{" "}
-                    <span className="bg-gradient-to-r from-violet-700 to-emerald-700 bg-clip-text text-transparent font-bold">
-                      ABES Engineering College
-                    </span>
-                    , I focus on building applications that are not just
-                    functional, but intelligent.
+            {/* Main content grid */}
+            <div className="grid lg:grid-cols-5 gap-12 items-start">
+
+              {/* Left column - Bio + Stats (3 cols) */}
+              <div className="lg:col-span-3 space-y-8">
+                {/* Bio intro */}
+                <div className="space-y-5">
+                  <p className={`text-xl md:text-2xl font-light leading-relaxed ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
+                    I'm <span className={`font-semibold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Devesh Singh</span>.
+                    Full-Stack Developer & ML enthusiast crafting{" "}
+                    <span className={`font-medium ${theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'}`}>robust, production-ready applications</span>.
                   </p>
-                  <p>
-                    My passion lies at the intersection of{" "}
-                    <span className="bg-gradient-to-r from-emerald-600 to-cyan-500 bg-clip-text text-transparent font-semibold">
-                      Full-Stack Engineering
-                    </span>{" "}
-                    and{" "}
-                    <span className="bg-gradient-to-r from-emerald-700 to-cyan-600 bg-clip-text text-transparent font-bold">
-                      Machine Learning
-                    </span>
-                    . Whether it's architecting a seamless e-commerce frontend
-                    or training a fraud detection model, I love turning complex
-                    logic into user-friendly reality.
+                  <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                    Currently pursuing B.Tech in IT at{" "}
+                    <span className={`font-semibold ${theme === 'dark' ? 'text-violet-300' : 'text-violet-600'}`}>ABES Engineering College</span>,
+                    I focus on building applications that are not just functional, but intelligent.
+                    My passion lies at the intersection of full-stack engineering and machine learning —
+                    turning complex logic into user-friendly reality.
                   </p>
-                  <p>
-                    When I'm not debugging, I'm refining my{" "}
-                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                      DSA skills
-                    </span>{" "}
-                    (solving problems on LeetCode) or exploring Cloud
-                    architectures. I am eager to join a forward-thinking team
-                    where I can deploy my analytical skills to solve real-world
-                    challenges.
+                  <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                    When I'm not debugging, I'm refining my DSA skills on LeetCode or experimenting
+                    with new frameworks and AI tools. I'm eager to join a forward-thinking team where I can
+                    deploy my analytical skills to solve real-world challenges.
                   </p>
                 </div>
 
-
-
-                <h3 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-2">
-                  <GraduationCap className="text-transparent bg-gradient-to-r from-violet-600 to-emerald-500 bg-clip-text" size={24} />{" "}
-                  <span className="bg-gradient-to-r from-violet-700 to-emerald-600 bg-clip-text text-transparent">Education Journey</span>
-                </h3>
-
-                <div className="space-y-4 relative pl-4 border-l-2 border-gradient-to-b from-violet-400/50 to-emerald-400/50">
-                  {education.map((edu, index) => (
-                    <Tilt
-                      key={index}
-                      tiltEnable={false}
-                      scale={1.03}
-                      transitionSpeed={200}
-                    >
-
-                      <div className="relative group p-6 bg-slate-950/75 rounded-xl border border-violet-300/35 shadow-md hover:shadow-xl hover:shadow-violet-900/20 hover:border-emerald-400/60 transition-all cursor-default mb-4 hover:-translate-y-1">
-                        <div className="absolute top-7 -left-[25px] w-5 h-5 bg-gradient-to-br from-violet-500 via-emerald-500 to-cyan-400 border-4 border-white dark:border-slate-950 rounded-full shadow-lg shadow-violet-400/50 group-hover:scale-125 transition-transform"></div>
-                        <div className="flex justify-between items-start flex-wrap gap-2">
-                          <div>
-                            <h4 className="font-bold text-slate-100 text-lg group-hover:text-emerald-300 transition-colors">
-                              {edu.degree}
-                            </h4>
-                            <p className="text-slate-200 font-medium">
-                              {edu.school}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <span className="inline-block px-3 py-1 bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-200 text-xs font-bold rounded-full border border-violet-200 dark:border-violet-700/50 group-hover:border-emerald-500/50 transition-all shadow-sm">
-                              {edu.year}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="mt-4 flex items-center gap-2">
-                          <Award size={16} className="text-emerald-400" />
-                          <span className="text-sm font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-600/20 px-3 py-1 rounded-md border border-emerald-200 dark:border-emerald-400/30">
-                            {edu.score}
-                          </span>
-                        </div>
-                      </div>
-                    </Tilt>
+                {/* Stats Row */}
+                <div className="grid grid-cols-3 gap-4 pt-2">
+                  {[
+                    { value: "5+", label: "PROJECTS" },
+                    { value: "4+", label: "CERTIFICATIONS" },
+                    { value: "∞", label: "ALWAYS LEARNING" },
+                  ].map(({ value, label }) => (
+                    <div key={label} className={`group text-center py-5 rounded-xl border backdrop-blur-sm transition-all duration-300 ${theme === 'dark' ? 'border-slate-700/40 bg-slate-900/50 hover:border-emerald-500/40 hover:bg-slate-800/40' : 'border-slate-200 bg-white/80 hover:border-emerald-400/40 hover:bg-slate-50'}`}>
+                      <div className="text-3xl md:text-4xl font-black text-emerald-400 group-hover:scale-110 transition-transform duration-300">{value}</div>
+                      <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 mt-1">{label}</div>
+                    </div>
                   ))}
+                </div>
+
+                {/* CTA */}
+                <div className="flex flex-wrap gap-4 pt-2">
+                  <button
+                    onClick={() => scrollToSection("contact")}
+                    className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-900 font-bold rounded-lg hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 hover:-translate-y-0.5 text-sm"
+                  >
+                    Get in Touch
+                  </button>
+                  <a
+                    href="/Updated_resume%20(1).pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`px-6 py-3 border font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 text-sm flex items-center gap-2 ${theme === 'dark' ? 'border-slate-600 text-slate-300 hover:border-emerald-400/50 hover:text-emerald-300' : 'border-slate-300 text-slate-600 hover:border-violet-400/50 hover:text-violet-600'}`}
+                  >
+                    <Download size={16} /> Resume
+                  </a>
                 </div>
               </div>
 
-              {/* Profile Image */}
-              <div className="w-full md:w-1/2 flex justify-center md:justify-end mt-10 md:mt-0">
+              {/* Right column - Profile Image (2 cols) */}
+              <div className="lg:col-span-2 flex flex-col items-center">
                 <Tilt
-                  tiltMaxAngleX={12}
-                  tiltMaxAngleY={12}
+                  tiltMaxAngleX={10}
+                  tiltMaxAngleY={10}
                   perspective={1200}
                   transitionSpeed={1000}
-                  scale={1.05}
+                  scale={1.03}
                   tiltEnable={!isMobile}
                   glareEnable={true}
-                  glareMaxOpacity={0.2}
+                  glareMaxOpacity={0.15}
                 >
-                  <div className="w-[220px] md:w-[380px] rounded-3xl overflow-hidden shadow-2xl border-2 border-white bg-gradient-to-br from-violet-600 via-emerald-500 to-cyan-400 p-1 hover:shadow-3xl hover:shadow-violet-400/50 transition-all duration-300">
-                    <div className="rounded-3xl overflow-hidden bg-slate-950">
-                      <img
-                        src="/profile.jpg"
-                        alt="Profile"
-                        className="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-300"
-                        loading="lazy"
-                        decoding="async"
-                      />
+                  <div className="relative">
+                    {/* Image container */}
+                    <div className="w-[260px] md:w-[320px] rounded-2xl overflow-hidden shadow-2xl border border-slate-700/40 bg-gradient-to-br from-violet-600/20 via-emerald-500/20 to-cyan-400/20 p-[2px]">
+                      <div className="rounded-2xl overflow-hidden bg-slate-950">
+                        <img
+                          src="/profile.jpg"
+                          alt="Devesh Singh"
+                          className="w-full h-auto object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="mt-6 flex justify-center md:justify-end">
-                    <div className="bg-slate-900/95 backdrop-blur-md px-5 py-3 rounded-full shadow-lg border border-cyan-400/20 flex items-center gap-2 animate-float w-fit hover:shadow-xl transition-all">
-                      <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></span>
-                      <span className="text-xs font-bold text-slate-100">
-                        Open to Work
+                    {/* Location badge - top left */}
+                    <div className="absolute -top-3 -left-3 bg-slate-900/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/50 shadow-lg flex items-center gap-1.5">
+                      <span className="text-lg">🇮🇳</span>
+                      <span className="text-xs font-semibold text-slate-300">India</span>
+                    </div>
+
+                    {/* Available badge - bottom right */}
+                    <div className="absolute -bottom-3 -right-3 bg-slate-900/95 backdrop-blur-md px-4 py-2 rounded-lg border border-emerald-500/30 shadow-lg flex items-center gap-2">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                       </span>
+                      <span className="text-xs font-bold text-emerald-300">Available</span>
                     </div>
                   </div>
                 </Tilt>
+
+                {/* Mini terminal below image */}
+                <div className="mt-8 w-full max-w-[320px]">
+                  <div className="rounded-lg border border-slate-700/50 bg-[#1e1e2e] overflow-hidden shadow-xl">
+                    <div className="flex items-center gap-1.5 px-3 py-2 bg-[#181825] border-b border-slate-700/40">
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
+                      <span className="text-[10px] font-mono text-slate-500 ml-2">terminal</span>
+                    </div>
+                    <div className="px-4 py-3 font-mono text-xs space-y-1">
+                      <p className="text-slate-500">
+                        <span className="text-emerald-400">➜</span>{" "}
+                        <span className="text-cyan-400">~</span>{" "}
+                        <span className="text-slate-300">cat interests.txt</span>
+                      </p>
+                      <p className="text-slate-400">🎯 Full-Stack Development</p>
+                      <p className="text-slate-400">🤖 Machine Learning & AI</p>
+                      <p className="text-slate-400">📱 App Development</p>
+                      <p className="text-slate-400">🧠 DSA & Problem Solving</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Education Section */}
+            <div className="mt-20">
+              <div className="flex items-center gap-3 mb-10">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-emerald-500 flex items-center justify-center shadow-lg">
+                  <GraduationCap size={20} className="text-white" />
+                </div>
+                <div>
+                  <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Education</h3>
+                  <p className="text-xs font-mono text-slate-500 uppercase tracking-wider">Academic Journey</p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-5">
+                {education.map((edu, index) => (
+                  <div
+                    key={index}
+                    className={`group relative p-6 rounded-xl border backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 ${theme === 'dark' ? 'border-slate-700/40 bg-slate-900/50 hover:border-emerald-500/40 hover:bg-slate-800/40' : 'border-slate-200 bg-white/80 hover:border-emerald-400/40 hover:bg-slate-50'}`}
+                  >
+                    {/* Number badge */}
+                    <span className="absolute top-4 right-4 text-[10px] font-mono text-emerald-500/40 font-bold">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    {/* Year badge */}
+                    <div className="inline-flex px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-bold mb-4">
+                      <Calendar size={12} className="mr-1.5" />
+                      {edu.year}
+                    </div>
+
+                    <h4 className={`text-base font-bold mb-1.5 group-hover:text-emerald-400 transition-colors leading-snug ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
+                      {edu.degree}
+                    </h4>
+                    <p className="text-sm text-slate-400 mb-3">{edu.school}</p>
+
+                    {/* Score */}
+                    <div className="flex items-center gap-2 mt-auto">
+                      <Award size={14} className="text-emerald-400" />
+                      <span className="text-sm font-bold text-emerald-300">
+                        {edu.score}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Philosophy / What Drives Me */}
+            <div className="mt-20">
+              <div className="text-center mb-10">
+                <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-3">PHILOSOPHY</p>
+                <h3 className={`text-3xl md:text-4xl font-black ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                  CODE THAT{" "}
+                  <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">SCALES</span>.
+                </h3>
+              </div>
+
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+                {[
+                  { num: "01", title: "Clean Architecture", desc: "Readable, maintainable code following SOLID principles. Every module has a single responsibility.", icon: "🏗️" },
+                  { num: "02", title: "Performance First", desc: "Optimized queries, efficient algorithms, lazy loading. Built to handle scale.", icon: "⚡" },
+                  { num: "03", title: "Data-Driven", desc: "Every decision backed by data. From model metrics to user analytics, numbers guide the way.", icon: "📊" },
+                  { num: "04", title: "Ship Fast", desc: "Automated CI/CD pipelines. From commit to production in minutes, not hours.", icon: "🚀" },
+                ].map(({ num, title, desc, icon }) => (
+                  <div key={num} className={`group relative p-6 rounded-xl border backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 ${theme === 'dark' ? 'border-slate-700/40 bg-slate-900/50 hover:border-emerald-500/40 hover:bg-slate-800/40' : 'border-slate-200 bg-white/80 hover:border-emerald-400/40 hover:bg-slate-50'}`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-2xl">{icon}</span>
+                      <span className="text-[10px] font-mono text-emerald-500/40 font-bold">{num}</span>
+                    </div>
+                    <h4 className={`text-sm font-bold mb-2 group-hover:text-emerald-300 transition-colors ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>{title}</h4>
+                    <p className={`text-xs leading-relaxed ${theme === 'dark' ? 'text-slate-500' : 'text-slate-500'}`}>{desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Quote */}
+              <div className="mt-12 max-w-2xl mx-auto text-center">
+                <blockquote className="relative">
+                  <span className="absolute -top-4 -left-2 text-5xl text-emerald-500/20 font-serif">"</span>
+                  <p className={`text-lg md:text-xl italic leading-relaxed px-8 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
+                    Code is poetry, debugging is the editing process.
+                  </p>
+                  <footer className="mt-3 text-sm text-slate-500">— My coding mantra</footer>
+                </blockquote>
               </div>
             </div>
           </div>
         </section>
 
-        {/* SKILLS SECTION */}
-        <section id="skills" data-reveal className="reveal-section py-24 bg-gradient-to-b from-slate-900/40 via-emerald-900/20 to-slate-900/40 relative overflow-hidden transition-colors duration-300">
-          <div className="hidden lg:block absolute right-0 top-1/4 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
-          <div className="hidden lg:block absolute left-0 bottom-1/4 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
+        {/* SKILLS SECTION — "TOOLS I MASTER" card grid */}
+        <section id="skills" data-reveal className={`reveal-section ${visibleSections.has('skills') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-emerald-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-emerald-50/20 to-slate-100/40'}`}>
+          <div className="hidden lg:block absolute right-0 top-1/4 w-96 h-96 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
+          <div className="hidden lg:block absolute left-0 bottom-1/4 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
 
           <div className="max-w-6xl mx-auto px-4 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-slate-100 mb-4">
-                Technical Arsenal
+              <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-3">TECH_STACK</p>
+              <h2 className={`text-4xl md:text-5xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                TOOLS I <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">MASTER</span>.
               </h2>
-              <p className="text-emerald-300 font-medium text-lg mb-4">Weapons in my developer toolkit</p>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50"></div>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-5"></div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 will-change-auto stagger-animation">
-              {[
-                {
-                  title: "Languages",
-                  icon: Code,
-                  skills: programmingSkills,
-                  color: "text-violet-300",
-                  bg: "bg-violet-50",
-                  gradient: "from-violet-500 to-purple-600",
-                  borderColor: "border-violet-400/70",
-                  accentColor: "text-violet-400",
-                },
-                {
-                  title: "Web Development",
-                  icon: Globe,
-                  skills: webDevSkills,
-                  color: "text-emerald-300",
-                  bg: "bg-emerald-50",
-                  gradient: "from-emerald-500 to-teal-600",
-                  borderColor: "border-emerald-400/70",
-                  accentColor: "text-emerald-400",
-                },
-                {
-                  title: "Core Concepts",
-                  icon: Brain,
-                  skills: [
-                    { name: "DSA", icon: Brain, level: 84 },
-                    { name: "OOP", icon: Brain, level: 86 },
-                  ],
-                  color: "text-cyan-300",
-                  bg: "bg-cyan-50",
-                  gradient: "from-cyan-500 to-blue-600",
-                  borderColor: "border-cyan-400/70",
-                  accentColor: "text-cyan-400",
-                },
-                {
-                  title: "Tools",
-                  icon: Layers,
-                  skills: [
-                    { name: "Git", icon: Layers, level: 83 },
-                    { name: "Figma", icon: Layers, level: 72 },
-                  ],
-                  color: "text-pink-300",
-                  bg: "bg-pink-50",
-                  gradient: "from-pink-500 via-rose-500 to-orange-500",
-                  borderColor: "border-pink-400/70",
-                  accentColor: "text-orange-400",
-                },
-              ].map((category, idx) => (
-                <Tilt
+            {/* Category Cards Grid */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {techCategories.map((category, idx) => (
+                <div
                   key={idx}
-                  tiltMaxAngleX={8}
-                  tiltMaxAngleY={8}
-                  glareEnable={true}
-                  glareMaxOpacity={0.15}
-                  scale={1.03}
-                  className="h-full"
+                  className={`group relative rounded-2xl border backdrop-blur-sm p-6 transition-all duration-500 hover:-translate-y-1 ${theme === 'dark' ? 'border-slate-700/40 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-800/40' : 'border-slate-200 bg-white/80 hover:border-emerald-400/40 hover:bg-slate-50'}`}
                 >
-
-                  <div className="p-8 rounded-2xl h-full border border-violet-300/35 shadow-lg hover:shadow-xl hover:shadow-violet-900/20 backdrop-blur-sm transition-all duration-300 group hover:-translate-y-2 bg-slate-950/75">
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.gradient} p-3 mb-5 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
-                      <category.icon size={28} className="text-white" />
-                    </div>
-                    <h3 className={`text-2xl font-bold mb-6 ${category.color} group-hover:text-slate-100`}>
+                  {/* Category Header */}
+                  <div className="flex items-center justify-between mb-5">
+                    <h3 className={`text-lg font-bold group-hover:text-emerald-400 transition-colors ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
                       {category.title}
                     </h3>
-                    <div className="space-y-3">
-                      {category.skills.map((skill, index) => (
-                        <div
-                          key={index}
-                          className="rounded-xl border border-white/10 bg-slate-800/60 p-3"
-                          role="progressbar"
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                          aria-valuenow={skill.level}
-                          aria-label={`${skill.name} proficiency`}
+                    <span className="text-xs font-mono text-slate-500">
+                      {category.techs.length} technologies
+                    </span>
+                  </div>
+
+                  {/* Tech Items */}
+                  <div className="space-y-2">
+                    {category.techs.map((tech) => (
+                      <div
+                        key={tech.name}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all duration-300 cursor-default group/item ${theme === 'dark' ? 'bg-slate-800/50 border-slate-700/30 hover:border-emerald-500/30 hover:bg-slate-700/40' : 'bg-slate-50 border-slate-200 hover:border-emerald-400/30 hover:bg-white'}`}
+                      >
+                        {tech.icon ? (
+                          <img
+                            src={tech.icon}
+                            alt={tech.name}
+                            className="w-6 h-6 flex-shrink-0 group-hover/item:scale-110 transition-transform duration-300"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-6 h-6 flex-shrink-0 rounded bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                            <Server size={14} className="text-white" />
+                          </div>
+                        )}
+                        <span className={`text-sm font-medium transition-colors ${theme === 'dark' ? 'text-slate-300 group-hover/item:text-slate-100' : 'text-slate-700 group-hover/item:text-slate-900'}`}>
+                          {tech.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Stats Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
+              {[
+                { value: `${techCategories.reduce((s, c) => s + c.techs.length, 0)}+`, label: "TECHNOLOGIES" },
+                { value: "5+", label: "PROJECTS BUILT" },
+                { value: "4+", label: "CERTIFICATIONS" },
+                { value: "∞", label: "ALWAYS LEARNING" },
+              ].map(({ value, label }) => (
+                <div key={label} className={`text-center py-4 px-3 rounded-xl border backdrop-blur-sm ${theme === 'dark' ? 'border-slate-700/30 bg-slate-900/40' : 'border-slate-200 bg-white/80'}`}>
+                  <div className="text-2xl font-bold text-emerald-400 mb-1">{value}</div>
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* BLOG SECTION */}
+        <section id="blog" data-reveal className={`reveal-section ${visibleSections.has('blog') ? 'is-visible' : ''} py-24 transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/10 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-violet-50/10 to-slate-100/40'}`}>
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className={`text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Technical Writing</h2>
+              <p className={theme === 'dark' ? 'text-slate-200' : 'text-slate-600'}>
+                Architecture notes, engineering trade-offs, and implementation details from real projects.
+              </p>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-4"></div>
+            </div>
+
+            <BlogSection theme={theme!} />
+          </div>
+        </section>
+
+        {/* PROJECTS SECTION */}
+        <section id="projects" data-reveal className={`reveal-section ${visibleSections.has('projects') ? 'is-visible' : ''} py-24 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-cyan-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-cyan-50/20 to-slate-100/40'}`}>
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-16">
+              <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-3">SELECTED_WORKS</p>
+              <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                DIGITAL{" "}
+                <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
+                  PRODUCTS
+                </span>
+              </h2>
+              <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
+                A curated selection of applications engineered for performance and scalability.
+              </p>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-5"></div>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
+              {projects.map((project, index) => (
+                <Tilt
+                  key={index}
+                  tiltMaxAngleX={isMobile ? 0 : 6}
+                  tiltMaxAngleY={isMobile ? 0 : 6}
+                  tiltEnable={!isMobile}
+                  glareEnable={!isMobile}
+                  glareMaxOpacity={0.15}
+                  scale={1.02}
+                  className="h-full"
+                >
+                  <div
+                    onMouseMove={handleCardSpotlightMove}
+                    className={`project-spotlight-card group relative rounded-2xl overflow-hidden border shadow-xl hover:shadow-2xl h-full flex flex-col transition-all duration-500 hover:-translate-y-2 ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/95 border-slate-700/40 hover:border-emerald-400/50' : 'bg-white border-slate-200 hover:border-emerald-400/60 hover:shadow-slate-300/40'}`}
+                  >
+                    {/* Image */}
+                    <div className="h-52 overflow-hidden relative">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+
+                      {/* Status badge */}
+                      <div className={`absolute top-3 left-3 z-20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border backdrop-blur-sm ${
+                        project.status === 'Live'
+                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40'
+                          : 'bg-violet-500/20 text-violet-300 border-violet-400/40'
+                      }`}>
+                        <span className="flex items-center gap-1.5">
+                          {project.status === 'Live' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+                          {project.status}
+                        </span>
+                      </div>
+
+                      {/* Category badge */}
+                      <div className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/40 text-white/80 border border-white/20 backdrop-blur-sm">
+                        {project.category}
+                      </div>
+
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        loading="lazy"
+                        decoding="async"
+                      />
+
+                      {/* Tech stack overlay */}
+                      <div className="absolute bottom-3 left-3 right-3 z-20 flex gap-1.5 flex-wrap">
+                        {project.tech.slice(0, 4).map((t, i) => (
+                          <span
+                            key={i}
+                            className="px-2 py-0.5 bg-black/40 backdrop-blur-md text-white text-[10px] rounded-md border border-white/20 font-semibold"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                        {project.tech.length > 4 && (
+                          <span className="px-2 py-0.5 bg-black/40 backdrop-blur-md text-white/70 text-[10px] rounded-md border border-white/20">
+                            +{project.tech.length - 4}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6 flex-1 flex flex-col">
+                      <h3 className={`text-lg font-bold mb-2 group-hover:text-emerald-400 transition-colors ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                        {project.title}
+                      </h3>
+                      <p className={`text-sm leading-relaxed flex-grow mb-5 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                        {project.description}
+                      </p>
+
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-3 pt-4 border-t border-slate-700/30">
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          data-cursor-label="Source"
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-300 hover:scale-105 ${theme === 'dark' ? 'bg-slate-800/60 border-slate-700/50 text-slate-300 hover:text-cyan-300 hover:border-cyan-400/40' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-violet-600 hover:border-violet-300'}`}
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          <div className="flex items-center justify-between mb-2">
-                            <span className={`text-sm font-bold text-slate-100`}>
-                              {skill.name}
-                            </span>
-                            <span className="text-xs text-slate-400 font-semibold">
-                              {skill.level}%
-                            </span>
-                          </div>
-                          <div className="h-2.5 bg-slate-700 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full bg-gradient-to-r ${category.gradient} transition-all duration-700`}
-                              style={{ width: `${skill.level}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      ))}
+                          <Github size={14} /> Source
+                        </a>
+                        {project.live && project.live !== '#' && (
+                          <a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            data-cursor-label="Live"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 border border-emerald-400/30 hover:border-emerald-400/60 transition-all duration-300 hover:scale-105"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ExternalLink size={14} /> Live Site
+                          </a>
+                        )}
+                      </div>
+
+                      {/* Live Preview iframe (lazy-loaded) */}
+                      {project.demoUrl && (
+                        <ProjectPreview url={project.demoUrl} title={project.title} />
+                      )}
                     </div>
                   </div>
                 </Tilt>
               ))}
             </div>
           </div>
-        </section >
-
-        {/* BLOG SECTION */}
-        <section id="blog" data-reveal className="reveal-section py-24 bg-gradient-to-b from-slate-900/40 via-violet-900/10 to-slate-900/40 transition-colors duration-300">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-slate-100 mb-4">Technical Writing</h2>
-              <p className="text-slate-200">
-                Architecture notes, engineering trade-offs, and implementation details from real projects.
-              </p>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-4"></div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 stagger-animation">
-              {blogPosts.map((post, index) => (
-                <article
-                  key={index}
-                  className="group p-7 rounded-2xl shadow-xl border border-cyan-300/20 bg-gradient-to-b from-slate-900/90 to-slate-950/95 hover:shadow-2xl hover:shadow-cyan-900/20 transition-all duration-300 hover:-translate-y-1"
-                >
-                  <div className="flex items-center justify-between gap-3 mb-5">
-                    <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-400/30">
-                      <BookOpen size={12} /> {post.platform}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-xs text-slate-300">
-                      <Clock3 size={13} /> {post.date} • {post.readTime}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-slate-100 mb-3 leading-snug group-hover:text-cyan-200 transition-colors">{post.title}</h3>
-                  <p className="text-slate-300 mb-5 leading-relaxed">{post.description}</p>
-
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {post.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-1 text-xs font-semibold rounded-md bg-violet-500/10 text-violet-200 border border-violet-400/30"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setSelectedBlog(post)}
-                    className="inline-flex items-center gap-2 text-cyan-300 hover:text-cyan-200 font-semibold"
-                    aria-label={`Read article: ${post.title}`}
-                  >
-                    <FileText size={16} /> Read Article <ArrowRight size={15} />
-                  </button>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section >
+        </section>
 
         {/* CERTIFICATIONS SECTION */}
-        < section id="certifications" data-reveal className="reveal-section py-24 bg-gradient-to-b from-slate-900/50 via-violet-900/20 to-slate-900/50 relative" >
+        <section id="certifications" data-reveal className={`reveal-section ${visibleSections.has('certifications') ? 'is-visible' : ''} py-24 relative ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/50 via-violet-900/20 to-slate-900/50' : 'bg-gradient-to-b from-slate-100/50 via-violet-50/20 to-slate-100/50'}`}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-white mb-3">
+              <p className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 mb-3">CREDENTIALS</p>
+              <h2 className={`text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                 Certifications & Badges
               </h2>
-              <p className="text-cyan-300 font-medium text-lg">Professional credentials & achievements</p>
+              <p className={`font-medium text-lg ${theme === 'dark' ? 'text-cyan-300' : 'text-cyan-700'}`}>Professional credentials & achievements</p>
               <div className="w-32 h-1.5 bg-gradient-to-r from-cyan-600 via-emerald-500 to-violet-600 mx-auto rounded-full shadow-lg shadow-cyan-400/50 mt-4"></div>
             </div>
 
@@ -1113,13 +1309,13 @@ function App() {
                     glareEnable={true}
                     glareMaxOpacity={0.1}
                   >
-                    <div className="p-7 rounded-2xl shadow-lg border border-cyan-300/35 group h-full backdrop-blur-sm hover:shadow-xl hover:shadow-cyan-900/20 transition-all duration-300 hover:-translate-y-2 bg-slate-950/75">
+                    <div className={`p-7 rounded-2xl shadow-lg border group h-full backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${theme === 'dark' ? 'bg-slate-950/75 border-cyan-300/35 hover:shadow-cyan-900/20' : 'bg-white border-slate-200 hover:shadow-slate-300/30'}`}>
                       <div className="flex items-start gap-4">
                         <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 via-emerald-500 to-violet-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-cyan-400/70 shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                           <IconComponent size={32} />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-bold text-slate-100 text-lg leading-tight mb-2 group-hover:text-cyan-300 transition-colors">
+                          <h3 className={`font-bold text-lg leading-tight mb-2 transition-colors ${theme === 'dark' ? 'text-slate-100 group-hover:text-cyan-300' : 'text-slate-900 group-hover:text-cyan-600'}`}>
                             {cert.name}
                           </h3>
                           <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
@@ -1153,288 +1349,297 @@ function App() {
               })}
             </div>
           </div>
-        </section >
-
-        {/* PROJECTS SECTION */}
-        < section id="projects" data-reveal className="reveal-section py-24 bg-gradient-to-b from-slate-900/40 via-cyan-900/20 to-slate-900/40" >
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-white mb-4">
-                Featured Work
-              </h2>
-              <p className="text-slate-200">Some things I've built</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-10 stagger-animation">
-              {projects.map((project, index) => (
-                <Tilt
-                  key={index}
-                  tiltMaxAngleX={isMobile ? 0 : 10}
-                  tiltMaxAngleY={isMobile ? 0 : 10}
-                  tiltEnable={!isMobile}
-                  glareEnable={!isMobile}
-                  glareMaxOpacity={0.3}
-                  scale={1.05}
-                  className="h-full"
-                >
-                  <div
-                    onMouseMove={handleCardSpotlightMove}
-                    className="project-spotlight-card group relative bg-gradient-to-br from-slate-900/85 via-violet-900/35 to-slate-900/85 rounded-3xl overflow-hidden border border-emerald-400/35 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/30 h-full flex flex-col transform-style-3d transition-all duration-300 hover:-translate-y-3 hover:border-emerald-400/60"
-                  >
-                    <div className="h-64 overflow-hidden relative">
-                      <div
-                        className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10"
-                        style={{ opacity: 0.3 }}
-                      ></div>
-
-                      {project.title === "Blinkit Clone" && (
-                        <div className="absolute top-4 left-4 z-30 bg-violet-500/90 text-xs md:text-sm font-bold px-3 py-1 rounded-md shadow-lg backdrop-blur-sm text-white border border-violet-300/60">
-                          Featured Project
-                        </div>
-                      )}
-
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-full object-cover transform group-hover:scale-125 transition-transform duration-700"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div
-                        className="absolute bottom-4 left-4 z-20 flex gap-2 flex-wrap"
-                        style={{ transform: "translateZ(20px)" }}
-                      >
-                        {project.tech.map((t, i) => (
-                          <span
-                            key={i}
-                            className="px-2 py-1 bg-white/30 backdrop-blur-md text-white text-xs rounded-md border border-white/30 font-semibold hover:bg-white/50 transition-all"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="p-8 flex-1 flex flex-col">
-                      <h3 className="text-2xl font-bold text-slate-100 mb-3 flex justify-between items-center group-hover:text-emerald-300 transition-colors">
-                        {project.title}
-                        <div
-                          className="flex gap-3"
-                          style={{ transform: "translateZ(50px)" }}
-                        >
-                          <button
-                            type="button"
-                            data-cursor-label="Code"
-                            className="text-cyan-400 hover:text-cyan-300 hover:scale-125 transition-all duration-300 z-50 cursor-pointer"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              window.open(
-                                project.github,
-                                "_blank",
-                                "noopener,noreferrer"
-                              );
-                            }}
-                            title="View Code"
-                            aria-label={`View source code for ${project.title}`}
-                          >
-                            <Github size={24} />
-                          </button>
-                          <button
-                            type="button"
-                            data-cursor-label="Live"
-                            className="text-emerald-400 hover:text-emerald-300 hover:scale-125 transition-all duration-300 z-50 cursor-pointer"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              window.open(
-                                project.live,
-                                "_blank",
-                                "noopener,noreferrer"
-                              );
-                            }}
-                            title="Live Demo"
-                            aria-label={`Open live demo for ${project.title}`}
-                          >
-                            <ExternalLink size={24} />
-                          </button>
-                        </div>
-                      </h3>
-                      <p className="text-slate-200 leading-relaxed flex-grow">
-                        {project.description}
-                      </p>
-                    </div>
-                  </div>
-                </Tilt>
-              ))}
-            </div>
-          </div>
-        </section >
+        </section>
 
         {/* CONTACT SECTION */}
         <section
           id="contact"
           data-reveal
-          className="reveal-section py-24 bg-gradient-to-b from-slate-900/40 via-violet-900/30 to-slate-900/40 relative overflow-hidden transition-colors duration-300"
+          className={`reveal-section ${visibleSections.has('contact') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/30 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-violet-50/30 to-slate-100/40'}`}
         >
-          <div className="max-w-4xl mx-auto px-4 relative z-10">
-            <Tilt
-              tiltMaxAngleX={isMobile ? 0 : 2}
-              tiltMaxAngleY={isMobile ? 0 : 2}
-              tiltEnable={!isMobile}
-              glareEnable={!isMobile}
-              glareMaxOpacity={0.05}
-            >
-              <div className="bg-gradient-to-br from-slate-900/85 via-violet-900/35 to-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl border border-violet-400/30">
-                <div className="text-center mb-10">
-                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-500 dark:from-violet-300 dark:via-emerald-300 dark:to-cyan-300 bg-clip-text text-transparent">
-                    Let's Work Together
-                  </h2>
-                  <p className="text-slate-200 mt-3 text-lg">
-                    Have a project in mind? Let's discuss and create something amazing.
+          {/* Background decoration */}
+          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
+
+          <div className="max-w-6xl mx-auto px-4 relative z-10">
+            {/* Section header */}
+            <div className="text-center mb-4">
+              <span className="inline-block text-xs font-bold uppercase tracking-[0.3em] text-cyan-400 mb-3">Get in Touch</span>
+              <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                Let's <span className="bg-gradient-to-r from-violet-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">Connect</span>
+              </h2>
+              <p className={`text-lg max-w-2xl mx-auto leading-relaxed ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
+                Have a project in mind? Want to collaborate? Or just want to say hello? I'd love to hear from you.
+              </p>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-6" />
+            </div>
+
+            <div className="grid lg:grid-cols-5 gap-8 mt-14">
+              {/* LEFT — Contact Information */}
+              <div className="lg:col-span-2 space-y-6">
+                <div className={`rounded-2xl p-8 border shadow-xl ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900/90 via-violet-900/25 to-slate-900/90 border-violet-400/20' : 'bg-white border-slate-200'}`}>
+                  <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Contact Information</h3>
+                  <p className={`text-sm mb-8 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Feel free to reach out through any of these channels. I typically respond within 24 hours.</p>
+
+                  {/* Email */}
+                  <div className="space-y-5">
+                    <a
+                      href="mailto:deveshsingh20666@gmail.com"
+                      className="flex items-start gap-4 group"
+                      data-cursor-label="Mail"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-violet-500/15 border border-violet-400/25 flex items-center justify-center shrink-0 group-hover:bg-violet-500/25 group-hover:border-violet-400/40 transition-all">
+                        <Mail size={18} className="text-violet-300" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">Email</p>
+                        <p className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-200 group-hover:text-cyan-300' : 'text-slate-700 group-hover:text-cyan-600'}`}>deveshsingh20666@gmail.com</p>
+                      </div>
+                    </a>
+
+                    {/* Location */}
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-400/25 flex items-center justify-center shrink-0">
+                        <Globe size={18} className="text-emerald-300" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">Location</p>
+                        <p className={`text-sm ${theme === 'dark' ? 'text-slate-200' : 'text-slate-700'}`}>India</p>
+                      </div>
+                    </div>
+
+                    {/* LinkedIn */}
+                    <a
+                      href="https://linkedin.com/in/devesh-singh-0b234928b"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-start gap-4 group"
+                      data-cursor-label="LinkedIn"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-cyan-500/15 border border-cyan-400/25 flex items-center justify-center shrink-0 group-hover:bg-cyan-500/25 group-hover:border-cyan-400/40 transition-all">
+                        <Linkedin size={18} className="text-cyan-300" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">LinkedIn</p>
+                        <p className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-200 group-hover:text-cyan-300' : 'text-slate-700 group-hover:text-cyan-600'}`}>Devesh Singh</p>
+                      </div>
+                    </a>
+                  </div>
+
+                  {/* Social links row */}
+                  <div className={`mt-8 pt-6 border-t ${theme === 'dark' ? 'border-slate-700/50' : 'border-slate-200'}`}>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Follow Me</h4>
+                    <div className="flex items-center gap-3">
+                      {[
+                        { href: "https://github.com/deveshsingh641", icon: Github, label: "GitHub" },
+                        { href: "https://linkedin.com/in/devesh-singh-0b234928b", icon: Linkedin, label: "LinkedIn" },
+                        { href: "https://x.com/harshhere_666", icon: Twitter, label: "X / Twitter" },
+                        { href: "https://www.instagram.com/harshsingh_6661/", icon: Instagram, label: "Instagram" },
+                      ].map(({ href, icon: Icon, label }) => (
+                        <a
+                          key={label}
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          data-cursor-label={label}
+                          className={`w-10 h-10 rounded-lg border flex items-center justify-center transition-all duration-300 ${theme === 'dark' ? 'border-slate-700/60 bg-slate-800/40 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/40 hover:bg-cyan-500/10' : 'border-slate-200 bg-slate-50 text-slate-500 hover:text-cyan-600 hover:border-cyan-400/40 hover:bg-cyan-50'}`}
+                          title={label}
+                          aria-label={label}
+                        >
+                          <Icon size={17} />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Availability badge */}
+                <div className={`rounded-2xl p-6 border shadow-lg ${theme === 'dark' ? 'bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border-emerald-400/20' : 'bg-emerald-50 border-emerald-200'}`}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    </span>
+                    <span className={`text-sm font-bold ${theme === 'dark' ? 'text-emerald-300' : 'text-emerald-700'}`}>Available for work</span>
+                  </div>
+                  <p className={`text-xs leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                    I'm currently open to new opportunities and exciting projects. Let's create something amazing together!
                   </p>
                 </div>
-
-                {/* Status Messages */}
-                {formStatus.status && (
-                  <div
-                    className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${formStatus.status === "success"
-                      ? "bg-emerald-500/20 border border-emerald-400/50 text-emerald-300"
-                      : formStatus.status === "error"
-                        ? "bg-red-500/20 border border-red-400/50 text-red-300"
-                        : "bg-blue-500/20 border border-blue-400/50 text-blue-300"
-                      }`}
-                    role={formStatus.status === "error" ? "alert" : "status"}
-                    aria-live="polite"
-                  >
-                    {formStatus.status === "success" && (
-                      <CheckCircle size={20} className="flex-shrink-0" />
-                    )}
-                    {formStatus.status === "error" && (
-                      <AlertCircle size={20} className="flex-shrink-0" />
-                    )}
-                    <span className="text-sm font-medium">{formStatus.message}</span>
-                  </div>
-                )}
-
-                <form onSubmit={handleFormSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <label htmlFor="contact-name" className="sr-only">
-                      Your Name
-                    </label>
-                    <input
-                      id="contact-name"
-                      type="text"
-                      name="name"
-                      placeholder="Your Name"
-                      value={formData.name}
-                      onChange={handleFormChange}
-                      required
-                      disabled={formStatus.status === "sending"}
-                      className="w-full px-6 py-4 bg-slate-800/70 border border-violet-400/25 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:border-transparent focus:bg-slate-800 outline-none transition-all shadow-sm hover:border-emerald-400/30 text-slate-100 placeholder-slate-400 disabled:opacity-60"
-                    />
-                    <label htmlFor="contact-email" className="sr-only">
-                      Your Email
-                    </label>
-                    <input
-                      id="contact-email"
-                      type="email"
-                      name="email"
-                      placeholder="Your Email"
-                      value={formData.email}
-                      onChange={handleFormChange}
-                      required
-                      disabled={formStatus.status === "sending"}
-                      className="w-full px-6 py-4 bg-slate-800/70 border border-violet-400/25 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:border-transparent focus:bg-slate-800 outline-none transition-all shadow-sm hover:border-emerald-400/30 text-slate-100 placeholder-slate-400 disabled:opacity-60"
-                    />
-                  </div>
-                  <label htmlFor="contact-message" className="sr-only">
-                    Tell me about your project
-                  </label>
-                  <textarea
-                    id="contact-message"
-                    name="message"
-                    rows={4}
-                    placeholder="Tell me about your project..."
-                    value={formData.message}
-                    onChange={handleFormChange}
-                    required
-                    disabled={formStatus.status === "sending"}
-                    className="w-full px-6 py-4 bg-slate-800/70 border border-violet-400/25 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:border-transparent focus:bg-slate-800 outline-none transition-all resize-none shadow-sm hover:border-emerald-400/30 text-slate-100 placeholder-slate-400 disabled:opacity-60"
-                  ></textarea>
-                  <button
-                    type="submit"
-                    disabled={formStatus.status === "sending"}
-                    className="w-full bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg hover:shadow-violet-500/50 disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {formStatus.status === "sending"
-                      ? "Sending..."
-                      : "Send Message"}
-                  </button>
-                </form>
-
-                <div className="mt-12 flex flex-col md:flex-row justify-center gap-6 pt-8 border-t border-violet-500/30">
-                  <a
-                    href="mailto:deveshsingh20666@gmail.com"
-                    data-cursor-label="Mail"
-                    className="flex items-center justify-center md:justify-start gap-2 text-slate-200 hover:text-emerald-300 transition-all hover:scale-105 font-semibold group"
-                  >
-                    <Mail size={18} className="group-hover:animate-pulse" /> deveshsingh20666@gmail.com
-                  </a>
-                  <a
-                    href="https://linkedin.com/in/devesh-singh-0b234928b"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor-label="LinkedIn"
-                    className="flex items-center justify-center md:justify-start gap-2 text-slate-200 hover:text-emerald-300 transition-all hover:scale-105 font-semibold group"
-                  >
-                    <Linkedin size={18} className="group-hover:animate-pulse" /> LinkedIn
-                  </a>
-                </div>
               </div>
-            </Tilt>
+
+              {/* RIGHT — Send a Message form */}
+              <div className="lg:col-span-3">
+                <Tilt
+                  tiltMaxAngleX={isMobile ? 0 : 2}
+                  tiltMaxAngleY={isMobile ? 0 : 2}
+                  tiltEnable={!isMobile}
+                  glareEnable={!isMobile}
+                  glareMaxOpacity={0.05}
+                >
+                  <div className={`rounded-2xl p-8 md:p-10 border shadow-xl ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900/90 via-violet-900/25 to-slate-900/90 border-violet-400/20' : 'bg-white border-slate-200'}`}>
+                    <h3 className={`text-xl font-bold mb-1 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Send a Message</h3>
+                    <p className={`text-sm mb-8 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>I'll get back to you within 24–48 hours.</p>
+
+                    {/* Status Messages */}
+                    {formStatus.status && (
+                      <div
+                        className={`mb-6 p-4 rounded-xl flex items-center gap-3 ${formStatus.status === "success"
+                          ? "bg-emerald-500/15 border border-emerald-400/40 text-emerald-300"
+                          : formStatus.status === "error"
+                            ? "bg-red-500/15 border border-red-400/40 text-red-300"
+                            : "bg-blue-500/15 border border-blue-400/40 text-blue-300"
+                          }`}
+                        role={formStatus.status === "error" ? "alert" : "status"}
+                        aria-live="polite"
+                      >
+                        {formStatus.status === "success" && <CheckCircle size={18} className="flex-shrink-0" />}
+                        {formStatus.status === "error" && <AlertCircle size={18} className="flex-shrink-0" />}
+                        <span className="text-sm font-medium">{formStatus.message}</span>
+                      </div>
+                    )}
+
+                    <form onSubmit={handleFormSubmit} className="space-y-5">
+                      <div className="grid md:grid-cols-2 gap-5">
+                        <div>
+                          <label htmlFor="contact-name" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Your Name</label>
+                          <input
+                            id="contact-name"
+                            type="text"
+                            name="name"
+                            placeholder="John Doe"
+                            value={formData.name}
+                            onChange={handleFormChange}
+                            required
+                            disabled={formStatus.status === "sending"}
+                            className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="contact-email" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Your Email</label>
+                          <input
+                            id="contact-email"
+                            type="email"
+                            name="email"
+                            placeholder="john@example.com"
+                            value={formData.email}
+                            onChange={handleFormChange}
+                            required
+                            disabled={formStatus.status === "sending"}
+                            className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label htmlFor="contact-subject" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Subject</label>
+                        <input
+                          id="contact-subject"
+                          type="text"
+                          name="subject"
+                          placeholder="Project Collaboration"
+                          onChange={handleFormChange}
+                          disabled={formStatus.status === "sending"}
+                          className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="contact-message" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Message</label>
+                        <textarea
+                          id="contact-message"
+                          name="message"
+                          rows={5}
+                          placeholder="Tell me about your project..."
+                          value={formData.message}
+                          onChange={handleFormChange}
+                          required
+                          disabled={formStatus.status === "sending"}
+                          className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all resize-none hover:border-slate-600/80 disabled:opacity-50"
+                        ></textarea>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={formStatus.status === "sending"}
+                        className="w-full bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 text-white font-bold py-3.5 rounded-xl hover:shadow-2xl hover:shadow-violet-500/30 hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {formStatus.status === "sending" ? (
+                          <>
+                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Mail size={16} />
+                            Send Message
+                          </>
+                        )}
+                      </button>
+                    </form>
+                  </div>
+                </Tilt>
+              </div>
+            </div>
           </div>
-        </section >
+        </section>
 
         {/* Footer */}
-        < footer className="bg-slate-950 py-8 border-t border-violet-500/30 text-center text-gray-400 text-sm" >
-          <p>© 2025 Devesh Singh. Crafted with React & Tailwind.</p>
-        </footer >
-      </main >
-
-      {selectedBlog && (
-        <div
-          className="fixed inset-0 z-[220] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setSelectedBlog(null)}
-        >
-          <article
-            className="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl border border-cyan-400/25 bg-slate-950 p-6 md:p-8 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div>
-                <p className="text-xs uppercase tracking-wider text-cyan-300 font-semibold mb-1">{selectedBlog.platform}</p>
-                <h3 className="text-2xl font-bold text-slate-100 leading-snug">{selectedBlog.title}</h3>
-                <p className="text-sm text-slate-400 mt-2">{selectedBlog.date} • {selectedBlog.readTime}</p>
+        <footer className={`border-t ${theme === 'dark' ? 'bg-slate-950/95 border-slate-700/40' : 'bg-slate-100 border-slate-200'}`}>
+          <div className="max-w-6xl mx-auto px-4 py-12">
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                <h3 className={`text-lg font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Devesh Singh</h3>
+                <p className={`text-sm leading-relaxed mb-4 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                  Full-Stack Developer crafting digital experiences with passion and precision.
+                </p>
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                  India
+                </div>
               </div>
-              <button
-                type="button"
-                className="p-2 rounded-md text-slate-300 hover:text-white hover:bg-white/10"
-                onClick={() => setSelectedBlog(null)}
-                aria-label="Close article"
-              >
-                <X size={18} />
-              </button>
+
+              {/* Navigation */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Navigation</h4>
+                <nav className="flex flex-col gap-2">
+                  {["Home", "About", "Skills", "Blog", "Projects", "Contact"].map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => scrollToSection(item.toLowerCase())}
+                      className={`text-sm text-left transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Connect */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Connect</h4>
+                <div className="flex flex-col gap-2">
+                  <a href="mailto:deveshsingh20666@gmail.com" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>deveshsingh20666@gmail.com</a>
+                  <a href="https://github.com/deveshsingh641" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>GitHub</a>
+                  <a href="https://linkedin.com/in/devesh-singh-0b234928b" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>LinkedIn</a>
+                  <a href="https://x.com/harshhere_666" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>X / Twitter</a>
+                  <a href="https://www.instagram.com/harshsingh_6661/" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>Instagram</a>
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-4 text-slate-200 leading-relaxed">
-              {selectedBlog.content.map((paragraph, idx) => (
-                <p key={idx}>{paragraph}</p>
-              ))}
+            <div className={`pt-6 border-t flex flex-col md:flex-row items-center justify-between gap-3 ${theme === 'dark' ? 'border-slate-800/60' : 'border-slate-200'}`}>
+              <p className="text-xs text-slate-500">© {new Date().getFullYear()} Devesh Singh. Crafted with React & Tailwind.</p>
+              <p className="text-xs text-slate-600">Made with ♥ by Devesh Singh</p>
             </div>
-          </article>
-        </div>
-      )}
-    </div >
+          </div>
+        </footer>
+      </main>
+    </div>
   );
 }
 
