@@ -30,7 +30,6 @@ import NeonBackground from "./components/NeonBackground";
 import BlogSection from "./components/BlogSection";
 import ProjectPreview from "./components/ProjectPreview";
 import CommandPalette from "./components/CommandPalette";
-import SkillsGraph from "./components/SkillsGraph";
 import Playground from "./components/Playground";
 import MissionControl from "./components/MissionControl";
 import BugReportButton from "./components/BugReportButton";
@@ -208,7 +207,6 @@ function App() {
             "home",
             "about",
             "skills",
-            "skills-graph",
             "blog",
             "playground",
             "projects",
@@ -382,59 +380,62 @@ function App() {
   const techCategories = [
     {
       title: "Languages",
+      icon: "code",
       techs: [
-        { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
-        { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-        { name: "Java", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
         { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
         { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+        { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+        { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
       ],
     },
     {
       title: "Frontend",
+      icon: "globe",
       techs: [
         { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
         { name: "Tailwind CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
+        { name: "Vite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" },
         { name: "HTML5", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
         { name: "CSS3", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
-        { name: "Vite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" },
-        { name: "Three.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" },
       ],
     },
     {
       title: "Backend",
+      icon: "server",
       techs: [
         { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
         { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
-        { name: "REST APIs", icon: "" },
         { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
       ],
     },
     {
       title: "ML & Data Science",
+      icon: "brain",
       techs: [
         { name: "Scikit-learn", icon: "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" },
         { name: "Pandas", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" },
         { name: "NumPy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" },
-        { name: "TensorFlow", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" },
-        { name: "Jupyter", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" },
         { name: "Matplotlib", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matplotlib/matplotlib-original.svg" },
+        { name: "Jupyter", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" },
       ],
     },
     {
-      title: "Version Control & OS",
+      title: "DevOps & Version Control",
+      icon: "gitbranch",
       techs: [
         { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
         { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
-        { name: "Linux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
+        { name: "GitHub Actions", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" },
+        { name: "Vercel", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" },
       ],
     },
     {
       title: "Tools",
+      icon: "wrench",
       techs: [
         { name: "VS Code", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
-        { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
         { name: "Postman", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" },
+        { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
         { name: "ESLint", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/eslint/eslint-original.svg" },
       ],
     },
@@ -1101,57 +1102,64 @@ function App() {
           </div>
         </section>
 
-        {/* SKILLS SECTION — "TOOLS I MASTER" card grid */}
+        {/* SKILLS SECTION — "TOOLS I MASTER" vertical list layout */}
         <section id="skills" data-reveal className={`reveal-section ${visibleSections.has('skills') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-emerald-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-emerald-50/20 to-slate-100/40'}`}>
           <div className="hidden lg:block absolute right-0 top-1/4 w-96 h-96 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
           <div className="hidden lg:block absolute left-0 bottom-1/4 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
 
           <div className="max-w-6xl mx-auto px-4 relative z-10">
-            <div className="text-center mb-16">
+            <div className="mb-16">
               <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-3">TECH_STACK</p>
               <h2 className={`text-4xl md:text-5xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
                 TOOLS I <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">MASTER</span>.
               </h2>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-5"></div>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 rounded-full shadow-lg shadow-violet-400/50 mt-5"></div>
             </div>
 
-            {/* Category Cards Grid */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Category Vertical List */}
+            <div className="space-y-12">
               {techCategories.map((category, idx) => (
-                <div
-                  key={idx}
-                  className={`group relative rounded-2xl border backdrop-blur-sm p-6 transition-all duration-500 hover:-translate-y-1 ${theme === 'dark' ? 'border-slate-700/40 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-800/40' : 'border-slate-200 bg-white/80 hover:border-emerald-400/40 hover:bg-slate-50'}`}
-                >
+                <div key={idx}>
                   {/* Category Header */}
-                  <div className="flex items-center justify-between mb-5">
-                    <h3 className={`text-lg font-bold group-hover:text-emerald-400 transition-colors ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
-                      {category.title}
-                    </h3>
-                    <span className="text-xs font-mono text-slate-500">
-                      {category.techs.length} technologies
-                    </span>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-emerald-500/15' : 'bg-emerald-100'}`}>
+                      {category.icon === 'code' && <span className="text-emerald-400 text-sm font-bold">{`</>`}</span>}
+                      {category.icon === 'globe' && <Globe size={16} className="text-emerald-400" />}
+                      {category.icon === 'server' && <Server size={16} className="text-emerald-400" />}
+                      {category.icon === 'brain' && <span className="text-emerald-400 text-sm">🧠</span>}
+                      {category.icon === 'gitbranch' && <span className="text-emerald-400 text-sm">⑂</span>}
+                      {category.icon === 'wrench' && <span className="text-emerald-400 text-sm">🔧</span>}
+                    </div>
+                    <div>
+                      <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                        {category.title}
+                      </h3>
+                      <span className="text-xs text-slate-500">
+                        {category.techs.length} technologies
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Tech Items */}
-                  <div className="space-y-2">
+                  {/* Tech Items — Horizontal Wrap Grid */}
+                  <div className="flex flex-wrap gap-3">
                     {category.techs.map((tech) => (
                       <div
                         key={tech.name}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all duration-300 cursor-default group/item ${theme === 'dark' ? 'bg-slate-800/50 border-slate-700/30 hover:border-emerald-500/30 hover:bg-slate-700/40' : 'bg-slate-50 border-slate-200 hover:border-emerald-400/30 hover:bg-white'}`}
+                        className={`flex flex-col items-center justify-center w-[120px] h-[90px] rounded-xl border transition-all duration-300 cursor-default group/item hover:-translate-y-0.5 ${theme === 'dark' ? 'bg-slate-800/60 border-slate-700/40 hover:border-emerald-500/40 hover:bg-slate-700/50' : 'bg-white border-slate-200 hover:border-emerald-400/40 hover:bg-slate-50 hover:shadow-md'}`}
                       >
                         {tech.icon ? (
                           <img
                             src={tech.icon}
                             alt={tech.name}
-                            className="w-6 h-6 flex-shrink-0 group-hover/item:scale-110 transition-transform duration-300"
+                            className="w-8 h-8 mb-2 group-hover/item:scale-110 transition-transform duration-300"
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-6 h-6 flex-shrink-0 rounded bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
-                            <Server size={14} className="text-white" />
+                          <div className="w-8 h-8 mb-2 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                            <Server size={16} className="text-white" />
                           </div>
                         )}
-                        <span className={`text-sm font-medium transition-colors ${theme === 'dark' ? 'text-slate-300 group-hover/item:text-slate-100' : 'text-slate-700 group-hover/item:text-slate-900'}`}>
+                        <span className={`text-xs font-medium text-center leading-tight ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
                           {tech.name}
                         </span>
                       </div>
@@ -1162,7 +1170,7 @@ function App() {
             </div>
 
             {/* Stats Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-4xl mx-auto">
               {[
                 { value: `${techCategories.reduce((s, c) => s + c.techs.length, 0)}+`, label: "TECHNOLOGIES" },
                 { value: "5+", label: "PROJECTS BUILT" },
@@ -1175,13 +1183,6 @@ function App() {
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* SKILLS GRAPH SECTION */}
-        <section id="skills-graph" data-reveal className={`reveal-section ${visibleSections.has('skills-graph') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/15 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-violet-50/15 to-slate-100/40'}`}>
-          <div className="max-w-6xl mx-auto px-4">
-            <SkillsGraph theme={theme!} />
           </div>
         </section>
 

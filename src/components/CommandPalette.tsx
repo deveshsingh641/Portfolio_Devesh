@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, BarChart3, Play, Rocket, Bug, Coffee } from "lucide-react";
+import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee } from "lucide-react";
 
 interface Command {
   id: string;
@@ -120,18 +120,6 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
         setOpen(false);
       },
       keywords: ["certifications", "credentials", "badges"],
-    },
-    {
-      id: "nav-skills-graph",
-      label: "Skills Graph",
-      description: "Interactive skill proficiency chart",
-      category: "navigation",
-      icon: <BarChart3 size={16} />,
-      action: () => {
-        scrollToSection("skills-graph");
-        setOpen(false);
-      },
-      keywords: ["skills", "graph", "chart", "proficiency", "visualization"],
     },
     {
       id: "nav-playground",
