@@ -780,7 +780,7 @@ function App() {
 
           <div className="relative z-10 w-full max-w-5xl mx-auto text-center">
             <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-bold tracking-wide uppercase mb-8 animate-fadeInUp shadow-sm ${theme === 'dark' ? 'bg-slate-950/80 border-cyan-300/50 text-cyan-100' : 'bg-white/90 border-violet-300/50 text-violet-700'}`}>
-              <span className="w-2.5 h-2.5 rounded-full bg-violet-600 animate-pulse"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-violet-600 animate-blink"></span>
               Open to Work
             </div>
 

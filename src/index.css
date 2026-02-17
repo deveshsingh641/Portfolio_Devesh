@@ -298,6 +298,17 @@ html:not(.dark) footer {
 .animate-shimmer { animation: shimmer 3s infinite; }
 .animate-pulse-subtle { animation: pulse-subtle 2s ease-in-out infinite; }
 
+/* Blink animation for small status dots (e.g., "Open to Work") */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.animate-blink {
+  animation: blink 1s steps(1, start) infinite;
+}
+
+/* Intentionally allow blink animation even when user has reduced motion preference. */
+
 /* Stagger animations for lists */
 .stagger-animation > * {
   animation: fadeInUp 0.8s ease-out backwards;

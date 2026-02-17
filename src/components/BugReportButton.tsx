@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import { Bug, X, Send, CheckCircle, AlertTriangle } from "lucide-react";
+import { Bug, X, Send, CheckCircle, AlertTriangle, AlertCircle } from "lucide-react";
 
 interface BugReportProps {
   theme: string;
@@ -10,17 +10,49 @@ const BugReportButton: React.FC<BugReportProps> = ({ theme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({ type: "bug", title: "", description: "", email: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In production, this would POST to an API
-    console.log("Bug report submitted:", formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setIsOpen(false);
-      setFormData({ type: "bug", title: "", description: "", email: "" });
-    }, 2500);
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined;
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string | undefined;
+      const receiveEmail = import.meta.env.VITE_RECEIVE_EMAIL as string | undefined;
+
+      if (!publicKey || !serviceId || !templateId || !receiveEmail) {
+        throw new Error("Email service not configured. Please try again later.");
+      }
+
+      const emailjsModule = await import("emailjs-com");
+      const emailjs = emailjsModule.default;
+      emailjs.init(publicKey);
+
+      await emailjs.send(serviceId, templateId, {
+        to_email: receiveEmail,
+        report_type: formData.type === "bug" ? "Bug Report" : "Feature Request",
+        title: formData.title,
+        description: formData.description,
+        reporter_email: formData.email || "Not provided",
+        message: `[${formData.type.toUpperCase()}] ${formData.title}\n\n${formData.description}`,
+      });
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setIsOpen(false);
+        setFormData({ type: "bug", title: "", description: "", email: "" });
+        setIsLoading(false);
+      }, 2500);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to submit report";
+      setError(errorMessage);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -172,13 +204,26 @@ const BugReportButton: React.FC<BugReportProps> = ({ theme }) => {
                   />
                 </div>
 
+                {/* Error message */}
+                {error && (
+                  <div className={`flex gap-2 p-3 rounded-xl text-sm ${theme === "dark" ? "bg-red-500/10 border border-red-500/20 text-red-400" : "bg-red-50 border border-red-200 text-red-700"}`}>
+                    <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
+                    {error}
+                  </div>
+                )}
+
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-bold text-sm hover:shadow-lg hover:shadow-violet-500/20 transition-all hover:scale-[1.01] active:scale-[0.99]"
+                  disabled={isLoading}
+                  className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all ${
+                    isLoading
+                      ? "bg-gradient-to-r from-violet-600/50 to-cyan-500/50 text-white cursor-not-allowed opacity-70"
+                      : "bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:shadow-lg hover:shadow-violet-500/20 hover:scale-[1.01] active:scale-[0.99]"
+                  }`}
                 >
                   <Send size={14} />
-                  Submit Report
+                  {isLoading ? "Sending..." : "Submit Report"}
                 </button>
               </form>
             )}
