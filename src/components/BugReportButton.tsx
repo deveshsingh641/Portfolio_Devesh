@@ -24,22 +24,29 @@ const BugReportButton: React.FC<BugReportProps> = ({ theme }) => {
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string | undefined;
       const receiveEmail = import.meta.env.VITE_RECEIVE_EMAIL as string | undefined;
 
+      console.log("EmailJS Config:", { publicKey, serviceId, templateId, receiveEmail });
+
       if (!publicKey || !serviceId || !templateId || !receiveEmail) {
-        throw new Error("Email service not configured. Please try again later.");
+        throw new Error("❌ Email service not configured. Please check your .env.local file.");
       }
 
       const emailjsModule = await import("emailjs-com");
       const emailjs = emailjsModule.default;
       emailjs.init(publicKey);
 
-      await emailjs.send(serviceId, templateId, {
+      const emailPayload = {
         to_email: receiveEmail,
-        report_type: formData.type === "bug" ? "Bug Report" : "Feature Request",
-        title: formData.title,
-        description: formData.description,
-        reporter_email: formData.email || "Not provided",
-        message: `[${formData.type.toUpperCase()}] ${formData.title}\n\n${formData.description}`,
-      });
+        name: `[${formData.type === "bug" ? "BUG" : "FEATURE"}] ${formData.title}`,
+        email: formData.email || "Not provided",
+        message: formData.description,
+        title: `Bug Report / Feature Request - ${formData.type}`,
+      };
+
+      console.log("Sending email with payload:", emailPayload);
+
+      const response = await emailjs.send(serviceId, templateId, emailPayload);
+      
+      console.log("✅ Email sent successfully:", response);
 
       setSubmitted(true);
       setTimeout(() => {
@@ -49,6 +56,7 @@ const BugReportButton: React.FC<BugReportProps> = ({ theme }) => {
         setIsLoading(false);
       }, 2500);
     } catch (err) {
+      console.error("❌ Email sending failed:", err);
       const errorMessage = err instanceof Error ? err.message : "Failed to submit report";
       setError(errorMessage);
       setIsLoading(false);

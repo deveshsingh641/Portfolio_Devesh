@@ -19,7 +19,6 @@ import {
   Sun,
   Moon,
   Twitter,
-  Instagram,
   Search,
 } from "lucide-react";
 import { Helmet } from "react-helmet";
@@ -1498,7 +1497,6 @@ function App() {
                         { href: "https://github.com/deveshsingh641", icon: Github, label: "GitHub" },
                         { href: "https://linkedin.com/in/devesh-singh-0b234928b", icon: Linkedin, label: "LinkedIn" },
                         { href: "https://x.com/harshhere_666", icon: Twitter, label: "X / Twitter" },
-                        { href: "https://www.instagram.com/harshsingh_6661/", icon: Instagram, label: "Instagram" },
                       ].map(({ href, icon: Icon, label }) => (
                         <a
                           key={label}
@@ -1691,7 +1689,6 @@ function App() {
                   <a href="https://github.com/deveshsingh641" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>GitHub</a>
                   <a href="https://linkedin.com/in/devesh-singh-0b234928b" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>LinkedIn</a>
                   <a href="https://x.com/harshhere_666" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>X / Twitter</a>
-                  <a href="https://www.instagram.com/harshsingh_6661/" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>Instagram</a>
                 </div>
               </div>
             </div>
