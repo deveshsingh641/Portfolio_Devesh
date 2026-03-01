@@ -497,7 +497,7 @@ function App() {
     {
       title: "Lecture Feedback System",
       description:
-        "A comprehensive full-stack platform for collecting and analyzing student feedback on lectures in real-time. Features anonymous feedback submission, instructor dashboard with analytics, sentiment analysis, and actionable insights to improve teaching quality.",
+        "A comprehensive full-stack platform for collecting and analyzing student feedback on lectures in real-time. Features anonymous feedback submission, instructor dashboard with analytics, and actionable insights to improve teaching quality.",
       tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
       github: "https://github.com/deveshsingh641/lecture_feedback_system",
       live: "https://lecture-feedback-system.demo",
