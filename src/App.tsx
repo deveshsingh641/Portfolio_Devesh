@@ -310,23 +310,41 @@ function App() {
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as
         | string
         | undefined;
+      const receiveEmail = import.meta.env.VITE_RECEIVE_EMAIL as
+        | string
+        | undefined;
       const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT as
         | string
         | undefined;
 
-      if (publicKey && serviceId && templateId) {
+      console.log("📧 Email Config Check:", { 
+        publicKey: publicKey ? "✓ Found" : "✗ Missing", 
+        serviceId: serviceId ? "✓ Found" : "✗ Missing", 
+        templateId: templateId ? "✓ Found" : "✗ Missing", 
+        receiveEmail: receiveEmail ? `✓ ${receiveEmail}` : "✗ Missing",
+        formspreeEndpoint: formspreeEndpoint ? "✓ Found" : "✗ Missing"
+      });
+
+      if (publicKey && serviceId && templateId && receiveEmail) {
         const emailjsModule = await import("emailjs-com");
         const emailjs = emailjsModule.default;
         emailjs.init(publicKey);
 
-        await emailjs.send(serviceId, templateId, {
-          to_email: import.meta.env.VITE_RECEIVE_EMAIL,
+        const emailPayload = {
+          to_email: receiveEmail,
           name: formData.name,
           email: formData.email,
+          title: "Contact Form Inquiry",
           message: formData.message,
-          title: "New Portfolio Inquiry",
-        });
+        };
+
+        console.log("📤 Sending email with payload:", emailPayload);
+
+        await emailjs.send(serviceId, templateId, emailPayload);
+        
+        console.log("✅ Email sent successfully via EmailJS");
       } else if (formspreeEndpoint) {
+        console.log("📤 Using Formspree as EmailJS is not configured");
         const response = await fetch(formspreeEndpoint, {
           method: "POST",
           headers: {
@@ -342,17 +360,19 @@ function App() {
         });
 
         if (!response.ok) {
-          throw new Error("Formspree submission failed");
+          throw new Error(`Formspree submission failed with status ${response.status}`);
         }
+        
+        console.log("✅ Email sent successfully via Formspree");
       } else {
         throw new Error(
-          "No form provider configured. Add EmailJS keys or VITE_FORMSPREE_ENDPOINT in .env.local"
+          "❌ No email service configured. Please set up EmailJS (VITE_EMAILJS_PUBLIC_KEY, VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_RECEIVE_EMAIL) or Formspree (VITE_FORMSPREE_ENDPOINT) in .env.local"
         );
       }
 
       setFormStatus({
         status: "success",
-        message: "Message sent successfully! I'll get back to you soon.",
+        message: "Message sent successfully! I'll get back to you within 24-48 hours.",
       });
       setFormData({ name: "", email: "", message: "" });
 
@@ -361,11 +381,12 @@ function App() {
         setFormStatus({ status: "", message: "" });
       }, 5000);
     } catch (error) {
-      console.error("Email sending failed:", error);
+      console.error("❌ Email sending failed:", error);
+      const fullError = error instanceof Error ? error.message : JSON.stringify(error);
+      
       setFormStatus({
         status: "error",
-        message:
-          "Failed to send message. Please try again or contact me directly at deveshsingh20666@gmail.com.",
+        message: `Failed to send message: ${fullError}. Please try contacting me directly at deveshsingh20666@gmail.com.`,
       });
 
       // Clear error message after 7 seconds
@@ -383,7 +404,6 @@ function App() {
       techs: [
         { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
         { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-        { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
         { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
       ],
     },
@@ -407,17 +427,7 @@ function App() {
         { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
       ],
     },
-    {
-      title: "ML & Data Science",
-      icon: "brain",
-      techs: [
-        { name: "Scikit-learn", icon: "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" },
-        { name: "Pandas", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" },
-        { name: "NumPy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" },
-        { name: "Matplotlib", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matplotlib/matplotlib-original.svg" },
-        { name: "Jupyter", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" },
-      ],
-    },
+
     {
       title: "DevOps & Version Control",
       icon: "gitbranch",
@@ -475,12 +485,6 @@ function App() {
       icon: Award,
     },
     {
-      name: "Python for Data Science",
-      source: "NPTEL",
-      year: "2025",
-      icon: FileText,
-    },
-    {
       name: "Google Arcade Cloud Skills Badges",
       source: "Google Cloud",
       year: "2025",
@@ -502,23 +506,11 @@ function App() {
       status: "Completed",
       category: "Full Stack",
     },
+
     {
-      title: "Online Fraud Detection",
+      title: "Personal Portfolio",
       description:
-        "Machine learning pipeline for detecting fraudulent transactions with 95%+ accuracy. Features advanced feature engineering, imbalanced-data handling (SMOTE), model evaluation with precision-recall trade-offs, and threshold optimization for production-ready fraud screening.",
-      tech: ["Python", "Scikit-learn", "Pandas", "NumPy", "Matplotlib"],
-      github: "https://github.com/deveshsingh641/Data-Science-Project-",
-      live: "#",
-      demoUrl: "",
-      image:
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      status: "Completed",
-      category: "Machine Learning",
-    },
-    {
-      title: "Developer Portfolio",
-      description:
-        "A modern, responsive developer portfolio built with React and Tailwind CSS. Features dark/light theme toggle, animated intro sequence, parallax effects, custom cursor, embedded blog with markdown rendering, live project previews, and glassmorphic design aesthetic.",
+        "A modern, responsive personal portfolio built with React and Tailwind CSS. Features dark/light theme toggle, animated intro sequence, parallax effects, custom cursor, embedded blog with markdown rendering, live project previews, and glassmorphic design aesthetic.",
       tech: ["React", "TypeScript", "Tailwind CSS", "Vite"],
       github: "https://github.com/deveshsingh641",
       live: window.location.origin,
@@ -581,11 +573,11 @@ function App() {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <meta
           name="description"
-          content="Devesh Singh - Full-Stack Developer and ML enthusiast building high-performance web applications with modern React, Node.js, and intelligent systems."
+          content="Devesh Singh - Full-Stack Developer building high-performance web applications with modern React, Node.js, and innovative solutions."
         />
         <meta
           name="keywords"
-          content="Devesh Singh, full stack developer, React developer, Node.js, machine learning, portfolio"
+          content="Devesh Singh, full stack developer, React developer, Node.js, web development, portfolio"
         />
         <meta name="author" content="Devesh Singh" />
         <meta name="robots" content="index, follow" />
@@ -593,7 +585,7 @@ function App() {
         <meta property="og:title" content="Devesh Singh | Portfolio" />
         <meta
           property="og:description"
-          content="Portfolio of Devesh Singh — Full-Stack Developer and ML enthusiast focused on fast, accessible, and user-centered products."
+          content="Portfolio of Devesh Singh — Full-Stack Developer focused on fast, accessible, and user-centered products."
         />
         <meta property="og:image" content="/profile.jpg" />
         <meta property="og:url" content={currentPageUrl} />
@@ -601,7 +593,7 @@ function App() {
         <meta name="twitter:title" content="Devesh Singh | Portfolio" />
         <meta
           name="twitter:description"
-          content="Explore projects, skills, and certifications of Devesh Singh — Full-Stack Developer and ML enthusiast."
+          content="Explore projects, skills, and certifications of Devesh Singh — Full-Stack Developer building innovative web solutions."
         />
         <meta name="twitter:image" content="/profile.jpg" />
         <link rel="icon" type="image/png" href="/favicon.png" />
@@ -809,11 +801,11 @@ function App() {
                   sequence={[
                     "Full Stack Developer",
                     2000,
-                    "Machine Learning Enthusiast",
-                    2000,
                     "Problem Solver",
                     2000,
-                    "App developer",
+                    "App Developer",
+                    2000,
+                    "Tech Innovator",
                     2000,
                   ]}
                   wrapper="span"
@@ -895,20 +887,19 @@ function App() {
                 <div className="space-y-5">
                   <p className={`text-xl md:text-2xl font-light leading-relaxed ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
                     I'm <span className={`font-semibold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Devesh Singh</span>.
-                    Full-Stack Developer & ML enthusiast crafting{" "}
+                    Full-Stack Developer crafting{" "}
                     <span className={`font-medium ${theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'}`}>robust, production-ready applications</span>.
                   </p>
                   <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
                     Currently pursuing B.Tech in IT at{" "}
                     <span className={`font-semibold ${theme === 'dark' ? 'text-violet-300' : 'text-violet-600'}`}>ABES Engineering College</span>,
-                    I focus on building applications that are not just functional, but intelligent.
-                    My passion lies at the intersection of full-stack engineering and machine learning —
-                    turning complex logic into user-friendly reality.
+                    I focus on building applications that are not just functional, but intuitive and scalable.
+                    My passion lies in full-stack engineering — leveraging modern technologies to turn complex logic into user-friendly reality.
                   </p>
                   <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-                    When I'm not debugging, I'm refining my DSA skills on LeetCode or experimenting
-                    with new frameworks and AI tools. I'm eager to join a forward-thinking team where I can
-                    deploy my analytical skills to solve real-world challenges.
+                    When I'm not debugging, I'm refining my DSA skills on LeetCode or exploring
+                    new frameworks and modern tech stacks. I'm eager to join a forward-thinking team where I can
+                    deploy my technical expertise to solve real-world challenges.
                   </p>
                 </div>
 
@@ -1004,7 +995,7 @@ function App() {
                         <span className="text-slate-300">cat interests.txt</span>
                       </p>
                       <p className="text-slate-400">🎯 Full-Stack Development</p>
-                      <p className="text-slate-400">🤖 Machine Learning & AI</p>
+                      <p className="text-slate-400">💻 Web Development</p>
                       <p className="text-slate-400">📱 App Development</p>
                       <p className="text-slate-400">🧠 DSA & Problem Solving</p>
                     </div>

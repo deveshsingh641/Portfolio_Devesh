@@ -13,7 +13,6 @@ const skills: Skill[] = [
   // Languages
   { name: "JavaScript", level: 90, category: "Languages", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg", experience: "2+ years" },
   { name: "TypeScript", level: 85, category: "Languages", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg", experience: "1+ year" },
-  { name: "Python", level: 88, category: "Languages", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg", experience: "2+ years" },
   { name: "C++", level: 82, category: "Languages", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg", experience: "2+ years" },
   { name: "Java", level: 75, category: "Languages", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg", experience: "1+ year" },
   // Frontend
@@ -26,10 +25,6 @@ const skills: Skill[] = [
   { name: "Express.js", level: 83, category: "Backend", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg", experience: "1+ year" },
   { name: "MongoDB", level: 80, category: "Backend", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg", experience: "1+ year" },
   { name: "REST APIs", level: 88, category: "Backend", experience: "2+ years" },
-  // ML & Data
-  { name: "Scikit-learn", level: 78, category: "ML & Data", icon: "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg", experience: "1+ year" },
-  { name: "Pandas", level: 82, category: "ML & Data", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg", experience: "1+ year" },
-  { name: "TensorFlow", level: 65, category: "ML & Data", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg", experience: "6 months" },
   // Tools
   { name: "Git", level: 88, category: "Tools", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg", experience: "2+ years" },
   { name: "VS Code", level: 95, category: "Tools", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg", experience: "3+ years" },
@@ -37,7 +32,7 @@ const skills: Skill[] = [
   { name: "Figma", level: 70, category: "Tools", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg", experience: "1+ year" },
 ];
 
-const categories = ["All", "Languages", "Frontend", "Backend", "ML & Data", "Tools"];
+const categories = ["All", "Languages", "Frontend", "Backend", "Tools"];
 
 function getBarColor(level: number): string {
   if (level >= 90) return "from-emerald-400 to-cyan-400";

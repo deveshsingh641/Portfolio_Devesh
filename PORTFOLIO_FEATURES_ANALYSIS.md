@@ -39,12 +39,12 @@ Your portfolio is **feature-rich** with 25+ features already implemented! It's a
   - Modal reader with syntax highlighting
   
 - ✅ **Projects Section**
-  - 3 project cards (Lecture Feedback, Fraud Detection, Portfolio)
+  - 3 project cards (Lecture Feedback, E-Commerce Platform, Portfolio)
   - Project preview with iframe/modal
   - Tech stack display with icons
   - GitHub/Live links
   - Status badges (Completed/Live)
-  - Category badges (Full Stack/ML/Frontend)
+  - Category badges (Full Stack/Backend/Frontend)
   - Lazy loading project previews
   
 - ✅ **Skills Section**
@@ -100,7 +100,7 @@ Your portfolio is **feature-rich** with 25+ features already implemented! It's a
    - **Why:** Very trendy, shows polish, improves UX
    
 2. **Project Filters by Tech Stack** ⭐⭐⭐ - Missing
-   - Filter projects: React, Node, ML, Python, etc.
+   - Filter projects: React, Node, TypeScript, etc.
    - Filter animation on toggle
    - Shows organizational skill
    - **Why:** Complements project section, blog filters exist but projects don't
