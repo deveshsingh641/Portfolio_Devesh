@@ -512,7 +512,7 @@ function App() {
       description:
         "A modern, responsive personal portfolio built with React and Tailwind CSS. Features dark/light theme toggle, animated intro sequence, parallax effects, custom cursor, embedded blog with markdown rendering, live project previews, and glassmorphic design aesthetic.",
       tech: ["React", "TypeScript", "Tailwind CSS", "Vite"],
-      github: "https://github.com/deveshsingh641",
+      github: "https://github.com/deveshsingh641/Portfolio_Devesh",
       live: window.location.origin,
       demoUrl: "",
       image:
