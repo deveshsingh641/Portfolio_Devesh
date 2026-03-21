@@ -513,8 +513,8 @@ function App() {
         "A modern, responsive personal portfolio built with React and Tailwind CSS. Features dark/light theme toggle, animated intro sequence, parallax effects, custom cursor, embedded blog with markdown rendering, live project previews, and glassmorphic design aesthetic.",
       tech: ["React", "TypeScript", "Tailwind CSS", "Vite"],
       github: "https://github.com/deveshsingh641/Portfolio_Devesh",
-      live: window.location.origin,
-      demoUrl: "",
+      live: "https://deveshdev.live",
+      demoUrl: "https://deveshdev.live",
       image:
         "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       status: "Live",
@@ -1485,6 +1485,7 @@ function App() {
                     <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Follow Me</h4>
                     <div className="flex items-center gap-3">
                       {[
+                        { href: "https://deveshdev.live", icon: Globe, label: "Website" },
                         { href: "https://github.com/deveshsingh641", icon: Github, label: "GitHub" },
                         { href: "https://linkedin.com/in/devesh-singh-0b234928b", icon: Linkedin, label: "LinkedIn" },
                         { href: "https://x.com/harshhere_666", icon: Twitter, label: "X / Twitter" },
@@ -1677,6 +1678,7 @@ function App() {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Connect</h4>
                 <div className="flex flex-col gap-2">
                   <a href="mailto:deveshsingh20666@gmail.com" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>deveshsingh20666@gmail.com</a>
+                  <a href="https://deveshdev.live" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>deveshdev.live</a>
                   <a href="https://github.com/deveshsingh641" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>GitHub</a>
                   <a href="https://linkedin.com/in/devesh-singh-0b234928b" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>LinkedIn</a>
                   <a href="https://x.com/harshhere_666" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>X / Twitter</a>
