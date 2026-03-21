@@ -33,13 +33,16 @@ type Post = {
 /* ------------------------------------------------------------------ */
 /*  Frontmatter parser (browser-safe, no Node deps)                    */
 /* ------------------------------------------------------------------ */
-function parseFrontmatter(raw: string): { data: Record<string, any>; content: string } {
+function parseFrontmatter(raw: string): {
+  data: Record<string, string | string[]>;
+  content: string;
+} {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return { data: {}, content: raw };
 
   const frontmatterBlock = match[1];
   const content = raw.slice(match[0].length).trim();
-  const data: Record<string, any> = {};
+  const data: Record<string, string | string[]> = {};
   let currentKey = "";
   let collectingList = false;
 

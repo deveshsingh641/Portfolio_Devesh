@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Play, Copy, Check, RotateCcw, Terminal, Code2, Palette, Sparkles, Zap, Gamepad2, Sliders } from "lucide-react";
+import { Play, Copy, Check, RotateCcw, Terminal, Code2, Palette, Sparkles, Zap, Sliders } from "lucide-react";
 
 /* ───────────────────── CODE SNIPPETS TAB ───────────────────── */
 

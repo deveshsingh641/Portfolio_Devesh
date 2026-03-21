@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee } from "lucide-react";
 
 interface Command {
@@ -23,14 +23,14 @@ interface CommandPaletteProps {
 const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scrollToSection, posts = [], isOpen: propIsOpen, onOpenChange }) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = propIsOpen !== undefined ? propIsOpen : internalOpen;
-  const setOpen = (value: boolean | ((prev: boolean) => boolean)) => {
+  const setOpen = useCallback((value: boolean | ((prev: boolean) => boolean)) => {
     const newValue = typeof value === 'function' ? value(open) : value;
     if (propIsOpen !== undefined && onOpenChange) {
       onOpenChange(newValue);
     } else {
       setInternalOpen(newValue);
     }
-  };
+  }, [open, propIsOpen, onOpenChange]);
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -221,18 +221,15 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
 
   const allCommands = [...navigationCommands, ...actionCommands, ...blogSearchCommands];
 
-  const filtered = useMemo(
-    () =>
-      search.trim() === ""
-        ? allCommands
-        : allCommands.filter(
-            (cmd) =>
-              cmd.label.toLowerCase().includes(search.toLowerCase()) ||
-              cmd.description.toLowerCase().includes(search.toLowerCase()) ||
-              cmd.keywords.some((k) => k.includes(search.toLowerCase()))
-          ),
-    [search, allCommands]
-  );
+  const filtered =
+    search.trim() === ""
+      ? allCommands
+      : allCommands.filter(
+          (cmd) =>
+            cmd.label.toLowerCase().includes(search.toLowerCase()) ||
+            cmd.description.toLowerCase().includes(search.toLowerCase()) ||
+            cmd.keywords.some((k) => k.includes(search.toLowerCase()))
+        );
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -270,14 +267,14 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, filtered, selectedIndex]);
+  }, [open, filtered, selectedIndex, setOpen]);
 
   // Focus input when opened
   useEffect(() => {
     if (open && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [open]);
+  }, [open, setOpen]);
 
   // Reset selection when search changes
   useEffect(() => {
@@ -296,7 +293,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [open]);
+  }, [open, setOpen]);
 
   return (
     <>

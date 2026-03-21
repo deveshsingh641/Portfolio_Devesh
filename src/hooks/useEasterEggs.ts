@@ -5,6 +5,16 @@ interface EasterEggOptions {
   onSecretCode?: (code: string) => void;
 }
 
+declare global {
+  interface Window {
+    help?: () => void;
+    viewSource?: () => void;
+    about?: () => void;
+    social?: () => void;
+    secretMessage?: () => void;
+  }
+}
+
 export const useEasterEggs = (options: EasterEggOptions = {}) => {
   useEffect(() => {
     const konami = [
@@ -133,7 +143,7 @@ export const triggerHiddenTerminal = () => {
   );
 
   // Make help function available
-  (window as any).help = () => {
+  window.help = () => {
     console.log(
       "%c Available Commands:\n" +
       "  - viewSource(): View portfolio source code\n" +
@@ -144,25 +154,25 @@ export const triggerHiddenTerminal = () => {
     );
   };
 
-  (window as any).viewSource = () => {
+  window.viewSource = () => {
     window.open("https://github.com/deveshsingh641", "_blank");
   };
 
-  (window as any).about = () => {
+  window.about = () => {
     console.log(
       "%cDevesh Singh - Full Stack Developer\nPassionate about building scalable systems and crafting beautiful UIs",
       "color: #22d3ee; font-weight: bold"
     );
   };
 
-  (window as any).social = () => {
+  window.social = () => {
     console.log(
       "%cGitHub: https://github.com/deveshsingh641\nLinkedIn: https://linkedin.com/in/devesh-singh-0b234928b\nTwitter: https://x.com/harshhere_666",
       "color: #a855f7"
     );
   };
 
-  (window as any).secretMessage = () => {
+  window.secretMessage = () => {
     console.log(
       "%c💡 Fun Fact: This portfolio has\n   6+ hidden easter eggs!\n   Keep exploring... 🔍",
       "color: #fbbf24; font-size: 14px; font-weight: bold"

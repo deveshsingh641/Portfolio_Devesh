@@ -7,7 +7,30 @@ Emails from the contact form and bug report feature are not reaching your inbox.
 
 Your portfolio supports two email services:
 
-### Option 1: EmailJS (Recommended)
+### Option 1: Formspree (Recommended for static hosting)
+
+Formspree is the most reliable option for a Vite + static deployment because it only needs a public endpoint.
+
+1. **Create a Formspree Account**
+   - Go to https://formspree.io/
+   - Create a new form for your portfolio
+
+2. **Get Your Form Endpoint**
+   - Copy the form endpoint URL (looks like `https://formspree.io/f/...`)
+
+3. **Configure Your Portfolio**
+   - Local dev: create a `.env.local` file in your project root and add:
+   ```
+   VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/your_form_id
+   ```
+   - Production deploy (Vercel/Netlify/etc): set the same environment variable in the dashboard, OR keep the committed `.env.production` up to date.
+
+4. **Test It**
+   - Restart dev server after adding `.env.local`
+   - Submit a message from “Let’s Connect → Send a Message” and from “Report Bug”
+   - Check your email + spam folder (Formspree also shows submissions in its dashboard)
+
+### Option 2: EmailJS (Alternative)
 
 1. **Create an EmailJS Account**
    - Go to https://www.emailjs.com/
@@ -53,21 +76,7 @@ Your portfolio supports two email services:
    - Go to the contact form and submit a test message
    - Check your email
 
-### Option 2: Formspree (Alternative)
-
-1. **Create a Formspree Account**
-   - Go to https://formspree.io/
-   - Sign up and create a new form for your portfolio
-
-2. **Get Your Form Endpoint**
-   - Copy the form endpoint URL
-
-3. **Configure Your Portfolio**
-   - Create a `.env.local` file in your project root
-   - Add:
-   ```
-   VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/your_form_id
-   ```
+EmailJS can work, but it’s more sensitive to account settings (templates, allowed senders, strict mode). If you use EmailJS, you can still keep Formspree enabled as a fallback.
 
 ## Debugging Tips
 
@@ -92,8 +101,8 @@ If emails still aren't arriving:
    - Whitelist devesh-singh@formspree.io or your EmailJS domain in your email provider
 
 5. **Environment Variables Not Loading**
-   - If using Node.js dev server, restart it after creating `.env.local`
-   - Make sure `.env.local` is in the project root, not in src/
+   - Local: restart the dev server after creating `.env.local`
+   - Production: `.env.local` is not deployed. Add variables in your hosting dashboard (Vercel/Netlify) or use `.env.production`.
 
 ## Template Variable Reference
 

@@ -23,37 +23,109 @@ const BugReportButton: React.FC<BugReportProps> = ({ theme }) => {
       const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined;
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string | undefined;
       const receiveEmail = import.meta.env.VITE_RECEIVE_EMAIL as string | undefined;
+      const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT as string | undefined;
+
+      const submitViaFormspree = async () => {
+        if (!formspreeEndpoint) {
+          throw new Error("Formspree endpoint is not configured");
+        }
+
+        const subjectPrefix = formData.type === "bug" ? "BUG" : "FEATURE";
+        const subject = `[${subjectPrefix}] ${formData.title}`;
+        const message = `${formData.description}\n\n---\nType: ${formData.type}\nTitle: ${formData.title}\nEmail: ${formData.email || "(not provided)"}\nSource: Portfolio Bug Report`;
+
+        const response = await fetch(formspreeEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            type: formData.type,
+            title: formData.title,
+            description: formData.description,
+            email: formData.email,
+            subject,
+            message,
+            source: "Portfolio Bug Report",
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Formspree submission failed with status ${response.status}`);
+        }
+      };
 
       console.log("🐛 Bug Report Email Config:", { 
         publicKey: publicKey ? "✓ Found" : "✗ Missing", 
         serviceId: serviceId ? "✓ Found" : "✗ Missing", 
         templateId: templateId ? "✓ Found" : "✗ Missing", 
-        receiveEmail: receiveEmail ? `✓ ${receiveEmail}` : "✗ Missing"
+        receiveEmail: receiveEmail ? `✓ ${receiveEmail}` : "✗ Missing",
+        formspreeEndpoint: formspreeEndpoint ? "✓ Found" : "✗ Missing"
       });
 
-      if (!publicKey || !serviceId || !templateId || !receiveEmail) {
+      // Prefer Formspree for static hosting reliability; fallback to EmailJS when configured.
+      if (formspreeEndpoint) {
+        console.log("📤 Sending bug report via Formspree");
+        try {
+          await submitViaFormspree();
+          console.log("✅ Bug report sent successfully via Formspree");
+        } catch (formspreeError) {
+          if (!(publicKey && serviceId && templateId && receiveEmail)) {
+            throw formspreeError;
+          }
+          console.warn("⚠️ Formspree failed, falling back to EmailJS", formspreeError);
+          const emailjsModule = await import("emailjs-com");
+          const emailjs = emailjsModule.default;
+          emailjs.init(publicKey);
+
+          const senderEmail = formData.email || "anonymous@portfolio.local";
+          const senderName = `[${formData.type === "bug" ? "BUG" : "FEATURE"}] ${formData.title}`;
+          const emailPayload = {
+            to_email: receiveEmail,
+            name: senderName,
+            email: senderEmail,
+            from_name: senderName,
+            from_email: senderEmail,
+            reply_to: senderEmail,
+            report_type: formData.type,
+            title: `Bug Report / Feature Request - ${formData.type}`,
+            subject: `Bug Report / Feature Request - ${formData.type}`,
+            message: formData.description,
+          };
+          console.log("📤 Sending bug report with payload:", emailPayload);
+          const response = await emailjs.send(serviceId, templateId, emailPayload);
+          console.log("✅ Bug report sent successfully:", response);
+        }
+      } else if (publicKey && serviceId && templateId && receiveEmail) {
+        const emailjsModule = await import("emailjs-com");
+        const emailjs = emailjsModule.default;
+        emailjs.init(publicKey);
+
+        const senderEmail = formData.email || "anonymous@portfolio.local";
+        const senderName = `[${formData.type === "bug" ? "BUG" : "FEATURE"}] ${formData.title}`;
+
+        const emailPayload = {
+          to_email: receiveEmail,
+          name: senderName,
+          email: senderEmail,
+          from_name: senderName,
+          from_email: senderEmail,
+          reply_to: senderEmail,
+          report_type: formData.type,
+          title: `Bug Report / Feature Request - ${formData.type}`,
+          subject: `Bug Report / Feature Request - ${formData.type}`,
+          message: formData.description,
+        };
+
+        console.log("📤 Sending bug report with payload:", emailPayload);
+        const response = await emailjs.send(serviceId, templateId, emailPayload);
+        console.log("✅ Bug report sent successfully:", response);
+      } else {
         throw new Error(
-          "❌ Email service not configured. Please ensure VITE_EMAILJS_PUBLIC_KEY, VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, and VITE_RECEIVE_EMAIL are set in .env.local"
+          "❌ No email service configured. Set VITE_FORMSPREE_ENDPOINT (recommended) or configure EmailJS (VITE_EMAILJS_PUBLIC_KEY, VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_RECEIVE_EMAIL)."
         );
       }
-
-      const emailjsModule = await import("emailjs-com");
-      const emailjs = emailjsModule.default;
-      emailjs.init(publicKey);
-
-      const emailPayload = {
-        to_email: receiveEmail,
-        name: `[${formData.type === "bug" ? "BUG" : "FEATURE"}] ${formData.title}`,
-        email: formData.email || "anonymous@portfolio.local",
-        title: `Bug Report / Feature Request - ${formData.type}`,
-        message: formData.description,
-      };
-
-      console.log("📤 Sending bug report with payload:", emailPayload);
-
-      const response = await emailjs.send(serviceId, templateId, emailPayload);
-      
-      console.log("✅ Bug report sent successfully:", response);
 
       setSubmitted(true);
       setTimeout(() => {
@@ -64,7 +136,10 @@ const BugReportButton: React.FC<BugReportProps> = ({ theme }) => {
       }, 2500);
     } catch (err) {
       console.error("❌ Bug report sending failed:", err);
-      const errorMessage = err instanceof Error ? err.message : "Failed to submit report. Please try again.";
+      const rawError = err instanceof Error ? err.message : "Failed to submit report. Please try again.";
+      const errorMessage = /strict mode/i.test(rawError)
+        ? "EmailJS is in strict mode for server API. Configure VITE_FORMSPREE_ENDPOINT in .env.local or adjust EmailJS strict-mode settings."
+        : rawError;
       setError(errorMessage);
       setIsLoading(false);
     }

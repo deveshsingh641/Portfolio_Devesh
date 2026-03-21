@@ -41,7 +41,7 @@ function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [heroParallax, setHeroParallax] = useState({ x: 0, y: 0 });
   const [isLoading, setIsLoading] = useState(true);
-  const [greetingIndex, setGreetingIndex] = useState(0);
+  const [introGreeting, setIntroGreeting] = useState("Hello");
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
   const [cursorActive, setCursorActive] = useState(false);
@@ -49,15 +49,12 @@ function App() {
   const isMobile = useMemo(() => window.innerWidth < 768, []);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
-  const greetings = useMemo(
-    () => ["Hello", "Namaste", "Bonjour", "Hola", "Ciao"],
-    []
-  );
 
   // Contact form states
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    subject: "",
     message: "",
   });
   const [formStatus, setFormStatus] = useState({
@@ -81,19 +78,24 @@ function App() {
 
   useEffect(() => {
     if (!isLoading) return;
+
+    // Match live-site loader greeting sequence
+    setIntroGreeting("Hello");
+    const timeouts: number[] = [];
+    timeouts.push(window.setTimeout(() => setIntroGreeting("Namaste"), 400));
+    timeouts.push(window.setTimeout(() => setIntroGreeting("Bonjour"), 800));
+    timeouts.push(window.setTimeout(() => setIntroGreeting("Hola"), 1600));
+    timeouts.push(window.setTimeout(() => setIntroGreeting("Ciao"), 2000));
+    timeouts.push(window.setTimeout(() => setIntroGreeting("Hello"), 2400));
+
     const timer = window.setTimeout(() => {
       setIsLoading(false);
     }, 2800);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      timeouts.forEach((t) => window.clearTimeout(t));
+    };
   }, [isLoading]);
-
-  useEffect(() => {
-    if (!isLoading) return;
-    const interval = window.setInterval(() => {
-      setGreetingIndex((prev) => (prev + 1) % greetings.length);
-    }, 450);
-    return () => window.clearInterval(interval);
-  }, [greetings.length, isLoading]);
 
   // Command Palette keyboard shortcut
   useEffect(() => {
@@ -317,34 +319,11 @@ function App() {
         | string
         | undefined;
 
-      console.log("📧 Email Config Check:", { 
-        publicKey: publicKey ? "✓ Found" : "✗ Missing", 
-        serviceId: serviceId ? "✓ Found" : "✗ Missing", 
-        templateId: templateId ? "✓ Found" : "✗ Missing", 
-        receiveEmail: receiveEmail ? `✓ ${receiveEmail}` : "✗ Missing",
-        formspreeEndpoint: formspreeEndpoint ? "✓ Found" : "✗ Missing"
-      });
+      const submitViaFormspree = async () => {
+        if (!formspreeEndpoint) {
+          throw new Error("Formspree endpoint is not configured");
+        }
 
-      if (publicKey && serviceId && templateId && receiveEmail) {
-        const emailjsModule = await import("emailjs-com");
-        const emailjs = emailjsModule.default;
-        emailjs.init(publicKey);
-
-        const emailPayload = {
-          to_email: receiveEmail,
-          name: formData.name,
-          email: formData.email,
-          title: "Contact Form Inquiry",
-          message: formData.message,
-        };
-
-        console.log("📤 Sending email with payload:", emailPayload);
-
-        await emailjs.send(serviceId, templateId, emailPayload);
-        
-        console.log("✅ Email sent successfully via EmailJS");
-      } else if (formspreeEndpoint) {
-        console.log("📤 Using Formspree as EmailJS is not configured");
         const response = await fetch(formspreeEndpoint, {
           method: "POST",
           headers: {
@@ -354,6 +333,7 @@ function App() {
           body: JSON.stringify({
             name: formData.name,
             email: formData.email,
+            subject: formData.subject,
             message: formData.message,
             source: "Portfolio Contact Form",
           }),
@@ -362,11 +342,68 @@ function App() {
         if (!response.ok) {
           throw new Error(`Formspree submission failed with status ${response.status}`);
         }
-        
-        console.log("✅ Email sent successfully via Formspree");
+      };
+
+      console.log("📧 Email Config Check:", { 
+        publicKey: publicKey ? "✓ Found" : "✗ Missing", 
+        serviceId: serviceId ? "✓ Found" : "✗ Missing", 
+        templateId: templateId ? "✓ Found" : "✗ Missing", 
+        receiveEmail: receiveEmail ? `✓ ${receiveEmail}` : "✗ Missing",
+        formspreeEndpoint: formspreeEndpoint ? "✓ Found" : "✗ Missing"
+      });
+
+      // Prefer Formspree for static hosting reliability; fallback to EmailJS when configured.
+      if (formspreeEndpoint) {
+        console.log("📤 Sending message via Formspree");
+        try {
+          await submitViaFormspree();
+          console.log("✅ Message sent successfully via Formspree");
+        } catch (formspreeError) {
+          if (!(publicKey && serviceId && templateId && receiveEmail)) {
+            throw formspreeError;
+          }
+          console.warn("⚠️ Formspree failed, falling back to EmailJS", formspreeError);
+          const emailjsModule = await import("emailjs-com");
+          const emailjs = emailjsModule.default;
+          emailjs.init(publicKey);
+          const emailPayload = {
+            to_email: receiveEmail,
+            name: formData.name,
+            email: formData.email,
+            from_name: formData.name,
+            from_email: formData.email,
+            reply_to: formData.email,
+            report_type: "contact",
+            title: formData.subject || "Contact Form Inquiry",
+            subject: formData.subject || "Contact Form Inquiry",
+            message: formData.message,
+          };
+          console.log("📤 Sending email with payload:", emailPayload);
+          await emailjs.send(serviceId, templateId, emailPayload);
+          console.log("✅ Message sent successfully via EmailJS");
+        }
+      } else if (publicKey && serviceId && templateId && receiveEmail) {
+        const emailjsModule = await import("emailjs-com");
+        const emailjs = emailjsModule.default;
+        emailjs.init(publicKey);
+        const emailPayload = {
+          to_email: receiveEmail,
+          name: formData.name,
+          email: formData.email,
+          from_name: formData.name,
+          from_email: formData.email,
+          reply_to: formData.email,
+          report_type: "contact",
+          title: formData.subject || "Contact Form Inquiry",
+          subject: formData.subject || "Contact Form Inquiry",
+          message: formData.message,
+        };
+        console.log("📤 Sending email with payload:", emailPayload);
+        await emailjs.send(serviceId, templateId, emailPayload);
+        console.log("✅ Message sent successfully via EmailJS");
       } else {
         throw new Error(
-          "❌ No email service configured. Please set up EmailJS (VITE_EMAILJS_PUBLIC_KEY, VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_RECEIVE_EMAIL) or Formspree (VITE_FORMSPREE_ENDPOINT) in .env.local"
+          "❌ No email service configured. Set VITE_FORMSPREE_ENDPOINT (recommended) or configure EmailJS (VITE_EMAILJS_PUBLIC_KEY, VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_RECEIVE_EMAIL)."
         );
       }
 
@@ -374,7 +411,7 @@ function App() {
         status: "success",
         message: "Message sent successfully! I'll get back to you within 24-48 hours.",
       });
-      setFormData({ name: "", email: "", message: "" });
+      setFormData({ name: "", email: "", subject: "", message: "" });
 
       // Clear success message after 5 seconds
       setTimeout(() => {
@@ -383,10 +420,14 @@ function App() {
     } catch (error) {
       console.error("❌ Email sending failed:", error);
       const fullError = error instanceof Error ? error.message : JSON.stringify(error);
+      const isStrictModeIssue = /strict mode/i.test(fullError);
+      const helpMessage = isStrictModeIssue
+        ? "EmailJS is in strict mode for server API. For reliable client-side delivery, set VITE_FORMSPREE_ENDPOINT in .env.local or adjust EmailJS strict-mode settings."
+        : fullError;
       
       setFormStatus({
         status: "error",
-        message: `Failed to send message: ${fullError}. Please try contacting me directly at deveshsingh20666@gmail.com.`,
+        message: `Failed to send message: ${helpMessage}. Please try contacting me directly at deveshsingh20666@gmail.com.`,
       });
 
       // Clear error message after 7 seconds
@@ -500,8 +541,8 @@ function App() {
         "A comprehensive full-stack platform for collecting and analyzing student feedback on lectures in real-time. Features anonymous feedback submission, instructor dashboard with analytics, and actionable insights to improve teaching quality.",
       tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
       github: "https://github.com/deveshsingh641/lecture_feedback_system",
-      live: "https://lecture-feedback-system.demo",
-      demoUrl: "https://lecture-feedback-system.demo",
+      live: "https://lecture-feedback-system.vercel.app",
+      demoUrl: "https://lecture-feedback-system.vercel.app",
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       status: "Completed",
       category: "Full Stack",
@@ -543,7 +584,7 @@ function App() {
             {/* Greeting text */}
             <div className="relative overflow-hidden">
               <p className="intro-greeting text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-violet-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent animate-gradient">
-                {greetings[greetingIndex]}
+                {introGreeting}
               </p>
             </div>
 
@@ -1592,6 +1633,7 @@ function App() {
                           type="text"
                           name="subject"
                           placeholder="Project Collaboration"
+                          value={formData.subject}
                           onChange={handleFormChange}
                           disabled={formStatus.status === "sending"}
                           className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"

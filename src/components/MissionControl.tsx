@@ -22,10 +22,10 @@ const items: StatusItem[] = [
   {
     id: "project-2",
     label: "WORKING",
-    title: "E-Commerce Platform",
-    description: "Building a full-stack e-commerce solution with React, Node.js, and MongoDB. Features include product catalog, shopping cart, and payment integration.",
+    title: "Portfolio UX Improvements",
+    description: "Shipping iterative improvements to portfolio UX, performance, and accessibility based on user feedback and real usage insights.",
     status: "working",
-    link: "https://github.com/deveshsingh641",
+    link: "https://deveshdev.live",
   },
   {
     id: "learning-1",
@@ -45,11 +45,11 @@ const items: StatusItem[] = [
 ];
 
 const statusConfig = {
-  live: { color: "text-emerald-400", bg: "bg-emerald-400", gradient: "from-emerald-500 to-green-500", icon: Rocket },
-  building: { color: "text-cyan-400", bg: "bg-cyan-400", gradient: "from-cyan-500 to-blue-500", icon: Code2 },
-  learning: { color: "text-violet-400", bg: "bg-violet-400", gradient: "from-violet-500 to-purple-500", icon: Target },
-  reading: { color: "text-amber-400", bg: "bg-amber-400", gradient: "from-amber-500 to-orange-500", icon: BookOpen },
-  working: { color: "text-rose-400", bg: "bg-rose-400", gradient: "from-rose-500 to-pink-500", icon: Briefcase },
+  live: { color: "text-emerald-400", hoverColor: "group-hover:text-emerald-300", bg: "bg-emerald-400", gradient: "from-emerald-500 to-green-500", icon: Rocket },
+  building: { color: "text-cyan-400", hoverColor: "group-hover:text-cyan-300", bg: "bg-cyan-400", gradient: "from-cyan-500 to-blue-500", icon: Code2 },
+  learning: { color: "text-violet-400", hoverColor: "group-hover:text-violet-300", bg: "bg-violet-400", gradient: "from-violet-500 to-purple-500", icon: Target },
+  reading: { color: "text-amber-400", hoverColor: "group-hover:text-amber-300", bg: "bg-amber-400", gradient: "from-amber-500 to-orange-500", icon: BookOpen },
+  working: { color: "text-rose-400", hoverColor: "group-hover:text-rose-300", bg: "bg-rose-400", gradient: "from-rose-500 to-pink-500", icon: Briefcase },
 };
 
 const MissionControl: React.FC<{ theme: string }> = ({ theme }) => {
@@ -108,7 +108,7 @@ const MissionControl: React.FC<{ theme: string }> = ({ theme }) => {
               </div>
 
               {/* Content */}
-              <h3 className={`text-lg font-bold mb-2 group-hover:${cfg.color} transition-colors ${theme === "dark" ? "text-slate-100" : "text-slate-900"}`}>
+              <h3 className={`text-lg font-bold mb-2 transition-colors ${cfg.hoverColor} ${theme === "dark" ? "text-slate-100" : "text-slate-900"}`}>
                 {item.title}
               </h3>
               <p className={`text-sm leading-relaxed ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>

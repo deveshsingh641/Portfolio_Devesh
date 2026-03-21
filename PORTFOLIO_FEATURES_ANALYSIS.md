@@ -39,7 +39,7 @@ Your portfolio is **feature-rich** with 25+ features already implemented! It's a
   - Modal reader with syntax highlighting
   
 - ✅ **Projects Section**
-  - 3 project cards (Lecture Feedback, E-Commerce Platform, Portfolio)
+   - 3 project cards (Lecture Feedback, Portfolio UX Improvements, Portfolio)
   - Project preview with iframe/modal
   - Tech stack display with icons
   - GitHub/Live links
