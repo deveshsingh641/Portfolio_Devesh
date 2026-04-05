@@ -35,6 +35,7 @@ import BugReportButton from "./components/BugReportButton";
 import SupporterRewards from "./components/SupporterRewards";
 import ResumePage from "./components/ResumePage";
 import ProjectCaseStudyPage from "./components/ProjectCaseStudyPage";
+import GitHubStats from "./components/GitHubStats";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -227,6 +228,7 @@ function App() {
             "home",
             "about",
             "skills",
+            "github",
             "blog",
             "playground",
             "projects",
@@ -1324,6 +1326,60 @@ function App() {
                   <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">{label}</div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* GITHUB STATS SECTION */}
+        <section id="github" data-reveal className={`reveal-section ${visibleSections.has('github') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-slate-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-slate-50/20 to-slate-100/40'}`}>
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-16">
+              <p className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 mb-3">GITHUB_DASHBOARD</p>
+              <h2 className={`text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                Activity & Impact
+              </h2>
+              <p className={theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}>
+                Live GitHub stats, streaks, and language breakdown.
+              </p>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-4"></div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                <GitHubStats username="deveshsingh641" theme={theme!} />
+              </div>
+
+              <div className="space-y-6">
+                <div className={`rounded-2xl border p-4 ${theme === 'dark' ? 'bg-slate-900/50 border-slate-800/50' : 'bg-white border-slate-200'}`}>
+                  <p className={`text-xs font-mono uppercase tracking-[0.3em] mb-3 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                    STREAKS
+                  </p>
+                  <img
+                    src={theme === 'dark'
+                      ? "https://streak-stats.demolab.com?user=deveshsingh641&theme=tokyonight&hide_border=true"
+                      : "https://streak-stats.demolab.com?user=deveshsingh641&theme=default&hide_border=true"}
+                    alt="GitHub streak stats"
+                    className="w-full"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                <div className={`rounded-2xl border p-4 ${theme === 'dark' ? 'bg-slate-900/50 border-slate-800/50' : 'bg-white border-slate-200'}`}>
+                  <p className={`text-xs font-mono uppercase tracking-[0.3em] mb-3 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                    ACTIVITY
+                  </p>
+                  <img
+                    src={theme === 'dark'
+                      ? "https://github-readme-activity-graph.vercel.app/graph?username=deveshsingh641&theme=react-dark&hide_border=true"
+                      : "https://github-readme-activity-graph.vercel.app/graph?username=deveshsingh641&theme=github-light&hide_border=true"}
+                    alt="GitHub activity graph"
+                    className="w-full"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>

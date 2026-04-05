@@ -75,6 +75,18 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
       keywords: ["skills", "tech", "stack", "technologies"],
     },
     {
+      id: "nav-github",
+      label: "GitHub Dashboard",
+      description: "View GitHub stats & activity",
+      category: "navigation",
+      icon: <Github size={16} />,
+      action: () => {
+        scrollToSection("github");
+        setOpen(false);
+      },
+      keywords: ["github", "stats", "streak", "activity", "languages"],
+    },
+    {
       id: "nav-blog",
       label: "Blog",
       description: "Read my blog posts",
