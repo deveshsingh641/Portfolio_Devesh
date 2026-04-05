@@ -49,6 +49,7 @@ function App() {
   const isMobile = useMemo(() => window.innerWidth < 768, []);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [projectFilter, setProjectFilter] = useState<string>("All");
 
   // Contact form states
   const [formData, setFormData] = useState({
@@ -562,6 +563,16 @@ function App() {
       category: "Frontend",
     },
   ];
+
+  const projectCategories = [
+    "All",
+    ...Array.from(new Set(projects.map((p) => p.category))).filter(Boolean),
+  ];
+  const filteredProjects =
+    projectFilter === "All"
+      ? projects
+      : projects.filter((p) => p.category === projectFilter);
+  const uniqueTechCount = new Set(projects.flatMap((p) => p.tech)).size;
 
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 ${theme === 'dark' ? 'bg-[#050816] text-slate-100 selection:bg-cyan-500 selection:text-slate-950' : 'bg-slate-50 text-slate-900 selection:bg-violet-500 selection:text-white'}`}>
@@ -1242,22 +1253,70 @@ function App() {
         {/* PROJECTS SECTION */}
         <section id="projects" data-reveal className={`reveal-section ${visibleSections.has('projects') ? 'is-visible' : ''} py-24 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-cyan-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-cyan-50/20 to-slate-100/40'}`}>
           <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-3">SELECTED_WORKS</p>
-              <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                DIGITAL{" "}
-                <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
-                  PRODUCTS
-                </span>
-              </h2>
-              <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
-                A curated selection of applications engineered for performance and scalability.
-              </p>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-5"></div>
+            <div className="mb-12">
+              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+                <div className="max-w-2xl">
+                  <p className="text-xs font-mono uppercase tracking-[0.35em] text-emerald-400 mb-3">ALLPROJECTS.</p>
+                  <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                    A curated collection of{" "}
+                    <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
+                      work
+                    </span>
+                  </h2>
+                  <p className={`text-lg ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
+                    Projects spanning full-stack applications, AI-driven systems, and polished frontend experiences.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <div className={`px-4 py-3 rounded-2xl border backdrop-blur-sm ${theme === 'dark' ? 'bg-slate-950/60 border-slate-700/40' : 'bg-white/70 border-slate-200'}`}>
+                    <p className={`text-[10px] font-mono uppercase tracking-[0.35em] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>PROJECTS</p>
+                    <p className={`text-xl font-extrabold ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{projects.length}+</p>
+                  </div>
+                  <div className={`px-4 py-3 rounded-2xl border backdrop-blur-sm ${theme === 'dark' ? 'bg-slate-950/60 border-slate-700/40' : 'bg-white/70 border-slate-200'}`}>
+                    <p className={`text-[10px] font-mono uppercase tracking-[0.35em] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>TECHNOLOGIES</p>
+                    <p className={`text-xl font-extrabold ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{uniqueTechCount}+</p>
+                  </div>
+                  <div className={`px-4 py-3 rounded-2xl border backdrop-blur-sm ${theme === 'dark' ? 'bg-slate-950/60 border-slate-700/40' : 'bg-white/70 border-slate-200'}`}>
+                    <p className={`text-[10px] font-mono uppercase tracking-[0.35em] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>PASSION</p>
+                    <p className={`text-xl font-extrabold ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>100%</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {filteredProjects.length} project{filteredProjects.length === 1 ? "" : "s"} found
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {projectCategories.map((cat) => {
+                    const isActive = cat === projectFilter;
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setProjectFilter(cat)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border transition-all duration-300 ${
+                          isActive
+                            ? 'bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 text-emerald-200 border-emerald-400/40'
+                            : theme === 'dark'
+                              ? 'bg-slate-900/40 text-slate-300 border-slate-700/50 hover:border-emerald-400/30 hover:text-emerald-200'
+                              : 'bg-white/70 text-slate-700 border-slate-200 hover:border-emerald-400/40 hover:text-emerald-700'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 rounded-full shadow-lg shadow-violet-400/50 mt-8"></div>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
-              {projects.map((project, index) => (
+            <div className="grid md:grid-cols-2 gap-8 stagger-animation">
+              {filteredProjects.map((project, index) => (
                 <Tilt
                   key={index}
                   tiltMaxAngleX={isMobile ? 0 : 6}
