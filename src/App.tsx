@@ -543,7 +543,7 @@ function App() {
       github: "https://github.com/deveshsingh641/lecture_feedback_system",
       live: "https://lecture-feedback-system.vercel.app",
       demoUrl: "https://lecture-feedback-system.vercel.app",
-      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80",
       status: "Live",
       category: "AI",
     },
@@ -557,7 +557,7 @@ function App() {
       live: "https://deveshdev.live",
       demoUrl: "https://deveshdev.live",
       image:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80",
       status: "Live",
       category: "Frontend",
     },
