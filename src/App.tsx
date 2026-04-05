@@ -33,6 +33,8 @@ import Playground from "./components/Playground";
 import MissionControl from "./components/MissionControl";
 import BugReportButton from "./components/BugReportButton";
 import SupporterRewards from "./components/SupporterRewards";
+import ResumePage from "./components/ResumePage";
+import ProjectCaseStudyPage from "./components/ProjectCaseStudyPage";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,6 +52,22 @@ function App() {
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [projectFilter, setProjectFilter] = useState<string>("All");
+  const [routePath, setRoutePath] = useState(() => window.location.pathname + window.location.hash);
+
+  const navigate = (to: string) => {
+    if (to === routePath) return;
+    // Support hash navigation (e.g. /#projects) as well as routes (/resume, /projects/:slug)
+    const [path, hash] = to.split("#");
+    window.history.pushState({}, "", `${path || "/"}${hash ? `#${hash}` : ""}`);
+    setRoutePath(window.location.pathname + window.location.hash);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+
+  useEffect(() => {
+    const onPopState = () => setRoutePath(window.location.pathname + window.location.hash);
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   // Contact form states
   const [formData, setFormData] = useState({
@@ -538,6 +556,7 @@ function App() {
   const projects = [
     {
       title: "ClassIntel AI (Lecture Feedback System)",
+      slug: "classintel-ai",
       description:
         "AI-powered classroom intelligence platform that turns student feedback into actionable teaching insights. Supports text + voice feedback, sentiment analysis, topic extraction, risk prediction, real-time alerts, and dashboards with trends & top-performer analytics.",
       tech: ["React", "Node.js", "Express.js", "MongoDB", "AI/NLP", "Speech-to-Text"],
@@ -547,10 +566,30 @@ function App() {
       image: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80",
       status: "Live",
       category: "AI",
+      caseStudy: {
+        problem:
+          "Manual feedback collection is slow and often lacks actionable insight. Educators need a fast way to capture sentiment and surface risks/weak topics early.",
+        solution:
+          "Built a feedback-to-insights pipeline that collects text/voice feedback, analyzes sentiment/topics, and surfaces dashboards + alerts so educators can iterate quickly.",
+        keyFeatures: [
+          "Text + voice feedback submission",
+          "Sentiment analysis and trend tracking",
+          "Topic extraction to identify weak areas",
+          "Risk prediction scoring and anomaly alerts",
+          "Live activity feed + top performers dashboard",
+          "Authentication flows (login/signup)",
+        ],
+        architecture: {
+          frontend: "React UI with responsive dashboard views and optimized client rendering.",
+          backend: "Node.js + Express APIs to ingest feedback, run analysis, and serve aggregated analytics.",
+          data: "MongoDB for persistence + AI/NLP pipeline for sentiment/topic/risk computation.",
+        },
+      },
     },
 
     {
       title: "Personal Portfolio",
+      slug: "personal-portfolio",
       description:
         "A modern, responsive personal portfolio built with React and Tailwind CSS. Features dark/light theme toggle, animated intro sequence, parallax effects, custom cursor, embedded blog with markdown rendering, live project previews, and glassmorphic design aesthetic.",
       tech: ["React", "TypeScript", "Tailwind CSS", "Vite"],
@@ -561,6 +600,25 @@ function App() {
         "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80",
       status: "Live",
       category: "Frontend",
+      caseStudy: {
+        problem:
+          "Recruiters skim fast. A portfolio needs strong storytelling, fast performance, and clear proof of skills without feeling cluttered.",
+        solution:
+          "Built a high-performance portfolio with a strong visual identity, section-based navigation, embedded blog, and project previews to showcase real work quickly.",
+        keyFeatures: [
+          "Dark/light mode with persistence",
+          "Custom cursor + micro-interactions",
+          "Markdown blog posts with routing-friendly bundles",
+          "Project previews embedded on cards",
+          "Command palette (Ctrl/Cmd+K)",
+          "Optimized build output with Vite",
+        ],
+        architecture: {
+          frontend: "React + TypeScript component architecture, Tailwind for consistent styling.",
+          backend: "Static hosting optimized for speed; content lives in-repo and loads via bundles.",
+          data: "Markdown content + local configuration; deploy pipeline handles static assets.",
+        },
+      },
     },
   ];
 
@@ -573,6 +631,15 @@ function App() {
       ? projects
       : projects.filter((p) => p.category === projectFilter);
   const uniqueTechCount = new Set(projects.flatMap((p) => p.tech)).size;
+
+  const isResumeRoute = routePath.startsWith("/resume");
+  const isProjectRoute = routePath.startsWith("/projects/");
+  const currentProjectSlug = isProjectRoute
+    ? routePath.replace("/projects/", "").split("#")[0].split("?")[0]
+    : "";
+  const currentProject = isProjectRoute
+    ? (projects as any[]).find((p) => p.slug === currentProjectSlug)
+    : undefined;
 
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 ${theme === 'dark' ? 'bg-[#050816] text-slate-100 selection:bg-cyan-500 selection:text-slate-950' : 'bg-slate-50 text-slate-900 selection:bg-violet-500 selection:text-white'}`}>
@@ -660,6 +727,19 @@ function App() {
         `}</style>
       </Helmet>
 
+      {isResumeRoute ? (
+        <ResumePage
+          theme={theme!}
+          onNavigate={navigate}
+          techCategories={techCategories}
+          projects={projects}
+          education={education}
+          certifications={certifications}
+        />
+      ) : isProjectRoute ? (
+        <ProjectCaseStudyPage theme={theme!} project={currentProject} onNavigate={navigate} />
+      ) : (
+      <>
       {/* SCROLL PROGRESS BAR */}
       <div
         className="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-violet-600 to-cyan-400 z-[100] transition-all duration-100 ease-out"
@@ -738,13 +818,14 @@ function App() {
                   "skills",
                   "blog",
                   "projects",
+                  "resume",
                   "certifications",
                   "contact",
                 ].map((item) => (
                   <button
                     key={item}
                     data-cursor-label={item}
-                    onClick={() => scrollToSection(item)}
+                    onClick={() => (item === "resume" ? navigate("/resume") : scrollToSection(item))}
                     onMouseMove={handleMagneticMove}
                     onMouseLeave={handleMagneticLeave}
                     className={`magnetic-nav-item relative px-4 py-1.5 rounded-full capitalize transition-all font-medium text-sm ${activeSection === item
@@ -791,12 +872,13 @@ function App() {
                 "skills",
                 "blog",
                 "projects",
+                "resume",
                 "certifications",
                 "contact",
               ].map((item) => (
                 <button
                   key={item}
-                  onClick={() => scrollToSection(item)}
+                  onClick={() => (item === "resume" ? navigate("/resume") : scrollToSection(item))}
                   className={`block w-full text-left px-4 py-3 capitalize rounded-lg transition-colors font-medium ${theme === 'dark' ? 'text-slate-200 hover:bg-violet-500/20' : 'text-slate-700 hover:bg-violet-50'}`}
                 >
                   {item}
@@ -887,17 +969,25 @@ function App() {
               </button>
 
               {/* FIXED RESUME LINK - Uses %20 for spaces */}
+              <button
+                type="button"
+                data-cursor-label="Resume"
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
+                onClick={() => navigate("/resume")}
+                className={`magnetic-btn px-8 py-4 rounded-full font-bold border shadow-md transition-all flex items-center justify-center gap-2 w-full sm:w-auto hover:scale-105 ${theme === 'dark' ? 'bg-slate-950/80 text-cyan-100 border-cyan-300/40 hover:bg-slate-900 hover:border-emerald-300/60' : 'bg-white text-violet-700 border-violet-300/50 hover:bg-violet-50 hover:border-violet-400/60'}`}
+              >
+                Resume Page <FileText size={18} />
+              </button>
               <a
                 href="/Updated_resume%20(1).pdf"
                 download="Devesh_Singh_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor-label="Resume"
-                onMouseMove={handleMagneticMove}
-                onMouseLeave={handleMagneticLeave}
-                className={`magnetic-btn px-8 py-4 rounded-full font-bold border shadow-md transition-all flex items-center justify-center gap-2 w-full sm:w-auto hover:scale-105 ${theme === 'dark' ? 'bg-slate-950/80 text-cyan-100 border-cyan-300/40 hover:bg-slate-900 hover:border-emerald-300/60' : 'bg-white text-violet-700 border-violet-300/50 hover:bg-violet-50 hover:border-violet-400/60'}`}
+                data-cursor-label="Download"
+                className={`magnetic-btn px-6 py-4 rounded-full font-bold border shadow-md transition-all flex items-center justify-center gap-2 w-full sm:w-auto hover:scale-105 ${theme === 'dark' ? 'bg-slate-950/60 text-slate-200 border-slate-700/50 hover:border-cyan-300/50' : 'bg-white text-slate-700 border-slate-200 hover:border-violet-300/50'}`}
               >
-                Resume <Download size={18} />
+                Download PDF <Download size={18} />
               </a>
             </div>
 
@@ -978,12 +1068,22 @@ function App() {
                     Get in Touch
                   </button>
                   <a
+                    href="/resume"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate("/resume");
+                    }}
+                    className={`px-6 py-3 border font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 text-sm flex items-center gap-2 ${theme === 'dark' ? 'border-slate-600 text-slate-300 hover:border-emerald-400/50 hover:text-emerald-300' : 'border-slate-300 text-slate-600 hover:border-violet-400/50 hover:text-violet-600'}`}
+                  >
+                    <FileText size={16} /> Resume Page
+                  </a>
+                  <a
                     href="/Updated_resume%20(1).pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`px-6 py-3 border font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 text-sm flex items-center gap-2 ${theme === 'dark' ? 'border-slate-600 text-slate-300 hover:border-emerald-400/50 hover:text-emerald-300' : 'border-slate-300 text-slate-600 hover:border-violet-400/50 hover:text-violet-600'}`}
+                    className={`px-6 py-3 border font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 text-sm flex items-center gap-2 ${theme === 'dark' ? 'border-slate-700 text-slate-300 hover:border-cyan-300/50 hover:text-cyan-300' : 'border-slate-200 text-slate-600 hover:border-violet-300/50 hover:text-violet-600'}`}
                   >
-                    <Download size={16} /> Resume
+                    <Download size={16} /> Download PDF
                   </a>
                 </div>
               </div>
@@ -1399,6 +1499,17 @@ function App() {
                         >
                           <Github size={14} /> Source
                         </a>
+                        <button
+                          type="button"
+                          data-cursor-label="Case Study"
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-300 hover:scale-105 ${theme === 'dark' ? 'bg-slate-800/60 border-slate-700/50 text-slate-300 hover:text-emerald-300 hover:border-emerald-400/40' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-emerald-700 hover:border-emerald-300'}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/projects/${(project as any).slug}`);
+                          }}
+                        >
+                          <FileText size={14} /> Case Study
+                        </button>
                         {project.live && project.live !== '#' && (
                           <a
                             href={project.live}
@@ -1761,14 +1872,22 @@ function App() {
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Navigation</h4>
                 <nav className="flex flex-col gap-2">
-                  {["Home", "About", "Skills", "Blog", "Projects", "Contact"].map((item) => (
+                  {[
+                    { label: "Home", onClick: () => scrollToSection("home") },
+                    { label: "About", onClick: () => scrollToSection("about") },
+                    { label: "Skills", onClick: () => scrollToSection("skills") },
+                    { label: "Blog", onClick: () => scrollToSection("blog") },
+                    { label: "Projects", onClick: () => scrollToSection("projects") },
+                    { label: "Resume", onClick: () => navigate("/resume") },
+                    { label: "Contact", onClick: () => scrollToSection("contact") },
+                  ].map((item) => (
                     <button
-                      key={item}
+                      key={item.label}
                       type="button"
-                      onClick={() => scrollToSection(item.toLowerCase())}
+                      onClick={item.onClick}
                       className={`text-sm text-left transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}
                     >
-                      {item}
+                      {item.label}
                     </button>
                   ))}
                 </nav>
@@ -1793,7 +1912,9 @@ function App() {
             </div>
           </div>
         </footer>
-      </main>
+    </main>
+    </>
+      )}
 
       {/* BUG REPORT BUTTON */}
       <BugReportButton theme={theme!} />
@@ -1803,6 +1924,7 @@ function App() {
         theme={theme!}
         setTheme={setTheme}
         scrollToSection={scrollToSection}
+        navigate={navigate}
         isOpen={commandPaletteOpen}
         onOpenChange={setCommandPaletteOpen}
       />
