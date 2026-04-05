@@ -89,9 +89,17 @@ function App() {
   });
 
   // Dark Mode State
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") ? localStorage.getItem("theme") : "dark"
-  );
+  const [theme, setTheme] = useState(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("theme");
+        return stored ? stored : "dark";
+      }
+    } catch {
+      // Ignore storage access issues (privacy mode, blocked storage).
+    }
+    return "dark";
+  });
 
   useEffect(() => {
     if (theme === "dark") {
@@ -99,7 +107,11 @@ function App() {
     } else {
       document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem("theme", theme!);
+    try {
+      localStorage.setItem("theme", theme!);
+    } catch {
+      // Ignore storage access issues.
+    }
   }, [theme]);
 
   useEffect(() => {

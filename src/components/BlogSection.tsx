@@ -92,10 +92,12 @@ function getCategoryStyle(cat: string) {
 /* ------------------------------------------------------------------ */
 const ShareButton: React.FC<{ title: string; slug: string }> = ({ title, slug }) => {
   const [copied, setCopied] = useState(false);
-  const url = `${window.location.origin}/blog/${slug}`;
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const url = origin ? `${origin}/blog/${slug}` : "";
 
   const copyLink = async () => {
     try {
+      if (!url) return;
       await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -103,6 +105,7 @@ const ShareButton: React.FC<{ title: string; slug: string }> = ({ title, slug })
   };
 
   const shareNative = () => {
+    if (!url) return;
     if (navigator.share) {
       navigator.share({ title, url }).catch(() => {});
     } else {
