@@ -536,16 +536,16 @@ function App() {
 
   const projects = [
     {
-      title: "Lecture Feedback System",
+      title: "ClassIntel AI (Lecture Feedback System)",
       description:
-        "A comprehensive full-stack platform for collecting and analyzing student feedback on lectures in real-time. Features anonymous feedback submission, instructor dashboard with analytics, and actionable insights to improve teaching quality.",
-      tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
+        "AI-powered classroom intelligence platform that turns student feedback into actionable teaching insights. Supports text + voice feedback, sentiment analysis, topic extraction, risk prediction, real-time alerts, and dashboards with trends & top-performer analytics.",
+      tech: ["React", "Node.js", "Express.js", "MongoDB", "AI/NLP", "Speech-to-Text"],
       github: "https://github.com/deveshsingh641/lecture_feedback_system",
       live: "https://lecture-feedback-system.vercel.app",
       demoUrl: "https://lecture-feedback-system.vercel.app",
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      status: "Completed",
-      category: "Full Stack",
+      status: "Live",
+      category: "AI",
     },
 
     {
