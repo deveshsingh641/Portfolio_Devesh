@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee, Download, FileText, Github } from "lucide-react";
+import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee, Download, FileText } from "lucide-react";
 
 interface Command {
   id: string;
@@ -73,18 +73,6 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
         setOpen(false);
       },
       keywords: ["skills", "tech", "stack", "technologies"],
-    },
-    {
-      id: "nav-github",
-      label: "GitHub Dashboard",
-      description: "View GitHub stats & activity",
-      category: "navigation",
-      icon: <Github size={16} />,
-      action: () => {
-        scrollToSection("github");
-        setOpen(false);
-      },
-      keywords: ["github", "stats", "streak", "activity", "languages"],
     },
     {
       id: "nav-blog",

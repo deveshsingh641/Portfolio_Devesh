@@ -35,7 +35,6 @@ import BugReportButton from "./components/BugReportButton";
 import SupporterRewards from "./components/SupporterRewards";
 import ResumePage from "./components/ResumePage";
 import ProjectCaseStudyPage from "./components/ProjectCaseStudyPage";
-import GitHubStats from "./components/GitHubStats";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -249,7 +248,6 @@ function App() {
             "home",
             "about",
             "skills",
-            "github",
             "blog",
             "playground",
             "projects",
@@ -382,7 +380,6 @@ function App() {
         });
 
         if (!response.ok) {
-          throw new Error(`Formspree submission failed with status ${response.status}`);
         }
       };
 
@@ -1351,57 +1348,6 @@ function App() {
           </div>
         </section>
 
-        {/* GITHUB STATS SECTION */}
-        <section id="github" data-reveal className={`reveal-section ${visibleSections.has('github') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-slate-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-slate-50/20 to-slate-100/40'}`}>
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-10">
-              <h2 className={`text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
-                GitHub Dashboard
-              </h2>
-              <p className={`text-sm mt-2 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-                Stats, streaks, and language trends at a glance.
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2">
-                <GitHubStats username="deveshsingh641" theme={theme!} />
-              </div>
-
-              <div className="space-y-6">
-                <div className={`rounded-2xl border p-4 ${theme === 'dark' ? 'bg-slate-900/50 border-slate-800/50' : 'bg-white border-slate-200'}`}>
-                  <p className={`text-xs font-mono uppercase tracking-[0.3em] mb-3 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                    STREAKS
-                  </p>
-                  <img
-                    src={theme === 'dark'
-                      ? "https://streak-stats.demolab.com?user=deveshsingh641&theme=tokyonight&hide_border=true"
-                      : "https://streak-stats.demolab.com?user=deveshsingh641&theme=default&hide_border=true"}
-                    alt="GitHub streak stats"
-                    className="w-full"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-
-                <div className={`rounded-2xl border p-4 ${theme === 'dark' ? 'bg-slate-900/50 border-slate-800/50' : 'bg-white border-slate-200'}`}>
-                  <p className={`text-xs font-mono uppercase tracking-[0.3em] mb-3 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                    ACTIVITY
-                  </p>
-                  <img
-                    src={theme === 'dark'
-                      ? "https://github-readme-activity-graph.vercel.app/graph?username=deveshsingh641&theme=react-dark&hide_border=true"
-                      : "https://github-readme-activity-graph.vercel.app/graph?username=deveshsingh641&theme=github-light&hide_border=true"}
-                    alt="GitHub activity graph"
-                    className="w-full"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* BLOG SECTION */}
         <section id="blog" data-reveal className={`reveal-section ${visibleSections.has('blog') ? 'is-visible' : ''} py-24 transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/10 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-violet-50/10 to-slate-100/40'}`}>
