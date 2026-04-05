@@ -49,13 +49,19 @@ function App() {
   const [cursorVisible, setCursorVisible] = useState(false);
   const [cursorActive, setCursorActive] = useState(false);
   const [cursorLabel, setCursorLabel] = useState("");
-  const isMobile = useMemo(() => window.innerWidth < 768, []);
+  const isMobile = useMemo(
+    () => (typeof window !== "undefined" ? window.innerWidth < 768 : false),
+    []
+  );
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [projectFilter, setProjectFilter] = useState<string>("All");
-  const [routePath, setRoutePath] = useState(() => window.location.pathname + window.location.hash);
+  const [routePath, setRoutePath] = useState(() =>
+    typeof window !== "undefined" ? window.location.pathname + window.location.hash : "/"
+  );
 
   const navigate = (to: string) => {
+    if (typeof window === "undefined") return;
     if (to === routePath) return;
     // Support hash navigation (e.g. /#projects) as well as routes (/resume, /projects/:slug)
     const [path, hash] = to.split("#");
@@ -119,6 +125,7 @@ function App() {
 
   // Command Palette keyboard shortcut
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd+K on Mac or Ctrl+K on Windows/Linux
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -136,6 +143,7 @@ function App() {
   }, [commandPaletteOpen]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (window.innerWidth < 768) return;
 
     const handleMove = (e: MouseEvent) => {
@@ -211,6 +219,7 @@ function App() {
     typeof window !== "undefined" ? window.location.href : "";
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {
@@ -1333,15 +1342,13 @@ function App() {
         {/* GITHUB STATS SECTION */}
         <section id="github" data-reveal className={`reveal-section ${visibleSections.has('github') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-slate-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-slate-50/20 to-slate-100/40'}`}>
           <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <p className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 mb-3">GITHUB_DASHBOARD</p>
-              <h2 className={`text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
-                Activity & Impact
+            <div className="text-center mb-10">
+              <h2 className={`text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                GitHub Dashboard
               </h2>
-              <p className={theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}>
-                Live GitHub stats, streaks, and language breakdown.
+              <p className={`text-sm mt-2 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                Stats, streaks, and language trends at a glance.
               </p>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-4"></div>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
