@@ -109,7 +109,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
           navigate("/resume");
         } else {
           const link = document.createElement("a");
-          link.href = "/Updated_resume%20(1).pdf";
+          link.href = "/FINAL_RESUME_DEVESH.pdf";
           link.target = "_blank";
           link.click();
         }
@@ -200,7 +200,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
       icon: <Download size={16} />,
       action: () => {
         const link = document.createElement("a");
-        link.href = "/Updated_resume%20(1).pdf";
+          link.href = "/FINAL_RESUME_DEVESH.pdf";
         link.download = "Devesh_Singh_Resume.pdf";
         link.click();
         setOpen(false);

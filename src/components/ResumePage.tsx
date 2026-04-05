@@ -52,7 +52,7 @@ export default function ResumePage({
 
   const handleDownloadPdf = () => {
     const link = document.createElement("a");
-    link.href = "/Updated_resume%20(1).pdf";
+    link.href = "/FINAL_RESUME_DEVESH.pdf";
     link.download = "Devesh_Singh_Resume.pdf";
     link.click();
   };

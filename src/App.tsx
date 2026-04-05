@@ -980,7 +980,7 @@ function App() {
                 Resume Page <FileText size={18} />
               </button>
               <a
-                href="/Updated_resume%20(1).pdf"
+                href="/FINAL_RESUME_DEVESH.pdf"
                 download="Devesh_Singh_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -1078,7 +1078,7 @@ function App() {
                     <FileText size={16} /> Resume Page
                   </a>
                   <a
-                    href="/Updated_resume%20(1).pdf"
+                    href="/FINAL_RESUME_DEVESH.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`px-6 py-3 border font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 text-sm flex items-center gap-2 ${theme === 'dark' ? 'border-slate-700 text-slate-300 hover:border-cyan-300/50 hover:text-cyan-300' : 'border-slate-200 text-slate-600 hover:border-violet-300/50 hover:text-violet-600'}`}
