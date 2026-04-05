@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee, Download, FileText } from "lucide-react";
+import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee, Download, FileText, Github } from "lucide-react";
 
 interface Command {
   id: string;
