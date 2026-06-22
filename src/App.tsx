@@ -266,7 +266,7 @@ function App() {
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -20px 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px 80px 0px" }
     );
 
     revealItems.forEach((item) => observer.observe(item));
