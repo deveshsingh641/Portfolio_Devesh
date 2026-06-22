@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { Coffee, Heart, Star, Zap, Sparkles, ExternalLink } from "lucide-react";
+import { Coffee, Heart, Star, Zap, Sparkles, ExternalLink, QrCode } from "lucide-react";
 
 interface Tier {
   emoji: string;
   label: string;
   amount: number;
+  inrAmount: number;
   color: string;
   gradient: string;
 }
 
 const tiers: Tier[] = [
-  { emoji: "☕", label: "ESPRESSO", amount: 3, color: "text-amber-400", gradient: "from-amber-500 to-orange-500" },
-  { emoji: "🍕", label: "PIZZA", amount: 9, color: "text-rose-400", gradient: "from-rose-500 to-pink-500" },
-  { emoji: "🎧", label: "HEADPHONES", amount: 15, color: "text-violet-400", gradient: "from-violet-500 to-purple-500" },
-  { emoji: "🚀", label: "ROCKET FUEL", amount: 25, color: "text-cyan-400", gradient: "from-cyan-500 to-blue-500" },
+  { emoji: "☕", label: "ESPRESSO", amount: 3, inrAmount: 250, color: "text-amber-400", gradient: "from-amber-500 to-orange-500" },
+  { emoji: "🍕", label: "PIZZA", amount: 9, inrAmount: 750, color: "text-rose-400", gradient: "from-rose-500 to-pink-500" },
+  { emoji: "🎧", label: "HEADPHONES", amount: 15, inrAmount: 1250, color: "text-violet-400", gradient: "from-violet-500 to-purple-500" },
+  { emoji: "🚀", label: "ROCKET FUEL", amount: 25, inrAmount: 2000, color: "text-cyan-400", gradient: "from-cyan-500 to-blue-500" },
 ];
 
 const perks = [
@@ -25,9 +26,16 @@ const perks = [
 
 const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
   const [selectedTier, setSelectedTier] = useState(0);
+  const [method, setMethod] = useState<"bmc" | "upi">("bmc");
 
-  // Replace with your actual Buy Me a Coffee / support link
+  // Customize payment variables here
   const supportBaseUrl = "https://buymeacoffee.com/devesh_6661";
+  const upiId = "deveshsingh20666@okaxis"; // <--- Replace with actual UPI ID (VPA)
+  const payeeName = "Devesh Singh";
+
+  const selected = tiers[selectedTier];
+  const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${selected.inrAmount}&cu=INR`;
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUrl)}`;
 
   return (
     <div className="space-y-10">
@@ -75,7 +83,39 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
               : "border-slate-200 bg-white shadow-lg"
           }`}
         >
-          {/* Label */}
+          {/* Method Selector Tabs */}
+          <div className="flex gap-2 p-1 rounded-xl border mb-6 bg-slate-800/25 border-slate-700/30">
+            <button
+              key="bmc"
+              type="button"
+              onClick={() => setMethod("bmc")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all duration-300 ${
+                method === "bmc"
+                  ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-400/30"
+                  : theme === "dark"
+                    ? "text-slate-400 hover:text-slate-200"
+                    : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              <Coffee size={14} /> Buy Me a Coffee
+            </button>
+            <button
+              key="upi"
+              type="button"
+              onClick={() => setMethod("upi")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all duration-300 ${
+                method === "upi"
+                  ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-400/30"
+                  : theme === "dark"
+                    ? "text-slate-400 hover:text-slate-200"
+                    : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              <QrCode size={14} /> UPI / Scan to Pay
+            </button>
+          </div>
+
+          {/* Amount Label */}
           <div className="flex items-center justify-center gap-2 mb-6">
             <Coffee size={16} className="text-amber-400" />
             <span className={`text-xs font-bold uppercase tracking-[0.2em] ${theme === "dark" ? "text-slate-400" : "text-slate-500"}`}>
@@ -84,7 +124,7 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
           </div>
 
           {/* Tier buttons */}
-          <div className="grid grid-cols-4 gap-3 mb-6">
+          <div className="grid grid-cols-4 gap-3 mb-8">
             {tiers.map((tier, idx) => (
               <button
                 key={tier.label}
@@ -102,7 +142,7 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
               >
                 <span className="text-2xl mb-1">{tier.emoji}</span>
                 <span className={`text-sm font-bold ${theme === "dark" ? "text-slate-100" : "text-slate-900"}`}>
-                  ${tier.amount}
+                  {method === "upi" ? `₹${tier.inrAmount}` : `$${tier.amount}`}
                 </span>
                 <span className="text-[9px] font-mono uppercase tracking-wider text-slate-500 mt-0.5">
                   {tier.label}
@@ -114,17 +154,54 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
             ))}
           </div>
 
-          {/* Support button */}
-          <a
-            href={`${supportBaseUrl}?price=${tiers[selectedTier].amount}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl bg-gradient-to-r ${tiers[selectedTier].gradient} text-white font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99]`}
-          >
-            <Coffee size={16} />
-            Support with ${tiers[selectedTier].amount}
-            <ExternalLink size={12} />
-          </a>
+          {/* Method View: Buy Me a Coffee */}
+          {method === "bmc" && (
+            <a
+              href={`${supportBaseUrl}?price=${selected.amount}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl bg-gradient-to-r ${selected.gradient} text-white font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99]`}
+            >
+              <Coffee size={16} />
+              Support with ${selected.amount}
+              <ExternalLink size={12} />
+            </a>
+          )}
+
+          {/* Method View: UPI QR Code */}
+          {method === "upi" && (
+            <div className="flex flex-col items-center gap-6 animate-slideInUp">
+              {/* QR Code Container */}
+              <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xl relative group">
+                <img
+                  src={qrCodeUrl}
+                  alt="UPI Payment QR Code"
+                  className="w-[180px] h-[180px]"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none" />
+              </div>
+
+              {/* UPI details */}
+              <div className="text-center space-y-1.5">
+                <p className={`text-xs ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>
+                  Scan QR code or click below to pay using any UPI App (GPay, PhonePe, Paytm)
+                </p>
+                <p className={`text-xs font-mono font-bold ${theme === "dark" ? "text-cyan-400" : "text-violet-600"}`}>
+                  UPI ID: {upiId}
+                </p>
+              </div>
+
+              {/* Mobile direct UPI trigger link */}
+              <a
+                href={upiUrl}
+                className={`w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl bg-gradient-to-r ${selected.gradient} text-white font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99]`}
+              >
+                <QrCode size={16} />
+                Pay ₹{selected.inrAmount} via UPI App
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -132,3 +209,4 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
 };
 
 export default SupporterRewards;
+
