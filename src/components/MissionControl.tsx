@@ -14,7 +14,7 @@ const items: StatusItem[] = [
   {
     id: "project-1",
     label: "BUILDING",
-    title: "Lecture Feedback System",
+    title: "ClassIntel AI (Lecture Feedback System)",
     description: "Full-stack platform for collecting and analyzing student feedback on lectures in real-time with advanced analytics.",
     status: "building",
     link: "https://github.com/deveshsingh641/lecture_feedback_system",
@@ -22,7 +22,7 @@ const items: StatusItem[] = [
   {
     id: "project-2",
     label: "WORKING",
-    title: "Portfolio UX Improvements",
+    title: "Personal Portfolio",
     description: "Shipping iterative improvements to portfolio UX, performance, and accessibility based on user feedback and real usage insights.",
     status: "working",
     link: "https://deveshdev.live",

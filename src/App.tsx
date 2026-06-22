@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import Tilt from "react-parallax-tilt";
-// import GitHubCalendar from "react-github-calendar"; // <--- Commented out to fix the crash
 import { TypeAnimation } from "react-type-animation";
 import NeonBackground from "./components/NeonBackground";
 import BlogSection from "./components/BlogSection";
@@ -35,6 +34,9 @@ import BugReportButton from "./components/BugReportButton";
 import SupporterRewards from "./components/SupporterRewards";
 import ResumePage from "./components/ResumePage";
 import ProjectCaseStudyPage from "./components/ProjectCaseStudyPage";
+import BlogPostPage from "./components/BlogPostPage";
+import { loadAllPosts, type Post } from "./blog/posts";
+import { useEasterEggs, triggerKonamiEffect, triggerHiddenTerminal } from "./hooks/useEasterEggs";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,6 +61,8 @@ function App() {
     typeof window !== "undefined" ? window.location.pathname + window.location.hash : "/"
   );
 
+  const [blogPosts, setBlogPosts] = useState<Post[]>([]);
+
   const navigate = (to: string) => {
     if (typeof window === "undefined") return;
     if (to === routePath) return;
@@ -66,7 +70,11 @@ function App() {
     const [path, hash] = to.split("#");
     window.history.pushState({}, "", `${path || "/"}${hash ? `#${hash}` : ""}`);
     setRoutePath(window.location.pathname + window.location.hash);
-    window.scrollTo({ top: 0, behavior: "auto" });
+    // Only force-scroll to top for non-hash navigation.
+    // Hash scrolling is handled in a dedicated effect so it also works on back/forward.
+    if (!hash) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
   };
 
   useEffect(() => {
@@ -74,6 +82,49 @@ function App() {
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
+
+  // Hash navigation: when URL has #section, scroll to that element.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const id = hash.replace(/^#/, "");
+    if (!id) return;
+
+    // Defer until the DOM for the new route is painted.
+    requestAnimationFrame(() => {
+      const element = document.getElementById(id);
+      if (!element) return;
+
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    });
+  }, [routePath]);
+
+  useEffect(() => {
+    let active = true;
+    loadAllPosts()
+      .then((posts) => {
+        if (active) setBlogPosts(posts);
+      })
+      .catch(() => {
+        if (active) setBlogPosts([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEasterEggs({
+    onKonami: () => triggerKonamiEffect(),
+    onSecretCode: (code) => {
+      if (code === "hidden-terminal") triggerHiddenTerminal();
+      if (code === "developer-mode") setCommandPaletteOpen(true);
+    },
+  });
 
   // Contact form states
   const [formData, setFormData] = useState({
@@ -123,7 +174,7 @@ function App() {
     timeouts.push(window.setTimeout(() => setIntroGreeting("Bonjour"), 800));
     timeouts.push(window.setTimeout(() => setIntroGreeting("Hola"), 1600));
     timeouts.push(window.setTimeout(() => setIntroGreeting("Ciao"), 2000));
-    timeouts.push(window.setTimeout(() => setIntroGreeting("Hello"), 2400));
+    timeouts.push(window.setTimeout(() => setIntroGreeting("Welcome"), 2400));
 
     const timer = window.setTimeout(() => {
       setIsLoading(false);
@@ -380,6 +431,7 @@ function App() {
         });
 
         if (!response.ok) {
+          throw new Error(`Formspree submission failed with status ${response.status}`);
         }
       };
 
@@ -654,11 +706,19 @@ function App() {
 
   const isResumeRoute = routePath.startsWith("/resume");
   const isProjectRoute = routePath.startsWith("/projects/");
+  const isBlogRoute = routePath.startsWith("/blog/");
   const currentProjectSlug = isProjectRoute
     ? routePath.replace("/projects/", "").split("#")[0].split("?")[0]
     : "";
   const currentProject = isProjectRoute
-    ? (projects as any[]).find((p) => p.slug === currentProjectSlug)
+    ? projects.find((p) => p.slug === currentProjectSlug)
+    : undefined;
+
+  const currentBlogSlug = isBlogRoute
+    ? routePath.replace("/blog/", "").split("#")[0].split("?")[0]
+    : "";
+  const currentBlogPost = isBlogRoute
+    ? blogPosts.find((p) => p.slug === currentBlogSlug)
     : undefined;
 
   return (
@@ -758,6 +818,8 @@ function App() {
         />
       ) : isProjectRoute ? (
         <ProjectCaseStudyPage theme={theme!} project={currentProject} onNavigate={navigate} />
+      ) : isBlogRoute ? (
+        <BlogPostPage theme={theme!} slug={currentBlogSlug} post={currentBlogPost} onNavigate={navigate} />
       ) : (
       <>
       {/* SCROLL PROGRESS BAR */}
@@ -838,7 +900,6 @@ function App() {
                   "skills",
                   "blog",
                   "projects",
-                  "resume",
                   "certifications",
                   "contact",
                 ].map((item) => (
@@ -892,7 +953,6 @@ function App() {
                 "skills",
                 "blog",
                 "projects",
-                "resume",
                 "certifications",
                 "contact",
               ].map((item) => (
@@ -988,17 +1048,7 @@ function App() {
                 </span>
               </button>
 
-              {/* FIXED RESUME LINK - Uses %20 for spaces */}
-              <button
-                type="button"
-                data-cursor-label="Resume"
-                onMouseMove={handleMagneticMove}
-                onMouseLeave={handleMagneticLeave}
-                onClick={() => navigate("/resume")}
-                className={`magnetic-btn px-8 py-4 rounded-full font-bold border shadow-md transition-all flex items-center justify-center gap-2 w-full sm:w-auto hover:scale-105 ${theme === 'dark' ? 'bg-slate-950/80 text-cyan-100 border-cyan-300/40 hover:bg-slate-900 hover:border-emerald-300/60' : 'bg-white text-violet-700 border-violet-300/50 hover:bg-violet-50 hover:border-violet-400/60'}`}
-              >
-                Resume Page <FileText size={18} />
-              </button>
+
               <a
                 href="/FINAL_RESUME_DEVESH.pdf"
                 download="Devesh_Singh_Resume.pdf"
@@ -1087,16 +1137,7 @@ function App() {
                   >
                     Get in Touch
                   </button>
-                  <a
-                    href="/resume"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate("/resume");
-                    }}
-                    className={`px-6 py-3 border font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 text-sm flex items-center gap-2 ${theme === 'dark' ? 'border-slate-600 text-slate-300 hover:border-emerald-400/50 hover:text-emerald-300' : 'border-slate-300 text-slate-600 hover:border-violet-400/50 hover:text-violet-600'}`}
-                  >
-                    <FileText size={16} /> Resume Page
-                  </a>
+
                   <a
                     href="/FINAL_RESUME_DEVESH.pdf"
                     target="_blank"
@@ -1360,7 +1401,7 @@ function App() {
               <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-4"></div>
             </div>
 
-            <BlogSection theme={theme!} />
+            <BlogSection theme={theme!} posts={blogPosts} onNavigate={navigate} />
           </div>
         </section>
 
@@ -1526,7 +1567,7 @@ function App() {
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-300 hover:scale-105 ${theme === 'dark' ? 'bg-slate-800/60 border-slate-700/50 text-slate-300 hover:text-emerald-300 hover:border-emerald-400/40' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-emerald-700 hover:border-emerald-300'}`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate(`/projects/${(project as any).slug}`);
+                            navigate(`/projects/${project.slug}`);
                           }}
                         >
                           <FileText size={14} /> Case Study
@@ -1899,7 +1940,6 @@ function App() {
                     { label: "Skills", onClick: () => scrollToSection("skills") },
                     { label: "Blog", onClick: () => scrollToSection("blog") },
                     { label: "Projects", onClick: () => scrollToSection("projects") },
-                    { label: "Resume", onClick: () => navigate("/resume") },
                     { label: "Contact", onClick: () => scrollToSection("contact") },
                   ].map((item) => (
                     <button
@@ -1946,6 +1986,8 @@ function App() {
         setTheme={setTheme}
         scrollToSection={scrollToSection}
         navigate={navigate}
+        posts={blogPosts.map((p) => ({ slug: p.slug, title: p.title }))}
+        projects={projects.map((p) => ({ slug: p.slug, title: p.title, category: p.category }))}
         isOpen={commandPaletteOpen}
         onOpenChange={setCommandPaletteOpen}
       />

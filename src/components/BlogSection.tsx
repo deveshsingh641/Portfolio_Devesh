@@ -15,63 +15,7 @@ import {
   Check,
 } from "lucide-react";
 
-/* ------------------------------------------------------------------ */
-/*  Types                                                              */
-/* ------------------------------------------------------------------ */
-type Post = {
-  slug: string;
-  title: string;
-  date: string;
-  category: string;
-  tags: string[];
-  description: string;
-  content: string;
-  readTime: number;
-  wordCount: number;
-};
-
-/* ------------------------------------------------------------------ */
-/*  Frontmatter parser (browser-safe, no Node deps)                    */
-/* ------------------------------------------------------------------ */
-function parseFrontmatter(raw: string): {
-  data: Record<string, string | string[]>;
-  content: string;
-} {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  if (!match) return { data: {}, content: raw };
-
-  const frontmatterBlock = match[1];
-  const content = raw.slice(match[0].length).trim();
-  const data: Record<string, string | string[]> = {};
-  let currentKey = "";
-  let collectingList = false;
-
-  for (const line of frontmatterBlock.split(/\r?\n/)) {
-    const kvMatch = line.match(/^(\w[\w\s]*):\s*(.*)/);
-    if (kvMatch) {
-      currentKey = kvMatch[1].trim();
-      const val = kvMatch[2].trim();
-      if (val === "") {
-        collectingList = true;
-        data[currentKey] = [];
-      } else {
-        collectingList = false;
-        data[currentKey] = val.replace(/^["']|["']$/g, "");
-      }
-    } else if (collectingList && line.match(/^\s*-\s+(.+)/)) {
-      const item = line.match(/^\s*-\s+(.+)/)![1].trim();
-      (data[currentKey] as string[]).push(item);
-    }
-  }
-
-  return { data, content };
-}
-
-/** Estimate reading time in minutes from word count */
-function estimateReadTime(text: string): { readTime: number; wordCount: number } {
-  const words = text.trim().split(/\s+/).length;
-  return { readTime: Math.max(1, Math.ceil(words / 220)), wordCount: words };
-}
+import { extractHeadings, loadAllPosts, type Post } from "../blog/posts";
 
 /* ------------------------------------------------------------------ */
 /*  Category badge color mapping                                       */
@@ -127,28 +71,10 @@ const ShareButton: React.FC<{ title: string; slug: string }> = ({ title, slug })
 };
 
 /* ------------------------------------------------------------------ */
-/*  Table of Contents                                                  */
-/* ------------------------------------------------------------------ */
-function extractHeadings(markdown: string): { level: number; text: string; id: string }[] {
-  const headingRegex = /^(#{2,4})\s+(.+)$/gm;
-  const headings: { level: number; text: string; id: string }[] = [];
-  let m;
-  while ((m = headingRegex.exec(markdown)) !== null) {
-    const text = m[2].trim();
-    headings.push({
-      level: m[1].length,
-      text,
-      id: text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
-    });
-  }
-  return headings;
-}
-
-/* ------------------------------------------------------------------ */
 /*  Blog Section Component                                             */
 /* ------------------------------------------------------------------ */
-const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
-  const [posts, setPosts] = useState<Post[]>([]);
+const BlogSection: React.FC<{ theme: string; posts?: Post[]; onNavigate?: (to: string) => void }> = ({ theme, posts: postsProp, onNavigate }) => {
+  const [posts, setPosts] = useState<Post[]>(postsProp || []);
   const [selected, setSelected] = useState<Post | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -156,39 +82,22 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
 
   /* ---- Load posts ---- */
   useEffect(() => {
-    const modules = import.meta.glob("/src/blog/posts/*.md", { query: "?raw", import: "default" });
-
-    async function load() {
-      const entries = Object.entries(modules);
-      const loaded: Post[] = [];
-      for (const [path, resolver] of entries) {
-        try {
-          const raw = await (resolver as () => Promise<string>)();
-          const { data, content } = parseFrontmatter(raw);
-          const slugMatch = path.match(/([^/]+)\.md$/);
-          const slug = slugMatch ? slugMatch[1] : path;
-          const { readTime, wordCount } = estimateReadTime(content);
-          loaded.push({
-            slug,
-            title: data.title || slug,
-            date: data.date || "",
-            category: data.category || "Development",
-            tags: data.tags || [],
-            description: data.description || "",
-            content,
-            readTime,
-            wordCount,
-          });
-        } catch {
-          // skip bad files
-        }
-      }
-      loaded.sort((a, b) => (a.date < b.date ? 1 : -1));
-      setPosts(loaded);
+    if (postsProp && postsProp.length) {
+      setPosts(postsProp);
+      return;
     }
-
-    load();
-  }, []);
+    let active = true;
+    loadAllPosts()
+      .then((loaded) => {
+        if (active) setPosts(loaded);
+      })
+      .catch(() => {
+        if (active) setPosts([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, [postsProp]);
 
   /* ---- Lock scroll when modal open + Escape to close ---- */
   useEffect(() => {
@@ -231,6 +140,14 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
 
   const featured = filtered[0];
   const rest = filtered.slice(1);
+
+  const openPost = (post: Post) => {
+    if (onNavigate) {
+      onNavigate(`/blog/${post.slug}`);
+    } else {
+      setSelected(post);
+    }
+  };
 
   /* ---- Table of contents for selected post ---- */
   const toc = useMemo(() => (selected ? extractHeadings(selected.content) : []), [selected]);
@@ -328,7 +245,7 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
       {/* ===== FEATURED ARTICLE (first one, large card) ===== */}
       {featured && (
         <article
-          onClick={() => setSelected(featured)}
+          onClick={() => openPost(featured)}
           className={`group mb-10 p-8 rounded-2xl shadow-xl border transition-all duration-500 hover:-translate-y-1 cursor-pointer relative overflow-hidden ${theme === 'dark' ? 'border-cyan-300/20 bg-gradient-to-br from-slate-900/90 via-cyan-950/30 to-slate-950/95 hover:shadow-2xl hover:shadow-cyan-900/20' : 'border-slate-200 bg-white hover:shadow-2xl hover:shadow-slate-300/30'}`}
           data-cursor-label="Read"
         >
@@ -387,7 +304,7 @@ const BlogSection: React.FC<{ theme: string }> = ({ theme }) => {
           return (
             <article
               key={post.slug}
-              onClick={() => setSelected(post)}
+              onClick={() => openPost(post)}
               className={`group p-6 rounded-2xl shadow-xl border transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col ${theme === 'dark' ? 'border-cyan-300/15 bg-gradient-to-b from-slate-900/90 to-slate-950/95 hover:shadow-2xl hover:shadow-cyan-900/15' : 'border-slate-200 bg-white hover:shadow-2xl hover:shadow-slate-300/20'}`}
               data-cursor-label="Read"
               style={{ animationDelay: `${idx * 80}ms` }}

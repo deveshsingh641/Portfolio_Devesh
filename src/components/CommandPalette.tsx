@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee, Download, FileText } from "lucide-react";
+import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee, Download } from "lucide-react";
 
 interface Command {
   id: string;
@@ -17,11 +17,12 @@ interface CommandPaletteProps {
   scrollToSection: (section: string) => void;
   navigate?: (to: string) => void;
   posts?: Array<{ slug: string; title: string }>;
+  projects?: Array<{ slug: string; title: string; category?: string }>;
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
-const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scrollToSection, navigate, posts = [], isOpen: propIsOpen, onOpenChange }) => {
+const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scrollToSection, navigate, posts = [], projects = [], isOpen: propIsOpen, onOpenChange }) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = propIsOpen !== undefined ? propIsOpen : internalOpen;
   const setOpen = useCallback((value: boolean | ((prev: boolean) => boolean)) => {
@@ -97,25 +98,6 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
         setOpen(false);
       },
       keywords: ["projects", "work", "portfolio"],
-    },
-    {
-      id: "nav-resume",
-      label: "Resume",
-      description: "View my resume page",
-      category: "navigation",
-      icon: <FileText size={16} />,
-      action: () => {
-        if (navigate) {
-          navigate("/resume");
-        } else {
-          const link = document.createElement("a");
-          link.href = "/FINAL_RESUME_DEVESH.pdf";
-          link.target = "_blank";
-          link.click();
-        }
-        setOpen(false);
-      },
-      keywords: ["resume", "cv", "profile", "placement"],
     },
     {
       id: "nav-contact",
@@ -207,22 +189,6 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
       },
       keywords: ["resume", "cv", "download", "pdf"],
     },
-    ...(navigate
-      ? [
-        {
-          id: "action-open-resume",
-          label: "Open Resume Page",
-          description: "View the ATS-friendly resume page",
-          category: "action",
-          icon: <FileText size={16} />,
-          action: () => {
-            navigate("/resume");
-            setOpen(false);
-          },
-          keywords: ["resume", "page", "ats", "placements"],
-        },
-      ]
-      : []),
     {
       id: "action-bug-report",
       label: "Report Bug / Suggest Feature",
@@ -249,13 +215,40 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
     category: "search",
     icon: <BookOpen size={16} />,
     action: () => {
-      scrollToSection("blog");
+      if (navigate) {
+        navigate(`/blog/${post.slug}`);
+      } else {
+        scrollToSection("blog");
+      }
       setOpen(false);
     },
     keywords: [post.title.toLowerCase(), post.slug.toLowerCase()],
   }));
 
-  const allCommands = [...navigationCommands, ...actionCommands, ...blogSearchCommands];
+  const projectSearchCommands: Command[] = projects.slice(0, 6).map((project) => ({
+    id: `project-${project.slug}`,
+    label: project.title,
+    description: project.category ? `Open ${project.category} project` : "Open project case study",
+    category: "search",
+    icon: <Rocket size={16} />,
+    action: () => {
+      if (navigate) {
+        navigate(`/projects/${project.slug}`);
+      } else {
+        scrollToSection("projects");
+      }
+      setOpen(false);
+    },
+    keywords: [
+      project.title.toLowerCase(),
+      project.slug.toLowerCase(),
+      (project.category || "").toLowerCase(),
+      "project",
+      "case study",
+    ].filter(Boolean),
+  }));
+
+  const allCommands = [...navigationCommands, ...actionCommands, ...blogSearchCommands, ...projectSearchCommands];
 
   const filtered =
     search.trim() === ""
@@ -467,7 +460,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
                           ? "text-slate-600"
                           : "text-slate-400"
                       }`}>
-                        Articles
+                        Search Results
                       </div>
                       {filtered
                         .filter((cmd) => cmd.category === "search")

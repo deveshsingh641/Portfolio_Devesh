@@ -18,21 +18,21 @@ declare global {
 export const useEasterEggs = (options: EasterEggOptions = {}) => {
   useEffect(() => {
     const konami = [
-      "ArrowUp",
-      "ArrowUp",
-      "ArrowDown",
-      "ArrowDown",
-      "ArrowLeft",
-      "ArrowRight",
-      "ArrowLeft",
-      "ArrowRight",
+      "arrowup",
+      "arrowup",
+      "arrowdown",
+      "arrowdown",
+      "arrowleft",
+      "arrowright",
+      "arrowleft",
+      "arrowright",
       "b",
       "a",
     ];
     let konamiIndex = 0;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      const key = e.key === " " ? " " : e.code || e.key;
+      const key = e.key.toLowerCase();
 
       // Konami code detection
       if (key === konami[konamiIndex]) {

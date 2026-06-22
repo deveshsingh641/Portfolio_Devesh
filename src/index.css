@@ -4,15 +4,21 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Offset to align scroll target below sticky navbar */
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
 }
 
 body {
   font-family: 'Lato', sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
+  min-height: 100dvh; /* Prevents viewport jumps on mobile when URL bar hides/shows */
   transition: background 0.3s ease;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /* Momentum-based smooth scroll for iOS */
 }
 
 @media print {
