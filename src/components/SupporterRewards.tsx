@@ -185,21 +185,12 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
               {/* UPI details */}
               <div className="text-center space-y-1.5">
                 <p className={`text-xs ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>
-                  Scan QR code or click below to pay using any UPI App (GPay, PhonePe, Paytm)
+                  Scan the QR code using any UPI App (GPay, PhonePe, Paytm, BHIM) to pay
                 </p>
                 <p className={`text-xs font-mono font-bold ${theme === "dark" ? "text-cyan-400" : "text-violet-600"}`}>
                   UPI ID: {upiId}
                 </p>
               </div>
-
-              {/* Mobile direct UPI trigger link */}
-              <a
-                href={upiUrl}
-                className={`w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl bg-gradient-to-r ${selected.gradient} text-white font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99]`}
-              >
-                <QrCode size={16} />
-                Pay ₹{selected.inrAmount} via UPI App
-              </a>
             </div>
           )}
         </div>
