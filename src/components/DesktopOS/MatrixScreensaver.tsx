@@ -13,21 +13,28 @@ export const MatrixScreensaver: React.FC<MatrixScreensaverProps> = ({ onClose })
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const fontSize = 16;
+    const columns = Math.ceil(window.innerWidth / fontSize);
+    const drops: number[] = Array(columns).fill(1);
+
+    const chars = "ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const charArray = chars.split("");
+
     // Set canvas sizes
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      
+      const newColumns = Math.ceil(canvas.width / fontSize);
+      if (newColumns > drops.length) {
+        const additional = newColumns - drops.length;
+        for (let i = 0; i < additional; i++) {
+          drops.push(Math.floor(Math.random() * -15));
+        }
+      }
     };
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
-
-    // Matrix characters - Katakana, digits, alphabet
-    const chars = "ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const charArray = chars.split("");
-
-    const fontSize = 16;
-    const columns = Math.ceil(canvas.width / fontSize);
-    const drops: number[] = Array(columns).fill(1);
 
     let animationFrameId: number;
 

@@ -148,7 +148,7 @@ const bgMoodColors: Record<string, string> = {
 
 /* ───────────────────── COMPONENT ───────────────────── */
 
-const Playground: React.FC<{ theme: string }> = ({ theme }) => {
+const Playground: React.FC<{ theme: string; setTheme?: (theme: string) => void }> = ({ theme, setTheme }) => {
   const [activeTab, setActiveTab] = useState<"glass" | "code" | "game">("glass");
 
   // Code snippet state
@@ -620,7 +620,7 @@ const Playground: React.FC<{ theme: string }> = ({ theme }) => {
             <p className={`text-center text-xs font-mono uppercase tracking-[0.2em] text-cyan-400 mb-4`}>CLI Game Console</p>
             <TerminalWindow
               theme={theme}
-              setTheme={() => {}}
+              setTheme={setTheme || (() => {})}
             />
             <div className="mt-4 text-center text-xs text-slate-500 font-medium">
               💡 Type <span className="text-cyan-400 font-mono font-bold">play snake</span> inside the console and press Enter to start the game!

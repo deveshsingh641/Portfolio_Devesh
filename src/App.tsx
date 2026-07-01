@@ -1215,7 +1215,7 @@ function App() {
         {/* PLAYGROUND SECTION */}
         <section id="playground" data-reveal className={`reveal-section ${visibleSections.has('playground') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-cyan-900/15 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-cyan-50/15 to-slate-100/40'}`}>
           <div className="max-w-6xl mx-auto px-4">
-            <Playground theme={theme!} />
+            <Playground theme={theme!} setTheme={setTheme} />
           </div>
         </section>
 
