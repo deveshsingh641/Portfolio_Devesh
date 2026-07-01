@@ -1,4 +1,3 @@
-import React from "react";
 import { Download, ArrowLeft, Mail, Github, Linkedin, Globe } from "lucide-react";
 
 type TechCategory = {
@@ -85,11 +84,11 @@ export default function ResumePage({
         <section className={`rounded-2xl border shadow-xl p-8 ${isDark ? "bg-gradient-to-br from-slate-900/90 via-violet-900/20 to-slate-900/90 border-slate-700/40" : "bg-white border-slate-200"}`}>
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             <div>
-              <p className="text-xs font-mono uppercase tracking-[0.35em] text-emerald-400 mb-2">RESUME</p>
+              <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-2">RESUME</p>
               <h1 className={`text-3xl md:text-4xl font-black ${isDark ? "text-white" : "text-slate-900"}`}>Devesh Singh</h1>
               <p className={`mt-2 text-base font-semibold ${isDark ? "text-slate-300" : "text-slate-600"}`}>Full-Stack Developer (MERN)</p>
               <p className={`mt-3 text-sm leading-relaxed ${isDark ? "text-slate-400" : "text-slate-600"}`}>
-                I build end-to-end web applications with clean architecture, scalable APIs, and polished UI.
+                Full Stack Developer (MERN) skilled in JavaScript, TypeScript, React.js, Node.js, Express.js, MongoDB, RESTful APIs, JWT Authentication, and Role-Based Access Control (RBAC). Delivered production applications with CI/CD pipelines via GitHub Actions, achieving 80% reduction in processing time and 95+ Google Lighthouse scores. B.Tech Information Technology student with 500+ DSA problems solved across CodeChef and LeetCode.
               </p>
             </div>
 
@@ -100,8 +99,8 @@ export default function ResumePage({
               <a className={`flex items-center gap-2 ${isDark ? "text-slate-300 hover:text-cyan-300" : "text-slate-700 hover:text-cyan-700"}`} href="https://github.com/deveshsingh641" target="_blank" rel="noopener noreferrer">
                 <Github size={16} /> github.com/deveshsingh641
               </a>
-              <a className={`flex items-center gap-2 ${isDark ? "text-slate-300 hover:text-cyan-300" : "text-slate-700 hover:text-cyan-700"}`} href="https://linkedin.com/in/devesh-singh-0b234928b" target="_blank" rel="noopener noreferrer">
-                <Linkedin size={16} /> linkedin.com/in/devesh-singh-0b234928b
+              <a className={`flex items-center gap-2 ${isDark ? "text-slate-300 hover:text-cyan-300" : "text-slate-700 hover:text-cyan-700"}`} href="https://linkedin.com/in/deveshsingh64" target="_blank" rel="noopener noreferrer">
+                <Linkedin size={16} /> linkedin.com/in/deveshsingh64
               </a>
               <a className={`flex items-center gap-2 ${isDark ? "text-slate-300 hover:text-cyan-300" : "text-slate-700 hover:text-cyan-700"}`} href="https://deveshdev.live" target="_blank" rel="noopener noreferrer">
                 <Globe size={16} /> deveshdev.live

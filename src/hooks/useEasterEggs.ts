@@ -167,7 +167,7 @@ export const triggerHiddenTerminal = () => {
 
   window.social = () => {
     console.log(
-      "%cGitHub: https://github.com/deveshsingh641\nLinkedIn: https://linkedin.com/in/devesh-singh-0b234928b\nTwitter: https://x.com/harshhere_666",
+      "%cGitHub: https://github.com/deveshsingh641\nLinkedIn: https://linkedin.com/in/deveshsingh64\nTwitter: https://x.com/harshhere_666",
       "color: #a855f7"
     );
   };

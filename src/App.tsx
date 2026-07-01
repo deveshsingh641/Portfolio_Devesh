@@ -559,6 +559,7 @@ function App() {
         { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
         { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
         { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
+        { name: "SQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
       ],
     },
     {
@@ -573,12 +574,14 @@ function App() {
       ],
     },
     {
-      title: "Backend",
+      title: "Backend & Databases",
       icon: "server",
       techs: [
         { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
         { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
         { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+        { name: "MySQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
+        { name: "Mongoose ODM", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
       ],
     },
 
@@ -606,50 +609,55 @@ function App() {
 
   const education = [
     {
-      degree: "B.Tech, Information Technology",
-      school: "ABES Engineering College",
-      year: "2024-Present",
-      score: "CGPA: 8.0",
+      degree: "B.Tech – Information Technology",
+      school: "ABES Engineering College, Ghaziabad",
+      year: "Aug 2023 – Present",
+      score: "CGPA: 8.0 / 10.0",
     },
     {
-      degree: "Intermediate (CBSE)",
-      school: "Sant Atulanand Convent School",
-      year: "2022-2023",
-      score: "Percentage: 89.02%",
+      degree: "Senior Secondary (Class XII), CBSE",
+      school: "Sant Atulanand Convent School, Varanasi",
+      year: "2023",
+      score: "89.02%",
     },
     {
-      degree: "High School (CBSE)",
-      school: "Sant Atulanand Convent School",
-      year: "2020-2021",
-      score: "Percentage: 94.6%",
+      degree: "Secondary (Class X), CBSE",
+      school: "Sant Atulanand Convent School, Varanasi",
+      year: "2021",
+      score: "94.6%",
     },
   ];
 
   const certifications = [
     {
-      name: "Data Structures and Algorithms",
+      name: "Mastering Agentic Design Patterns with Hands-on Projects",
+      source: "Udemy",
+      year: "2026",
+      icon: Award,
+    },
+    {
+      name: "Google Cloud: Essentials, Generative AI & Kubernetes",
+      source: "Google",
+      year: "2025",
+      icon: Award,
+    },
+    {
+      name: "Data Structures & Algorithms",
       source: "Infosys Springboard",
       year: "2025",
       icon: FileText,
     },
     {
-      name: "Problem Solving (Intermediate)",
-      source: "HackerRank",
-      year: "2024",
-      icon: Award,
-    },
-    {
-      name: "Google Arcade Cloud Skills Badges",
-      source: "Google Cloud",
+      name: "Python for Data Science",
+      source: "NPTEL",
       year: "2025",
-      badges: ["Cloud Essentials", "Generative AI", "Kubernetes Basics"],
-      icon: Award,
+      icon: FileText,
     },
   ];
 
   const projects = [
     {
-      title: "ClassIntel AI (Lecture Feedback System)",
+      title: "Classroom Feedback & Analytics System (ClassIntel)",
       slug: "classintel-ai",
       description:
         "AI-powered classroom intelligence platform that turns student feedback into actionable teaching insights. Supports text + voice feedback, sentiment analysis, topic extraction, risk prediction, real-time alerts, and dashboards with trends & top-performer analytics.",
@@ -682,7 +690,7 @@ function App() {
     },
 
     {
-      title: "Personal Portfolio",
+      title: "Developer Portfolio Website",
       slug: "personal-portfolio",
       description:
         "A modern, responsive personal portfolio built with React and Tailwind CSS. Features dark/light theme toggle, animated intro sequence, parallax effects, custom cursor, embedded blog with markdown rendering, live project previews, and glassmorphic design aesthetic.",
@@ -1423,7 +1431,7 @@ function App() {
                   <a href="mailto:deveshsingh20666@gmail.com" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>deveshsingh20666@gmail.com</a>
                   <a href="https://deveshdev.live" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>deveshdev.live</a>
                   <a href="https://github.com/deveshsingh641" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>GitHub</a>
-                  <a href="https://linkedin.com/in/devesh-singh-0b234928b" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>LinkedIn</a>
+                  <a href="https://linkedin.com/in/deveshsingh64" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>LinkedIn</a>
                   <a href="https://x.com/harshhere_666" target="_blank" rel="noopener noreferrer" className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:text-cyan-300' : 'text-slate-600 hover:text-cyan-600'}`}>X / Twitter</a>
                 </div>
               </div>

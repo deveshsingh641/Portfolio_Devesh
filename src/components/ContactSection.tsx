@@ -131,7 +131,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
 
                 {/* LinkedIn */}
                 <a
-                  href="https://linkedin.com/in/devesh-singh-0b234928b"
+                  href="https://linkedin.com/in/deveshsingh64"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 group"
@@ -170,7 +170,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                     { href: "https://deveshdev.live", icon: Globe, label: "Website" },
                     { href: "https://github.com/deveshsingh641", icon: Github, label: "GitHub" },
                     {
-                      href: "https://linkedin.com/in/devesh-singh-0b234928b",
+                      href: "https://linkedin.com/in/deveshsingh64",
                       icon: Linkedin,
                       label: "LinkedIn",
                     },

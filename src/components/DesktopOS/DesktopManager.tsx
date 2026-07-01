@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { 
   User, Code2, Folder, BookOpen, Award, Mail, FileText, 
-  Sun, Moon, Volume2, VolumeX, Monitor, Clock, ExternalLink, Github, ArrowRight
+  Sun, Moon, Volume2, VolumeX, Monitor, Clock, ExternalLink, Github, ArrowRight, Terminal
 } from "lucide-react";
 import DesktopWindow from "./DesktopWindow";
 import AboutSection from "../AboutSection";
@@ -10,6 +10,7 @@ import CertificationsSection from "../CertificationsSection";
 import ContactSection from "../ContactSection";
 import BlogSection from "../BlogSection";
 import ProjectPreview from "../ProjectPreview";
+import { TerminalWindow } from "./TerminalWindow";
 
 interface WindowState {
   id: string;
@@ -67,6 +68,7 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
     blog: { id: "blog", title: "Technical Blog", isOpen: false, isMinimized: false, isMaximized: false, x: 200, y: 120, w: 750, h: 500, zIndex: 1 },
     certifications: { id: "certifications", title: "Certifications", isOpen: false, isMinimized: false, isMaximized: false, x: 240, y: 140, w: 700, h: 480, zIndex: 1 },
     contact: { id: "contact", title: "Contact Me", isOpen: false, isMinimized: false, isMaximized: false, x: 280, y: 160, w: 700, h: 500, zIndex: 1 },
+    terminal: { id: "terminal", title: "Terminal Shell", isOpen: false, isMinimized: false, isMaximized: false, x: 180, y: 90, w: 550, h: 420, zIndex: 1 },
   });
 
   const [projectFilter, setProjectFilter] = useState("All");
@@ -199,6 +201,7 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
     { id: "blog", title: "Blog Posts", icon: BookOpen, color: "from-pink-500 to-rose-600" },
     { id: "certifications", title: "Certifications", icon: Award, color: "from-amber-500 to-orange-600" },
     { id: "contact", title: "Contact", icon: Mail, color: "from-rose-500 to-red-600" },
+    { id: "terminal", title: "Terminal", icon: Terminal, color: "from-slate-800 to-slate-950" },
   ];
 
   const projectCategories = ["All", "AI", "Frontend"];
@@ -531,6 +534,25 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
               handleFormChange={handleFormChange}
               handleFormSubmit={handleFormSubmit}
               isMobile={false}
+            />
+          </DesktopWindow>
+
+          {/* Window 7: Terminal Shell */}
+          <DesktopWindow
+            id="terminal"
+            title="Terminal Shell"
+            theme={theme}
+            {...windows.terminal}
+            onClose={handleWindowClose}
+            onMinimize={handleWindowMinimize}
+            onMaximize={handleWindowMaximize}
+            onFocus={handleWindowFocus}
+            onMove={handleWindowMove}
+            onResize={handleWindowResize}
+          >
+            <TerminalWindow
+              theme={theme}
+              setTheme={setTheme}
             />
           </DesktopWindow>
         </div>
