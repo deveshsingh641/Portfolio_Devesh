@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { Play, Copy, Check, RotateCcw, Terminal, Code2, Palette, Sparkles, Zap, Sliders } from "lucide-react";
+import { Play, Copy, Check, RotateCcw, Terminal, Code2, Palette, Sparkles, Zap, Sliders, Gamepad2 } from "lucide-react";
+import { TerminalWindow } from "./DesktopOS/TerminalWindow";
 
 /* ───────────────────── CODE SNIPPETS TAB ───────────────────── */
 
@@ -148,7 +149,7 @@ const bgMoodColors: Record<string, string> = {
 /* ───────────────────── COMPONENT ───────────────────── */
 
 const Playground: React.FC<{ theme: string }> = ({ theme }) => {
-  const [activeTab, setActiveTab] = useState<"glass" | "code">("glass");
+  const [activeTab, setActiveTab] = useState<"glass" | "code" | "game">("glass");
 
   // Code snippet state
   const [activeId, setActiveId] = useState(snippets[0].id);
@@ -251,6 +252,7 @@ const Playground: React.FC<{ theme: string }> = ({ theme }) => {
           {[
             { id: "glass" as const, label: "Glassmorphism Lab", icon: Palette },
             { id: "code" as const, label: "Code Snippets", icon: Code2 },
+            { id: "game" as const, label: "Retro Arcade", icon: Gamepad2 },
           ].map(({ id, label, icon: Icon }) => (
             <button
               key={id}
@@ -606,6 +608,22 @@ const Playground: React.FC<{ theme: string }> = ({ theme }) => {
               <p className={`text-xs leading-relaxed ${theme === "dark" ? "text-slate-400" : "text-slate-500"}`}>
                 {active.description}
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════ RETRO ARCADE TAB ═══════════ */}
+      {activeTab === "game" && (
+        <div className="max-w-md mx-auto w-full">
+          <div className={`p-6 rounded-2xl border shadow-xl ${theme === "dark" ? "border-slate-800 bg-slate-900/40 shadow-black/40" : "border-slate-200 bg-white shadow-slate-200/50"}`}>
+            <p className={`text-center text-xs font-mono uppercase tracking-[0.2em] text-cyan-400 mb-4`}>CLI Game Console</p>
+            <TerminalWindow
+              theme={theme}
+              setTheme={() => {}}
+            />
+            <div className="mt-4 text-center text-xs text-slate-500 font-medium">
+              💡 Type <span className="text-cyan-400 font-mono font-bold">play snake</span> inside the console and press Enter to start the game!
             </div>
           </div>
         </div>

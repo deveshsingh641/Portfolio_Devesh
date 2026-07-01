@@ -117,7 +117,10 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
           { text: "  clear         - Clear terminal history.", type: "output" },
           { text: "  theme toggle  - Toggle the page styling mood (light/dark).", type: "output" },
           { text: "  play snake    - Launch the retro Snake arcade canvas game.", type: "output" },
-          { text: "  play retro-game - Same as 'play snake'.", type: "output" }
+          { text: "  play retro-game - Same as 'play snake'.", type: "output" },
+          { text: "  glitch        - Trigger a cyberpunk visual screen distortion.", type: "output" },
+          { text: "  matrix        - Toggle a green CRT phosphor theme on the portfolio.", type: "output" },
+          { text: "  screensaver   - Start the falling digital rain Matrix screensaver.", type: "output" }
         );
         break;
 
@@ -125,6 +128,21 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         setHistory([]);
         setCommand("");
         return;
+
+      case "glitch":
+        window.dispatchEvent(new CustomEvent("trigger-glitch"));
+        newHistory.push({ text: "Alert: Cyberpunk screen glitch triggered.", type: "success" });
+        break;
+
+      case "matrix":
+        window.dispatchEvent(new CustomEvent("trigger-matrix-theme"));
+        newHistory.push({ text: "Alert: Green CRT Matrix theme toggled.", type: "success" });
+        break;
+
+      case "screensaver":
+        window.dispatchEvent(new CustomEvent("trigger-screensaver"));
+        newHistory.push({ text: "Alert: Matrix screensaver activated.", type: "success" });
+        break;
 
       case "cat":
         const file = cmdTokens[1];

@@ -44,6 +44,7 @@ import ThreeHeroCanvas from "./components/ThreeHeroCanvas";
 import DesktopManager from "./components/DesktopOS/DesktopManager";
 import { loadAllPosts, type Post } from "./blog/posts";
 import { useEasterEggs, triggerKonamiEffect, triggerHiddenTerminal } from "./hooks/useEasterEggs";
+import { MatrixScreensaver } from "./components/DesktopOS/MatrixScreensaver";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -84,6 +85,60 @@ function App() {
       localStorage.setItem("isOsMode", String(isOsMode));
     } catch { /* ignore */ }
   }, [isOsMode]);
+
+  // --- Screensaver & Custom Easter Egg Command States ---
+  const [isScreensaverActive, setIsScreensaverActive] = useState(false);
+  const [isGlitching, setIsGlitching] = useState(false);
+  const [isMatrixActive, setIsMatrixActive] = useState(false);
+
+  useEffect(() => {
+    let idleTimeout: any;
+
+    const resetIdleTimer = () => {
+      if (isScreensaverActive) return; // Don't reset if already active
+      clearTimeout(idleTimeout);
+      idleTimeout = setTimeout(() => {
+        setIsScreensaverActive(true);
+      }, 45000); // 45 seconds of idle time
+    };
+
+    // User activity event listeners
+    window.addEventListener("mousemove", resetIdleTimer);
+    window.addEventListener("keydown", resetIdleTimer);
+    window.addEventListener("mousedown", resetIdleTimer);
+    window.addEventListener("scroll", resetIdleTimer);
+
+    resetIdleTimer(); // Initial call
+
+    // Terminal triggers custom event listeners
+    const handleGlitch = () => {
+      setIsGlitching(true);
+      setTimeout(() => setIsGlitching(false), 1200);
+    };
+
+    const handleMatrixTheme = () => {
+      setIsMatrixActive((prev) => !prev);
+    };
+
+    const handleScreensaver = () => {
+      setIsScreensaverActive(true);
+    };
+
+    window.addEventListener("trigger-glitch", handleGlitch);
+    window.addEventListener("trigger-matrix-theme", handleMatrixTheme);
+    window.addEventListener("trigger-screensaver", handleScreensaver);
+
+    return () => {
+      clearTimeout(idleTimeout);
+      window.removeEventListener("mousemove", resetIdleTimer);
+      window.removeEventListener("keydown", resetIdleTimer);
+      window.removeEventListener("mousedown", resetIdleTimer);
+      window.removeEventListener("scroll", resetIdleTimer);
+      window.removeEventListener("trigger-glitch", handleGlitch);
+      window.removeEventListener("trigger-matrix-theme", handleMatrixTheme);
+      window.removeEventListener("trigger-screensaver", handleScreensaver);
+    };
+  }, [isScreensaverActive]);
 
   const navigate = (to: string) => {
     if (typeof window === "undefined") return;
@@ -1461,6 +1516,55 @@ function App() {
         isOpen={commandPaletteOpen}
         onOpenChange={setCommandPaletteOpen}
       />
+
+      {/* MATRIX GREEN CRT phosphor STYLE */}
+      {isMatrixActive && (
+        <style>{`
+          * {
+            font-family: 'Courier New', Courier, monospace !important;
+            color: #10b981 !important;
+            border-color: rgba(16, 185, 129, 0.35) !important;
+            text-shadow: 0 0 4px rgba(16, 185, 129, 0.65) !important;
+          }
+          body, html, div, section, nav, footer, main {
+            background-color: #020702 !important;
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)) !important;
+            background-size: 100% 4px, 6px 100% !important;
+          }
+          button, a {
+            text-decoration: underline !important;
+          }
+          img, canvas, svg {
+            filter: sepia(1) saturate(5) hue-rotate(80deg) !important;
+          }
+        `}</style>
+      )}
+
+      {/* CYBERPUNK GLITCH SCREEN OVERLAY */}
+      {isGlitching && (
+        <div className="fixed inset-0 z-[400] bg-transparent pointer-events-none glitch-overlay">
+          <style>{`
+            .glitch-overlay {
+              background: rgba(0, 0, 0, 0.05);
+              animation: glitch-anim 0.4s infinite;
+              backdrop-filter: hue-rotate(90deg) contrast(1.4) blur(1px);
+            }
+            @keyframes glitch-anim {
+              0% { clip-path: inset(12% 0 78% 0); transform: skew(0.5deg); }
+              20% { clip-path: inset(82% 0 8% 0); transform: skew(-0.5deg); }
+              40% { clip-path: inset(32% 0 48% 0); transform: skew(1.2deg); }
+              60% { clip-path: inset(48% 0 32% 0); transform: skew(-1.2deg); }
+              80% { clip-path: inset(72% 0 8% 0); transform: skew(0.6deg); }
+              100% { clip-path: inset(18% 0 62% 0); transform: skew(0deg); }
+            }
+          `}</style>
+        </div>
+      )}
+
+      {/* MATRIX SCREENSAVER */}
+      {isScreensaverActive && (
+        <MatrixScreensaver onClose={() => setIsScreensaverActive(false)} />
+      )}
     </div>
   );
 }
