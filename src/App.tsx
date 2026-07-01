@@ -20,6 +20,7 @@ import {
   Moon,
   Twitter,
   Search,
+  Monitor,
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import Tilt from "react-parallax-tilt";
@@ -35,6 +36,12 @@ import SupporterRewards from "./components/SupporterRewards";
 import ResumePage from "./components/ResumePage";
 import ProjectCaseStudyPage from "./components/ProjectCaseStudyPage";
 import BlogPostPage from "./components/BlogPostPage";
+import AboutSection from "./components/AboutSection";
+import SkillsSection from "./components/SkillsSection";
+import CertificationsSection from "./components/CertificationsSection";
+import ContactSection from "./components/ContactSection";
+import ThreeHeroCanvas from "./components/ThreeHeroCanvas";
+import DesktopManager from "./components/DesktopOS/DesktopManager";
 import { loadAllPosts, type Post } from "./blog/posts";
 import { useEasterEggs, triggerKonamiEffect, triggerHiddenTerminal } from "./hooks/useEasterEggs";
 
@@ -62,6 +69,21 @@ function App() {
   );
 
   const [blogPosts, setBlogPosts] = useState<Post[]>([]);
+  const [isOsMode, setIsOsMode] = useState(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("isOsMode");
+        return stored === "true";
+      }
+    } catch { /* ignore */ }
+    return false;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("isOsMode", String(isOsMode));
+    } catch { /* ignore */ }
+  }, [isOsMode]);
 
   const navigate = (to: string) => {
     if (typeof window === "undefined") return;
@@ -807,7 +829,23 @@ function App() {
         `}</style>
       </Helmet>
 
-      {isResumeRoute ? (
+      {isOsMode ? (
+        <DesktopManager
+          theme={theme!}
+          setTheme={setTheme}
+          onToggleOsMode={() => setIsOsMode(false)}
+          techCategories={techCategories}
+          projects={projects}
+          education={education}
+          certifications={certifications}
+          blogPosts={blogPosts}
+          onNavigate={navigate}
+          formData={formData}
+          formStatus={formStatus}
+          handleFormChange={handleFormChange}
+          handleFormSubmit={handleFormSubmit}
+        />
+      ) : isResumeRoute ? (
         <ResumePage
           theme={theme!}
           onNavigate={navigate}
@@ -888,6 +926,19 @@ function App() {
                 ) : (
                   <Moon size={20} className="text-violet-600" />
                 )}
+              </button>
+
+              <button
+                onClick={() => setIsOsMode(true)}
+                data-cursor-label="OS Mode"
+                className={`p-2 rounded-full transition-colors border ${theme === 'dark'
+                  ? (scrolled ? 'border-cyan-400/30 text-slate-100 hover:bg-cyan-500/10' : 'border-white/20 text-white hover:bg-white/10')
+                  : (scrolled ? 'border-slate-300 text-slate-700 hover:bg-slate-100' : 'border-slate-400/30 text-slate-700 hover:bg-slate-200/50')
+                }`}
+                aria-label="Switch to Developer OS Mode"
+                title="Switch to Developer OS Mode"
+              >
+                <Monitor size={20} />
               </button>
 
               <div className={`hidden md:flex space-x-1 p-1 rounded-full border transition-all duration-300 ${theme === 'dark'
@@ -977,10 +1028,11 @@ function App() {
           onMouseMove={handleHeroMouseMove}
           onMouseLeave={resetHeroParallax}
         >
-          <div className="hidden md:block absolute top-0 w-full h-full overflow-hidden z-0">
-            <div className="absolute top-0 left-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob motion-reduce:animate-none"></div>
-            <div className="absolute top-0 right-1/4 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 motion-reduce:animate-none"></div>
-            <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000 motion-reduce:animate-none"></div>
+          <ThreeHeroCanvas theme={theme!} />
+          <div className="hidden md:block absolute top-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+            <div className="absolute top-0 left-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob motion-reduce:animate-none"></div>
+            <div className="absolute top-0 right-1/4 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 motion-reduce:animate-none"></div>
+            <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 motion-reduce:animate-none"></div>
           </div>
 
           <div className="relative z-10 w-full max-w-5xl mx-auto text-center">
@@ -1065,329 +1117,21 @@ function App() {
         </section>
 
         {/* ABOUT SECTION */}
-        <section
-          id="about"
-          data-reveal
-          className={`reveal-section ${visibleSections.has('about') ? 'is-visible' : ''} py-28 backdrop-blur-sm relative px-6 md:px-20 transition-colors duration-300 overflow-hidden ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/60 via-violet-100/20 to-slate-100/60'}`}
-        >
-          {/* Background decorations */}
-          <div className="absolute top-20 -left-40 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 -right-40 w-80 h-80 bg-emerald-600/10 rounded-full blur-3xl"></div>
+        <AboutSection
+          theme={theme!}
+          visibleSections={visibleSections}
+          scrollToSection={scrollToSection}
+          navigate={navigate}
+          education={education}
+          isMobile={isMobile}
+        />
 
-          <div className="max-w-6xl mx-auto relative z-10">
-            {/* Section Label */}
-            <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-6 text-center">ABOUT_ME</p>
-
-            {/* Big Heading */}
-            <div className="text-center mb-16">
-              <h2 className={`text-4xl md:text-6xl font-black leading-tight ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
-                BUILDING{" "}
-                <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
-                  SCALABLE
-                </span>
-                <br />
-                <span className={theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}>SYSTEMS.</span>
-              </h2>
-            </div>
-
-            {/* Main content grid */}
-            <div className="grid lg:grid-cols-5 gap-12 items-start">
-
-              {/* Left column - Bio + Stats (3 cols) */}
-              <div className="lg:col-span-3 space-y-8">
-                {/* Bio intro */}
-                <div className="space-y-5">
-                  <p className={`text-xl md:text-2xl font-light leading-relaxed ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
-                    I'm <span className={`font-semibold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Devesh Singh</span>.
-                    Full-Stack Developer crafting{" "}
-                    <span className={`font-medium ${theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'}`}>robust, production-ready applications</span>.
-                  </p>
-                  <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-                    Currently pursuing B.Tech in IT at{" "}
-                    <span className={`font-semibold ${theme === 'dark' ? 'text-violet-300' : 'text-violet-600'}`}>ABES Engineering College</span>,
-                    I focus on building applications that are not just functional, but intuitive and scalable.
-                    My passion lies in full-stack engineering — leveraging modern technologies to turn complex logic into user-friendly reality.
-                  </p>
-                  <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-                    When I'm not debugging, I'm refining my DSA skills on LeetCode or exploring
-                    new frameworks and modern tech stacks. I'm eager to join a forward-thinking team where I can
-                    deploy my technical expertise to solve real-world challenges.
-                  </p>
-                </div>
-
-                {/* Stats Row */}
-                <div className="grid grid-cols-3 gap-4 pt-2">
-                  {[
-                    { value: "5+", label: "PROJECTS" },
-                    { value: "4+", label: "CERTIFICATIONS" },
-                    { value: "∞", label: "ALWAYS LEARNING" },
-                  ].map(({ value, label }) => (
-                    <div key={label} className={`group text-center py-5 rounded-xl border backdrop-blur-sm transition-all duration-300 ${theme === 'dark' ? 'border-slate-700/40 bg-slate-900/50 hover:border-emerald-500/40 hover:bg-slate-800/40' : 'border-slate-200 bg-white/80 hover:border-emerald-400/40 hover:bg-slate-50'}`}>
-                      <div className="text-3xl md:text-4xl font-black text-emerald-400 group-hover:scale-110 transition-transform duration-300">{value}</div>
-                      <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 mt-1">{label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* CTA */}
-                <div className="flex flex-wrap gap-4 pt-2">
-                  <button
-                    onClick={() => scrollToSection("contact")}
-                    className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-900 font-bold rounded-lg hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 hover:-translate-y-0.5 text-sm"
-                  >
-                    Get in Touch
-                  </button>
-
-                  <a
-                    href="/FINAL_RESUME_DEVESH.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`px-6 py-3 border font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 text-sm flex items-center gap-2 ${theme === 'dark' ? 'border-slate-700 text-slate-300 hover:border-cyan-300/50 hover:text-cyan-300' : 'border-slate-200 text-slate-600 hover:border-violet-300/50 hover:text-violet-600'}`}
-                  >
-                    <Download size={16} /> Download PDF
-                  </a>
-                </div>
-              </div>
-
-              {/* Right column - Profile Image (2 cols) */}
-              <div className="lg:col-span-2 flex flex-col items-center">
-                <Tilt
-                  tiltMaxAngleX={10}
-                  tiltMaxAngleY={10}
-                  perspective={1200}
-                  transitionSpeed={1000}
-                  scale={1.03}
-                  tiltEnable={!isMobile}
-                  glareEnable={true}
-                  glareMaxOpacity={0.15}
-                >
-                  <div className="relative">
-                    {/* Image container */}
-                    <div className="w-[260px] md:w-[320px] rounded-2xl overflow-hidden shadow-2xl border border-slate-700/40 bg-gradient-to-br from-violet-600/20 via-emerald-500/20 to-cyan-400/20 p-[2px]">
-                      <div className="rounded-2xl overflow-hidden bg-slate-950">
-                        <img
-                          src="/profile.jpg"
-                          alt="Devesh Singh"
-                          className="w-full h-auto object-cover"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Location badge - top left */}
-                    <div className="absolute -top-3 -left-3 bg-slate-900/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/50 shadow-lg flex items-center gap-1.5">
-                      <span className="text-lg">🇮🇳</span>
-                      <span className="text-xs font-semibold text-slate-300">India</span>
-                    </div>
-
-                    {/* Available badge - bottom right */}
-                    <div className="absolute -bottom-3 -right-3 bg-slate-900/95 backdrop-blur-md px-4 py-2 rounded-lg border border-emerald-500/30 shadow-lg flex items-center gap-2">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                      </span>
-                      <span className="text-xs font-bold text-emerald-300">Available</span>
-                    </div>
-                  </div>
-                </Tilt>
-
-                {/* Mini terminal below image */}
-                <div className="mt-8 w-full max-w-[320px]">
-                  <div className="rounded-lg border border-slate-700/50 bg-[#1e1e2e] overflow-hidden shadow-xl">
-                    <div className="flex items-center gap-1.5 px-3 py-2 bg-[#181825] border-b border-slate-700/40">
-                      <span className="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
-                      <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
-                      <span className="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
-                      <span className="text-[10px] font-mono text-slate-500 ml-2">terminal</span>
-                    </div>
-                    <div className="px-4 py-3 font-mono text-xs space-y-1">
-                      <p className="text-slate-500">
-                        <span className="text-emerald-400">➜</span>{" "}
-                        <span className="text-cyan-400">~</span>{" "}
-                        <span className="text-slate-300">cat interests.txt</span>
-                      </p>
-                      <p className="text-slate-400">🎯 Full-Stack Development</p>
-                      <p className="text-slate-400">💻 Web Development</p>
-                      <p className="text-slate-400">📱 App Development</p>
-                      <p className="text-slate-400">🧠 DSA & Problem Solving</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Education Section */}
-            <div className="mt-20">
-              <div className="flex items-center gap-3 mb-10">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-emerald-500 flex items-center justify-center shadow-lg">
-                  <GraduationCap size={20} className="text-white" />
-                </div>
-                <div>
-                  <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Education</h3>
-                  <p className="text-xs font-mono text-slate-500 uppercase tracking-wider">Academic Journey</p>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-5">
-                {education.map((edu, index) => (
-                  <div
-                    key={index}
-                    className={`group relative p-6 rounded-xl border backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 ${theme === 'dark' ? 'border-slate-700/40 bg-slate-900/50 hover:border-emerald-500/40 hover:bg-slate-800/40' : 'border-slate-200 bg-white/80 hover:border-emerald-400/40 hover:bg-slate-50'}`}
-                  >
-                    {/* Number badge */}
-                    <span className="absolute top-4 right-4 text-[10px] font-mono text-emerald-500/40 font-bold">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-
-                    {/* Year badge */}
-                    <div className="inline-flex px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-bold mb-4">
-                      <Calendar size={12} className="mr-1.5" />
-                      {edu.year}
-                    </div>
-
-                    <h4 className={`text-base font-bold mb-1.5 group-hover:text-emerald-400 transition-colors leading-snug ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
-                      {edu.degree}
-                    </h4>
-                    <p className="text-sm text-slate-400 mb-3">{edu.school}</p>
-
-                    {/* Score */}
-                    <div className="flex items-center gap-2 mt-auto">
-                      <Award size={14} className="text-emerald-400" />
-                      <span className="text-sm font-bold text-emerald-300">
-                        {edu.score}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Philosophy / What Drives Me */}
-            <div className="mt-20">
-              <div className="text-center mb-10">
-                <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-3">PHILOSOPHY</p>
-                <h3 className={`text-3xl md:text-4xl font-black ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
-                  CODE THAT{" "}
-                  <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">SCALES</span>.
-                </h3>
-              </div>
-
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
-                {[
-                  { num: "01", title: "Clean Architecture", desc: "Readable, maintainable code following SOLID principles. Every module has a single responsibility.", icon: "🏗️" },
-                  { num: "02", title: "Performance First", desc: "Optimized queries, efficient algorithms, lazy loading. Built to handle scale.", icon: "⚡" },
-                  { num: "03", title: "Data-Driven", desc: "Every decision backed by data. From model metrics to user analytics, numbers guide the way.", icon: "📊" },
-                  { num: "04", title: "Ship Fast", desc: "Automated CI/CD pipelines. From commit to production in minutes, not hours.", icon: "🚀" },
-                ].map(({ num, title, desc, icon }) => (
-                  <div key={num} className={`group relative p-6 rounded-xl border backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 ${theme === 'dark' ? 'border-slate-700/40 bg-slate-900/50 hover:border-emerald-500/40 hover:bg-slate-800/40' : 'border-slate-200 bg-white/80 hover:border-emerald-400/40 hover:bg-slate-50'}`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-2xl">{icon}</span>
-                      <span className="text-[10px] font-mono text-emerald-500/40 font-bold">{num}</span>
-                    </div>
-                    <h4 className={`text-sm font-bold mb-2 group-hover:text-emerald-300 transition-colors ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>{title}</h4>
-                    <p className={`text-xs leading-relaxed ${theme === 'dark' ? 'text-slate-500' : 'text-slate-500'}`}>{desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Quote */}
-              <div className="mt-12 max-w-2xl mx-auto text-center">
-                <blockquote className="relative">
-                  <span className="absolute -top-4 -left-2 text-5xl text-emerald-500/20 font-serif">"</span>
-                  <p className={`text-lg md:text-xl italic leading-relaxed px-8 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
-                    Code is poetry, debugging is the editing process.
-                  </p>
-                  <footer className="mt-3 text-sm text-slate-500">— My coding mantra</footer>
-                </blockquote>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* SKILLS SECTION — "TOOLS I MASTER" vertical list layout */}
-        <section id="skills" data-reveal className={`reveal-section ${visibleSections.has('skills') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-emerald-900/20 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-emerald-50/20 to-slate-100/40'}`}>
-          <div className="hidden lg:block absolute right-0 top-1/4 w-96 h-96 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
-          <div className="hidden lg:block absolute left-0 bottom-1/4 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 motion-reduce:opacity-0"></div>
-
-          <div className="max-w-6xl mx-auto px-4 relative z-10">
-            <div className="mb-16">
-              <p className="text-xs font-mono uppercase tracking-[0.3em] text-emerald-400 mb-3">TECH_STACK</p>
-              <h2 className={`text-4xl md:text-5xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
-                TOOLS I <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">MASTER</span>.
-              </h2>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 rounded-full shadow-lg shadow-violet-400/50 mt-5"></div>
-            </div>
-
-            {/* Category Vertical List */}
-            <div className="space-y-12">
-              {techCategories.map((category, idx) => (
-                <div key={idx}>
-                  {/* Category Header */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-emerald-500/15' : 'bg-emerald-100'}`}>
-                      {category.icon === 'code' && <span className="text-emerald-400 text-sm font-bold">{`</>`}</span>}
-                      {category.icon === 'globe' && <Globe size={16} className="text-emerald-400" />}
-                      {category.icon === 'server' && <Server size={16} className="text-emerald-400" />}
-                      {category.icon === 'brain' && <span className="text-emerald-400 text-sm">🧠</span>}
-                      {category.icon === 'gitbranch' && <span className="text-emerald-400 text-sm">⑂</span>}
-                      {category.icon === 'wrench' && <span className="text-emerald-400 text-sm">🔧</span>}
-                    </div>
-                    <div>
-                      <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
-                        {category.title}
-                      </h3>
-                      <span className="text-xs text-slate-500">
-                        {category.techs.length} technologies
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Tech Items — Horizontal Wrap Grid */}
-                  <div className="flex flex-wrap gap-3">
-                    {category.techs.map((tech) => (
-                      <div
-                        key={tech.name}
-                        className={`flex flex-col items-center justify-center w-[120px] h-[90px] rounded-xl border transition-all duration-300 cursor-default group/item hover:-translate-y-0.5 ${theme === 'dark' ? 'bg-slate-800/60 border-slate-700/40 hover:border-emerald-500/40 hover:bg-slate-700/50' : 'bg-white border-slate-200 hover:border-emerald-400/40 hover:bg-slate-50 hover:shadow-md'}`}
-                      >
-                        {tech.icon ? (
-                          <img
-                            src={tech.icon}
-                            alt={tech.name}
-                            className="w-8 h-8 mb-2 group-hover/item:scale-110 transition-transform duration-300"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="w-8 h-8 mb-2 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
-                            <Server size={16} className="text-white" />
-                          </div>
-                        )}
-                        <span className={`text-xs font-medium text-center leading-tight ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
-                          {tech.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Stats Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-4xl mx-auto">
-              {[
-                { value: `${techCategories.reduce((s, c) => s + c.techs.length, 0)}+`, label: "TECHNOLOGIES" },
-                { value: "5+", label: "PROJECTS BUILT" },
-                { value: "4+", label: "CERTIFICATIONS" },
-                { value: "∞", label: "ALWAYS LEARNING" },
-              ].map(({ value, label }) => (
-                <div key={label} className={`text-center py-4 px-3 rounded-xl border backdrop-blur-sm ${theme === 'dark' ? 'border-slate-700/30 bg-slate-900/40' : 'border-slate-200 bg-white/80'}`}>
-                  <div className="text-2xl font-bold text-emerald-400 mb-1">{value}</div>
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">{label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* SKILLS SECTION */}
+        <SkillsSection
+          theme={theme!}
+          visibleSections={visibleSections}
+          techCategories={techCategories}
+        />
 
 
         {/* BLOG SECTION */}
@@ -1599,70 +1343,11 @@ function App() {
         </section>
 
         {/* CERTIFICATIONS SECTION */}
-        <section id="certifications" data-reveal className={`reveal-section ${visibleSections.has('certifications') ? 'is-visible' : ''} py-24 relative ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/50 via-violet-900/20 to-slate-900/50' : 'bg-gradient-to-b from-slate-100/50 via-violet-50/20 to-slate-100/50'}`}>
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <p className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 mb-3">CREDENTIALS</p>
-              <h2 className={`text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                Certifications & Badges
-              </h2>
-              <p className={`font-medium text-lg ${theme === 'dark' ? 'text-cyan-300' : 'text-cyan-700'}`}>Professional credentials & achievements</p>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-cyan-600 via-emerald-500 to-violet-600 mx-auto rounded-full shadow-lg shadow-cyan-400/50 mt-4"></div>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 stagger-animation">
-              {certifications.map((cert, index) => {
-                const IconComponent = cert.icon;
-                return (
-                  <Tilt
-                    key={index}
-                    tiltMaxAngleX={4}
-                    tiltMaxAngleY={4}
-                    scale={1.02}
-                    glareEnable={true}
-                    glareMaxOpacity={0.1}
-                  >
-                    <div className={`p-7 rounded-2xl shadow-lg border group h-full backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${theme === 'dark' ? 'bg-slate-950/75 border-cyan-300/35 hover:shadow-cyan-900/20' : 'bg-white border-slate-200 hover:shadow-slate-300/30'}`}>
-                      <div className="flex items-start gap-4">
-                        <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 via-emerald-500 to-violet-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-cyan-400/70 shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                          <IconComponent size={32} />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className={`font-bold text-lg leading-tight mb-2 transition-colors ${theme === 'dark' ? 'text-slate-100 group-hover:text-cyan-300' : 'text-slate-900 group-hover:text-cyan-600'}`}>
-                            {cert.name}
-                          </h3>
-                          <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-                            <p className="text-sm font-bold text-emerald-800 dark:text-emerald-100 bg-emerald-100 dark:bg-emerald-900/60 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-700/50">
-                              {cert.source}
-                            </p>
-                            {cert.year && (
-                              <span className="text-xs text-cyan-800 dark:text-cyan-100 font-semibold bg-cyan-100 dark:bg-cyan-900/60 px-3 py-1.5 rounded-full border border-cyan-200 dark:border-cyan-700/50 flex items-center gap-1">
-                                <Calendar size={12} /> {cert.year}
-                              </span>
-                            )}
-                          </div>
-
-                          {cert.badges && (
-                            <div className="mt-4 flex flex-wrap gap-3">
-                              {cert.badges.map((badge, badgeIndex) => (
-                                <span
-                                  key={badgeIndex}
-                                  className="px-3 py-2 bg-gradient-to-r from-violet-600/80 to-cyan-600/80 border-2 border-violet-400/90 text-white text-[12px] uppercase tracking-wider font-bold rounded-lg shadow-md hover:shadow-lg hover:shadow-violet-500/70 transition-all hover:from-violet-600/95 hover:to-cyan-600/95 hover:border-violet-300 hover:scale-105"
-                                >
-                                  {badge}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </Tilt>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        <CertificationsSection
+          theme={theme!}
+          visibleSections={visibleSections}
+          certifications={certifications}
+        />
 
         {/* NOW TRACKER SECTION */}
         <section id="now-tracker" data-reveal className={`reveal-section ${visibleSections.has('now-tracker') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-emerald-900/15 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-emerald-50/15 to-slate-100/40'}`}>
@@ -1679,238 +1364,15 @@ function App() {
         </section>
 
         {/* CONTACT SECTION */}
-        <section
-          id="contact"
-          data-reveal
-          className={`reveal-section ${visibleSections.has('contact') ? 'is-visible' : ''} py-24 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-b from-slate-900/40 via-violet-900/30 to-slate-900/40' : 'bg-gradient-to-b from-slate-100/40 via-violet-50/30 to-slate-100/40'}`}
-        >
-          {/* Background decoration */}
-          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
-
-          <div className="max-w-6xl mx-auto px-4 relative z-10">
-            {/* Section header */}
-            <div className="text-center mb-4">
-              <span className="inline-block text-xs font-bold uppercase tracking-[0.3em] text-cyan-400 mb-3">Get in Touch</span>
-              <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
-                Let's <span className="bg-gradient-to-r from-violet-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">Connect</span>
-              </h2>
-              <p className={`text-lg max-w-2xl mx-auto leading-relaxed ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
-                Have a project in mind? Want to collaborate? Or just want to say hello? I'd love to hear from you.
-              </p>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-6" />
-            </div>
-
-            <div className="grid lg:grid-cols-5 gap-8 mt-14">
-              {/* LEFT — Contact Information */}
-              <div className="lg:col-span-2 space-y-6">
-                <div className={`rounded-2xl p-8 border shadow-xl ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900/90 via-violet-900/25 to-slate-900/90 border-violet-400/20' : 'bg-white border-slate-200'}`}>
-                  <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Contact Information</h3>
-                  <p className={`text-sm mb-8 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Feel free to reach out through any of these channels. I typically respond within 24 hours.</p>
-
-                  {/* Email */}
-                  <div className="space-y-5">
-                    <a
-                      href="mailto:deveshsingh20666@gmail.com"
-                      className="flex items-start gap-4 group"
-                      data-cursor-label="Mail"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-violet-500/15 border border-violet-400/25 flex items-center justify-center shrink-0 group-hover:bg-violet-500/25 group-hover:border-violet-400/40 transition-all">
-                        <Mail size={18} className="text-violet-300" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">Email</p>
-                        <p className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-200 group-hover:text-cyan-300' : 'text-slate-700 group-hover:text-cyan-600'}`}>deveshsingh20666@gmail.com</p>
-                      </div>
-                    </a>
-
-                    {/* Location */}
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-400/25 flex items-center justify-center shrink-0">
-                        <Globe size={18} className="text-emerald-300" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">Location</p>
-                        <p className={`text-sm ${theme === 'dark' ? 'text-slate-200' : 'text-slate-700'}`}>India</p>
-                      </div>
-                    </div>
-
-                    {/* LinkedIn */}
-                    <a
-                      href="https://linkedin.com/in/devesh-singh-0b234928b"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-start gap-4 group"
-                      data-cursor-label="LinkedIn"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-cyan-500/15 border border-cyan-400/25 flex items-center justify-center shrink-0 group-hover:bg-cyan-500/25 group-hover:border-cyan-400/40 transition-all">
-                        <Linkedin size={18} className="text-cyan-300" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">LinkedIn</p>
-                        <p className={`text-sm transition-colors ${theme === 'dark' ? 'text-slate-200 group-hover:text-cyan-300' : 'text-slate-700 group-hover:text-cyan-600'}`}>Devesh Singh</p>
-                      </div>
-                    </a>
-                  </div>
-
-                  {/* Social links row */}
-                  <div className={`mt-8 pt-6 border-t ${theme === 'dark' ? 'border-slate-700/50' : 'border-slate-200'}`}>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Follow Me</h4>
-                    <div className="flex items-center gap-3">
-                      {[
-                        { href: "https://deveshdev.live", icon: Globe, label: "Website" },
-                        { href: "https://github.com/deveshsingh641", icon: Github, label: "GitHub" },
-                        { href: "https://linkedin.com/in/devesh-singh-0b234928b", icon: Linkedin, label: "LinkedIn" },
-                        { href: "https://x.com/harshhere_666", icon: Twitter, label: "X / Twitter" },
-                      ].map(({ href, icon: Icon, label }) => (
-                        <a
-                          key={label}
-                          href={href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          data-cursor-label={label}
-                          className={`w-10 h-10 rounded-lg border flex items-center justify-center transition-all duration-300 ${theme === 'dark' ? 'border-slate-700/60 bg-slate-800/40 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/40 hover:bg-cyan-500/10' : 'border-slate-200 bg-slate-50 text-slate-500 hover:text-cyan-600 hover:border-cyan-400/40 hover:bg-cyan-50'}`}
-                          title={label}
-                          aria-label={label}
-                        >
-                          <Icon size={17} />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Availability badge */}
-                <div className={`rounded-2xl p-6 border shadow-lg ${theme === 'dark' ? 'bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border-emerald-400/20' : 'bg-emerald-50 border-emerald-200'}`}>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="relative flex h-3 w-3">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                    </span>
-                    <span className={`text-sm font-bold ${theme === 'dark' ? 'text-emerald-300' : 'text-emerald-700'}`}>Available for work</span>
-                  </div>
-                  <p className={`text-xs leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-                    I'm currently open to new opportunities and exciting projects. Let's create something amazing together!
-                  </p>
-                </div>
-              </div>
-
-              {/* RIGHT — Send a Message form */}
-              <div className="lg:col-span-3">
-                <Tilt
-                  tiltMaxAngleX={isMobile ? 0 : 2}
-                  tiltMaxAngleY={isMobile ? 0 : 2}
-                  tiltEnable={!isMobile}
-                  glareEnable={!isMobile}
-                  glareMaxOpacity={0.05}
-                >
-                  <div className={`rounded-2xl p-8 md:p-10 border shadow-xl ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900/90 via-violet-900/25 to-slate-900/90 border-violet-400/20' : 'bg-white border-slate-200'}`}>
-                    <h3 className={`text-xl font-bold mb-1 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Send a Message</h3>
-                    <p className={`text-sm mb-8 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>I'll get back to you within 24–48 hours.</p>
-
-                    {/* Status Messages */}
-                    {formStatus.status && (
-                      <div
-                        className={`mb-6 p-4 rounded-xl flex items-center gap-3 ${formStatus.status === "success"
-                          ? "bg-emerald-500/15 border border-emerald-400/40 text-emerald-300"
-                          : formStatus.status === "error"
-                            ? "bg-red-500/15 border border-red-400/40 text-red-300"
-                            : "bg-blue-500/15 border border-blue-400/40 text-blue-300"
-                          }`}
-                        role={formStatus.status === "error" ? "alert" : "status"}
-                        aria-live="polite"
-                      >
-                        {formStatus.status === "success" && <CheckCircle size={18} className="flex-shrink-0" />}
-                        {formStatus.status === "error" && <AlertCircle size={18} className="flex-shrink-0" />}
-                        <span className="text-sm font-medium">{formStatus.message}</span>
-                      </div>
-                    )}
-
-                    <form onSubmit={handleFormSubmit} className="space-y-5">
-                      <div className="grid md:grid-cols-2 gap-5">
-                        <div>
-                          <label htmlFor="contact-name" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Your Name</label>
-                          <input
-                            id="contact-name"
-                            type="text"
-                            name="name"
-                            placeholder="John Doe"
-                            value={formData.name}
-                            onChange={handleFormChange}
-                            required
-                            disabled={formStatus.status === "sending"}
-                            className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="contact-email" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Your Email</label>
-                          <input
-                            id="contact-email"
-                            type="email"
-                            name="email"
-                            placeholder="john@example.com"
-                            value={formData.email}
-                            onChange={handleFormChange}
-                            required
-                            disabled={formStatus.status === "sending"}
-                            className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label htmlFor="contact-subject" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Subject</label>
-                        <input
-                          id="contact-subject"
-                          type="text"
-                          name="subject"
-                          placeholder="Project Collaboration"
-                          value={formData.subject}
-                          onChange={handleFormChange}
-                          disabled={formStatus.status === "sending"}
-                          className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="contact-message" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Message</label>
-                        <textarea
-                          id="contact-message"
-                          name="message"
-                          rows={5}
-                          placeholder="Tell me about your project..."
-                          value={formData.message}
-                          onChange={handleFormChange}
-                          required
-                          disabled={formStatus.status === "sending"}
-                          className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all resize-none hover:border-slate-600/80 disabled:opacity-50"
-                        ></textarea>
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={formStatus.status === "sending"}
-                        className="w-full bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 text-white font-bold py-3.5 rounded-xl hover:shadow-2xl hover:shadow-violet-500/30 hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                      >
-                        {formStatus.status === "sending" ? (
-                          <>
-                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            Sending...
-                          </>
-                        ) : (
-                          <>
-                            <Mail size={16} />
-                            Send Message
-                          </>
-                        )}
-                      </button>
-                    </form>
-                  </div>
-                </Tilt>
-              </div>
-            </div>
-          </div>
-        </section>
+        <ContactSection
+          theme={theme!}
+          visibleSections={visibleSections}
+          formData={formData}
+          formStatus={formStatus}
+          handleFormChange={handleFormChange}
+          handleFormSubmit={handleFormSubmit}
+          isMobile={isMobile}
+        />
 
         {/* Footer */}
         <footer className={`border-t ${theme === 'dark' ? 'bg-slate-950/95 border-slate-700/40' : 'bg-slate-100 border-slate-200'}`}>
