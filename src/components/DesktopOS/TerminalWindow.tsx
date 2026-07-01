@@ -15,8 +15,14 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
   const [history, setHistory] = useState<LogLine[]>([
     { text: "DeveshOS v1.1.2 (kernel 6.2.0-generic-x86_64)", type: "system" },
     { text: "System initialization complete. 1024MB RAM allocated.", type: "system" },
-    { text: "Type 'help' for a list of commands, or 'play retro-game' to start.", type: "system" },
-    { text: "--------------------------------------------------------", type: "system" }
+    { text: "--------------------------------------------------------", type: "system" },
+    { text: "⚡ EXPLORE VINTAGE CLI COMMANDS:", type: "success" },
+    { text: "  play snake   - Start retro Snake canvas game", type: "output" },
+    { text: "  glitch       - Trigger visual screen glitch distortion", type: "output" },
+    { text: "  matrix       - Toggle green CRT phosphor theme override", type: "output" },
+    { text: "  screensaver  - Launch code rain screensaver immediately", type: "output" },
+    { text: "--------------------------------------------------------", type: "system" },
+    { text: "Type 'help' for full system documentation.", type: "system" }
   ]);
   const [command, setCommand] = useState("");
   const [gameMode, setGameMode] = useState<"idle" | "snake">("idle");
