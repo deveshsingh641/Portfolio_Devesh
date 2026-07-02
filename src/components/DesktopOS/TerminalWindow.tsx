@@ -41,26 +41,34 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
   });
   const [gameStatus, setGameStatus] = useState<"start" | "playing" | "gameover" | "paused">("start");
 
+  // Shared Web Audio context (reused to avoid browser limits)
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const getAudioCtx = () => {
+    if (!audioCtxRef.current || audioCtxRef.current.state === "closed") {
+      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    return audioCtxRef.current;
+  };
+
   // Web Audio Synth for retro sound effects
   const playSound = (type: "eat" | "die" | "tick" | "start") => {
     try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioCtx = getAudioCtx();
+      if (audioCtx.state === "suspended") audioCtx.resume();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.connect(gain);
       gain.connect(audioCtx.destination);
 
       if (type === "eat") {
-        // High pitch beep-boop
         osc.type = "square";
-        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); // E5
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08);
         gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.2);
       } else if (type === "die") {
-        // Downward slide buzz
         osc.type = "sawtooth";
         osc.frequency.setValueAtTime(150, audioCtx.currentTime);
         osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.45);
@@ -69,7 +77,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         osc.start();
         osc.stop(audioCtx.currentTime + 0.5);
       } else if (type === "tick") {
-        // Quiet high-hat style tick
         osc.type = "sine";
         osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
         gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
@@ -77,7 +84,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         osc.start();
         osc.stop(audioCtx.currentTime + 0.03);
       } else if (type === "start") {
-        // Arpeggio
         const notes = [261.63, 329.63, 392.00, 523.25];
         osc.type = "triangle";
         gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
@@ -270,6 +276,24 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         return;
       }
 
+      if (localStatus === "gameover") {
+        // Restart the game on any key press from game over screen
+        snake = [
+          { x: 7 * grid, y: 10 * grid },
+          { x: 6 * grid, y: 10 * grid },
+          { x: 5 * grid, y: 10 * grid }
+        ];
+        dx = grid;
+        dy = 0;
+        food = generateFood();
+        score = 0;
+        setGameScore(0);
+        localStatus = "playing";
+        setGameStatus("playing");
+        playSound("start");
+        return;
+      }
+
       if (localStatus === "start" && ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
         localStatus = "playing";
         setGameStatus("playing");
@@ -448,8 +472,10 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
   const restartSnake = () => {
     playSound("start");
     setGameScore(0);
-    setGameStatus("playing");
-    setGameMode("snake");
+    setGameStatus("start");
+    // Toggle gameMode off then on to re-trigger the useEffect
+    setGameMode("idle");
+    setTimeout(() => setGameMode("snake"), 0);
   };
 
   if (gameMode === "snake") {

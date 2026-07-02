@@ -95,8 +95,8 @@ function App() {
     let idleTimeout: any;
 
     const resetIdleTimer = () => {
-      if (isScreensaverActive) return; // Don't reset if already active
       clearTimeout(idleTimeout);
+      if (isScreensaverActive) return; // Don't set new timer while screensaver is showing
       idleTimeout = setTimeout(() => {
         setIsScreensaverActive(true);
       }, 45000); // 45 seconds of idle time
@@ -1542,23 +1542,37 @@ function App() {
 
       {/* CYBERPUNK GLITCH SCREEN OVERLAY */}
       {isGlitching && (
-        <div className="fixed inset-0 z-[400] bg-transparent pointer-events-none glitch-overlay">
+        <>
+          <div className="fixed inset-0 z-[400] pointer-events-none" style={{
+            background: 'rgba(255, 0, 0, 0.03)',
+            animation: 'glitch-shift 0.15s infinite',
+            mixBlendMode: 'exclusion',
+          }} />
+          <div className="fixed inset-0 z-[401] pointer-events-none" style={{
+            background: 'rgba(0, 255, 255, 0.03)',
+            animation: 'glitch-shift 0.15s infinite reverse',
+            mixBlendMode: 'exclusion',
+          }} />
+          <div className="fixed inset-0 z-[402] pointer-events-none" style={{
+            background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 3px)',
+            animation: 'glitch-scanlines 0.08s infinite',
+          }} />
           <style>{`
-            .glitch-overlay {
-              background: rgba(0, 0, 0, 0.05);
-              animation: glitch-anim 0.4s infinite;
-              backdrop-filter: hue-rotate(90deg) contrast(1.4) blur(1px);
+            @keyframes glitch-shift {
+              0% { transform: translate(0, 0); }
+              20% { transform: translate(-3px, 1px); }
+              40% { transform: translate(3px, -2px); }
+              60% { transform: translate(-1px, 3px); }
+              80% { transform: translate(2px, -1px); }
+              100% { transform: translate(0, 0); }
             }
-            @keyframes glitch-anim {
-              0% { clip-path: inset(12% 0 78% 0); transform: skew(0.5deg); }
-              20% { clip-path: inset(82% 0 8% 0); transform: skew(-0.5deg); }
-              40% { clip-path: inset(32% 0 48% 0); transform: skew(1.2deg); }
-              60% { clip-path: inset(48% 0 32% 0); transform: skew(-1.2deg); }
-              80% { clip-path: inset(72% 0 8% 0); transform: skew(0.6deg); }
-              100% { clip-path: inset(18% 0 62% 0); transform: skew(0deg); }
+            @keyframes glitch-scanlines {
+              0% { opacity: 0.6; }
+              50% { opacity: 0.3; }
+              100% { opacity: 0.6; }
             }
           `}</style>
-        </div>
+        </>
       )}
 
       {/* MATRIX SCREENSAVER */}
