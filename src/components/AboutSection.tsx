@@ -1,43 +1,22 @@
 import React from "react";
 import { Download, GraduationCap, Calendar, Award } from "lucide-react";
 import Tilt from "react-parallax-tilt";
-
-interface EducationItem {
-  degree: string;
-  school: string;
-  year: string;
-  score: string;
-}
+import { EducationItem } from "../types";
 
 interface AboutSectionProps {
   theme: string;
   visibleSections: Set<string>;
   scrollToSection: (sectionId: string) => void;
-  navigate: (to: string) => void;
   education: EducationItem[];
   isMobile: boolean;
-  handleMagneticMove?: (e: React.MouseEvent<HTMLElement>) => void;
-  handleMagneticLeave?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const AboutSection: React.FC<AboutSectionProps> = ({
   theme,
   visibleSections,
   scrollToSection,
-  navigate,
   education,
   isMobile,
-  handleMagneticMove = (e) => {
-    if (isMobile) return;
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    el.style.transform = `translate3d(${x * 0.16}px, ${y * 0.16}px, 0)`;
-  },
-  handleMagneticLeave = (e) => {
-    e.currentTarget.style.transform = "translate3d(0, 0, 0)";
-  },
 }) => {
   return (
     <section

@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react";
-import { X, Minus, Square, ShieldAlert } from "lucide-react";
+import React, { useRef } from "react";
+import { X, Minus, Square } from "lucide-react";
 
 interface DesktopWindowProps {
   id: string;

@@ -1,24 +1,15 @@
 import { useState, useEffect, useMemo } from "react";
 import {
-  Mail,
   Github,
-  Linkedin,
   ExternalLink,
   Menu,
   X,
-  Globe,
-  Server,
   FileText,
   Award,
-  GraduationCap,
   ChevronRight,
-  Calendar,
   Download,
-  CheckCircle,
-  AlertCircle,
   Sun,
   Moon,
-  Twitter,
   Search,
   Monitor,
 } from "lucide-react";
@@ -92,7 +83,7 @@ function App() {
   const [isMatrixActive, setIsMatrixActive] = useState(false);
 
   useEffect(() => {
-    let idleTimeout: any;
+    let idleTimeout: ReturnType<typeof setTimeout> | undefined;
 
     const resetIdleTimer = () => {
       clearTimeout(idleTimeout);

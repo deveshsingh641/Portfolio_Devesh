@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { 
-  User, Code2, Folder, BookOpen, Award, Mail, FileText, 
-  Sun, Moon, Volume2, VolumeX, Monitor, Clock, ExternalLink, Github, ArrowRight, Terminal
+  User, Code2, Folder, BookOpen, Award, Mail, 
+  Sun, Moon, Volume2, VolumeX, Monitor, Clock, Github, ArrowRight, Terminal
 } from "lucide-react";
 import DesktopWindow from "./DesktopWindow";
 import AboutSection from "../AboutSection";
@@ -9,8 +9,11 @@ import SkillsSection from "../SkillsSection";
 import CertificationsSection from "../CertificationsSection";
 import ContactSection from "../ContactSection";
 import BlogSection from "../BlogSection";
-import ProjectPreview from "../ProjectPreview";
 import { TerminalWindow } from "./TerminalWindow";
+import { 
+  TechCategory, ProjectItem, EducationItem, CertificationItem, BlogPost, 
+  ContactFormData, ContactFormStatus 
+} from "../../types";
 
 interface WindowState {
   id: string;
@@ -29,16 +32,15 @@ interface DesktopManagerProps {
   theme: string;
   setTheme: (theme: string) => void;
   onToggleOsMode: () => void;
-  techCategories: any[];
-  projects: any[];
-  education: any[];
-  certifications: any[];
-  blogPosts: any[];
-  onNavigate: (to: string) => void;
-  formData: any;
-  formStatus: any;
-  handleFormChange: (e: any) => void;
-  handleFormSubmit: (e: any) => void;
+  techCategories: TechCategory[];
+  projects: ProjectItem[];
+  education: EducationItem[];
+  certifications: CertificationItem[];
+  blogPosts: BlogPost[];
+  formData: ContactFormData;
+  formStatus: ContactFormStatus;
+  handleFormChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const DesktopManager: React.FC<DesktopManagerProps> = ({
@@ -50,7 +52,6 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
   education,
   certifications,
   blogPosts,
-  onNavigate,
   formData,
   formStatus,
   handleFormChange,
@@ -92,7 +93,8 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
   const playTick = () => {
     if (isMuted) return;
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const ctx = new AudioContextClass();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = "sine";

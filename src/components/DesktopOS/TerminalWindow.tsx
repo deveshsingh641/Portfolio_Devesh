@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 interface TerminalWindowProps {
   theme: string;
@@ -45,13 +45,14 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const getAudioCtx = () => {
     if (!audioCtxRef.current || audioCtxRef.current.state === "closed") {
-      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      audioCtxRef.current = new AudioContextClass();
     }
     return audioCtxRef.current;
   };
 
   // Web Audio Synth for retro sound effects
-  const playSound = (type: "eat" | "die" | "tick" | "start") => {
+  const playSound = useCallback((type: "eat" | "die" | "tick" | "start") => {
     try {
       const audioCtx = getAudioCtx();
       if (audioCtx.state === "suspended") audioCtx.resume();
@@ -95,7 +96,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         osc.stop(audioCtx.currentTime + 0.45);
       }
     } catch { /* ignore audio errors */ }
-  };
+  }, []);
 
   useEffect(() => {
     if (gameMode === "idle") {
@@ -156,7 +157,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         newHistory.push({ text: "Alert: Matrix screensaver activated.", type: "success" });
         break;
 
-      case "cat":
+      case "cat": {
         const file = cmdTokens[1];
         if (file === "resume") {
           newHistory.push(
@@ -188,6 +189,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
           newHistory.push({ text: `cat: ${file}: No such file or directory.`, type: "error" });
         }
         break;
+      }
 
       case "theme":
         if (cmdTokens[1] === "toggle") {
@@ -198,7 +200,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         }
         break;
 
-      case "play":
+      case "play": {
         const target = cmdTokens[1];
         if (target === "snake" || target === "retro-game" || !target) {
           playSound("start");
@@ -211,6 +213,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
           newHistory.push({ text: `Unknown game '${target}'. Type 'play snake' to play the retro game.`, type: "error" });
         }
         break;
+      }
 
       default:
         newHistory.push({ text: `DeveshOS: ${baseCmd}: command not found. Type 'help' for commands.`, type: "error" });
@@ -319,7 +322,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
 
     window.addEventListener("keydown", handleKeyDown);
 
-    let gameInterval: any;
+
 
     const gameLoop = () => {
       if (localStatus !== "playing") {
@@ -415,7 +418,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
           setHighScore(score);
           try {
             localStorage.setItem("terminal_snake_highscore", score.toString());
-          } catch {}
+          } catch { /* ignore */ }
         }
         return;
       }
@@ -460,13 +463,13 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
       });
     };
 
-    gameInterval = setInterval(gameLoop, 90);
+    const gameInterval = setInterval(gameLoop, 90);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       clearInterval(gameInterval);
     };
-  }, [gameMode, highScore]);
+  }, [gameMode, highScore, playSound]);
 
   // Restart snake game click
   const restartSnake = () => {
