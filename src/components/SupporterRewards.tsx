@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Coffee, Heart, Star, Zap, Sparkles, ExternalLink, QrCode } from "lucide-react";
+import { Coffee, Heart, Star, Zap, Sparkles, ExternalLink, QrCode, Copy, Check, Smartphone } from "lucide-react";
 
 interface Tier {
   emoji: string;
@@ -11,10 +11,10 @@ interface Tier {
 }
 
 const tiers: Tier[] = [
-  { emoji: "☕", label: "ESPRESSO", amount: 3, inrAmount: 250, color: "text-amber-400", gradient: "from-amber-500 to-orange-500" },
-  { emoji: "🍕", label: "PIZZA", amount: 9, inrAmount: 750, color: "text-rose-400", gradient: "from-rose-500 to-pink-500" },
-  { emoji: "🎧", label: "HEADPHONES", amount: 15, inrAmount: 1250, color: "text-violet-400", gradient: "from-violet-500 to-purple-500" },
-  { emoji: "🚀", label: "ROCKET FUEL", amount: 25, inrAmount: 2000, color: "text-cyan-400", gradient: "from-cyan-500 to-blue-500" },
+  { emoji: "☕", label: "ESPRESSO", amount: 1, inrAmount: 30, color: "text-amber-400", gradient: "from-amber-500 to-orange-500" },
+  { emoji: "🍕", label: "PIZZA", amount: 3, inrAmount: 100, color: "text-rose-400", gradient: "from-rose-500 to-pink-500" },
+  { emoji: "🎧", label: "HEADPHONES", amount: 5, inrAmount: 250, color: "text-violet-400", gradient: "from-violet-500 to-purple-500" },
+  { emoji: "🚀", label: "ROCKET FUEL", amount: 10, inrAmount: 500, color: "text-cyan-400", gradient: "from-cyan-500 to-blue-500" },
 ];
 
 const perks = [
@@ -26,12 +26,23 @@ const perks = [
 
 const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
   const [selectedTier, setSelectedTier] = useState(0);
-  const [method, setMethod] = useState<"bmc" | "upi">("bmc");
+  const [method, setMethod] = useState<"bmc" | "upi">("upi");
 
   // Customize payment variables here
   const supportBaseUrl = "https://buymeacoffee.com/devesh_6661";
   const upiId = "deveshsingh20666@okaxis"; // <--- Replace with actual UPI ID (VPA)
   const payeeName = "Devesh Singh";
+
+  const [copiedUpi, setCopiedUpi] = useState(false);
+  const handleCopyUpi = async () => {
+    try {
+      await navigator.clipboard.writeText(upiId);
+      setCopiedUpi(true);
+      setTimeout(() => setCopiedUpi(false), 2000);
+    } catch {
+      // ignore
+    }
+  };
 
   const selected = tiers[selectedTier];
   const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${selected.inrAmount}&cu=INR`;
@@ -168,7 +179,7 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
             </a>
           )}
 
-          {/* Method View: UPI QR Code */}
+          {/* Method View: UPI QR Code & App Direct Link */}
           {method === "upi" && (
             <div className="flex flex-col items-center gap-6 animate-slideInUp">
               {/* QR Code Container */}
@@ -183,13 +194,45 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
               </div>
 
               {/* UPI details */}
-              <div className="text-center space-y-1.5">
+              <div className="text-center w-full space-y-4">
                 <p className={`text-xs ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>
-                  Scan the QR code using any UPI App (GPay, PhonePe, Paytm, BHIM) to pay
+                  Scan the QR code using any UPI App (GPay, PhonePe, Paytm, BHIM) to pay.
                 </p>
-                <p className={`text-xs font-mono font-bold ${theme === "dark" ? "text-cyan-400" : "text-violet-600"}`}>
-                  UPI ID: {upiId}
-                </p>
+
+                {/* UPI ID Copy Field */}
+                <div className={`flex items-center justify-between p-3 rounded-xl border ${
+                  theme === "dark" ? "bg-slate-950/60 border-slate-800" : "bg-slate-50 border-slate-200"
+                }`}>
+                  <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">UPI ID:</span>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs font-mono font-extrabold ${theme === "dark" ? "text-cyan-400" : "text-violet-600"}`}>
+                      {upiId}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopyUpi}
+                      className={`p-1.5 rounded-lg border transition-all ${
+                        copiedUpi
+                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                          : theme === "dark"
+                            ? "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                            : "bg-white border-slate-200 text-slate-500 hover:text-slate-700"
+                      }`}
+                      title="Copy UPI ID"
+                    >
+                      {copiedUpi ? <Check size={13} /> : <Copy size={13} />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Direct Pay Button */}
+                <a
+                  href={upiUrl}
+                  className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r ${selected.gradient} text-white font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99]`}
+                >
+                  <Smartphone size={16} />
+                  Pay via UPI App (GPay/PhonePe)
+                </a>
               </div>
             </div>
           )}
