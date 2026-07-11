@@ -290,7 +290,11 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                         onChange={handleFormChange}
                         required
                         disabled={formStatus.status === "sending"}
-                        className="w-full px-4 py-3 bg-slate-850 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
+                        className={`w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all hover:border-slate-600/80 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 disabled:opacity-50 ${
+                          theme === "dark"
+                            ? "bg-slate-800/40 border-slate-700/60 text-slate-100 placeholder-slate-500"
+                            : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400"
+                        }`}
                       />
                     </div>
                     <div>
@@ -309,7 +313,11 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                         onChange={handleFormChange}
                         required
                         disabled={formStatus.status === "sending"}
-                        className="w-full px-4 py-3 bg-slate-850 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
+                        className={`w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all hover:border-slate-600/80 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 disabled:opacity-50 ${
+                          theme === "dark"
+                            ? "bg-slate-800/40 border-slate-700/60 text-slate-100 placeholder-slate-500"
+                            : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400"
+                        }`}
                       />
                     </div>
                   </div>
@@ -329,7 +337,11 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                       value={formData.subject}
                       onChange={handleFormChange}
                       disabled={formStatus.status === "sending"}
-                      className="w-full px-4 py-3 bg-slate-850 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all hover:border-slate-600/80 disabled:opacity-50"
+                      className={`w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all hover:border-slate-600/80 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 disabled:opacity-50 ${
+                        theme === "dark"
+                          ? "bg-slate-800/40 border-slate-700/60 text-slate-100 placeholder-slate-500"
+                          : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400"
+                      }`}
                     />
                   </div>
 
@@ -349,7 +361,11 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                       onChange={handleFormChange}
                       required
                       disabled={formStatus.status === "sending"}
-                      className="w-full px-4 py-3 bg-slate-850 border border-slate-700/60 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 outline-none transition-all resize-none hover:border-slate-600/80 disabled:opacity-50"
+                      className={`w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all resize-none hover:border-slate-600/80 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 disabled:opacity-50 ${
+                        theme === "dark"
+                          ? "bg-slate-800/40 border-slate-700/60 text-slate-100 placeholder-slate-500"
+                          : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400"
+                      }`}
                     ></textarea>
                   </div>
 

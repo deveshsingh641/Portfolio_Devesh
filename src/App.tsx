@@ -49,10 +49,18 @@ function App() {
   const [cursorVisible, setCursorVisible] = useState(false);
   const [cursorActive, setCursorActive] = useState(false);
   const [cursorLabel, setCursorLabel] = useState("");
-  const isMobile = useMemo(
-    () => (typeof window !== "undefined" ? window.innerWidth < 768 : false),
-    []
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [projectFilter, setProjectFilter] = useState<string>("All");

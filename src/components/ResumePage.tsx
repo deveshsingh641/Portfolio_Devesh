@@ -53,7 +53,9 @@ export default function ResumePage({
     const link = document.createElement("a");
     link.href = "/FINAL_RESUME_DEVESH.pdf";
     link.download = "Devesh_Singh_Resume.pdf";
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   };
 
   return (

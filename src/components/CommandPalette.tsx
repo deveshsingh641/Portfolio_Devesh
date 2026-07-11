@@ -182,9 +182,11 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
       icon: <Download size={16} />,
       action: () => {
         const link = document.createElement("a");
-          link.href = "/FINAL_RESUME_DEVESH.pdf";
+        link.href = "/FINAL_RESUME_DEVESH.pdf";
         link.download = "Devesh_Singh_Resume.pdf";
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         setOpen(false);
       },
       keywords: ["resume", "cv", "download", "pdf"],

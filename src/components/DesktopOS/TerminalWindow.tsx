@@ -109,7 +109,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
   const handleCommandSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanCmd = command.trim().toLowerCase();
-    const cmdTokens = cleanCmd.split(" ");
+    const cmdTokens = cleanCmd.split(/\s+/);
     const baseCmd = cmdTokens[0];
 
     const newHistory = [...history, { text: `devesh@DeveshOS:~$ ${command}`, type: "input" as const }];
@@ -242,6 +242,8 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
     ];
     let dx = grid;
     let dy = 0;
+    let lastDx = grid;
+    let lastDy = 0;
     let food = { x: 12 * grid, y: 10 * grid };
     let score = 0;
     let localStatus = "start";
@@ -272,11 +274,12 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         if (localStatus === "playing") {
           localStatus = "paused";
           setGameStatus("paused");
+          return;
         } else if (localStatus === "paused") {
           localStatus = "playing";
           setGameStatus("playing");
+          return;
         }
-        return;
       }
 
       if (localStatus === "gameover") {
@@ -288,6 +291,8 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
         ];
         dx = grid;
         dy = 0;
+        lastDx = grid;
+        lastDy = 0;
         food = generateFood();
         score = 0;
         setGameScore(0);
@@ -305,16 +310,16 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
       if (localStatus !== "playing") return;
 
       playSound("tick");
-      if (e.key === "ArrowUp" && dy === 0) {
+      if (e.key === "ArrowUp" && lastDy === 0) {
         dx = 0;
         dy = -grid;
-      } else if (e.key === "ArrowDown" && dy === 0) {
+      } else if (e.key === "ArrowDown" && lastDy === 0) {
         dx = 0;
         dy = grid;
-      } else if (e.key === "ArrowLeft" && dx === 0) {
+      } else if (e.key === "ArrowLeft" && lastDx === 0) {
         dx = -grid;
         dy = 0;
-      } else if (e.key === "ArrowRight" && dx === 0) {
+      } else if (e.key === "ArrowRight" && lastDx === 0) {
         dx = grid;
         dy = 0;
       }
@@ -397,6 +402,8 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
 
       // Update snake position
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+      lastDx = dx;
+      lastDy = dy;
 
       // Self collision or wall collision check
       if (

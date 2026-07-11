@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface EasterEggOptions {
   onKonami?: () => void;
@@ -16,6 +16,9 @@ declare global {
 }
 
 export const useEasterEggs = (options: EasterEggOptions = {}) => {
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
+
   useEffect(() => {
     const konami = [
       "arrowup",
@@ -38,7 +41,7 @@ export const useEasterEggs = (options: EasterEggOptions = {}) => {
       if (key === konami[konamiIndex]) {
         konamiIndex++;
         if (konamiIndex === konami.length) {
-          options.onKonami?.();
+          optionsRef.current.onKonami?.();
           konamiIndex = 0;
         }
       } else {
@@ -53,19 +56,19 @@ export const useEasterEggs = (options: EasterEggOptions = {}) => {
       // Alt+D for developer mode
       if ((e.altKey || e.metaKey) && e.key.toLowerCase() === "d") {
         e.preventDefault();
-        options.onSecretCode?.("developer-mode");
+        optionsRef.current.onSecretCode?.("developer-mode");
       }
 
       // Ctrl+Shift+X for hidden terminal
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "x") {
         e.preventDefault();
-        options.onSecretCode?.("hidden-terminal");
+        optionsRef.current.onSecretCode?.("hidden-terminal");
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [options]);
+  }, []);
 };
 
 // Easter egg effects

@@ -28,6 +28,12 @@ const MorphingParticles: React.FC<MorphingParticlesProps> = ({ theme }) => {
     return new THREE.CanvasTexture(canvas);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      dotTexture.dispose();
+    };
+  }, [dotTexture]);
+
   // 2. Generate 3D Spherical Coordinate distributions for 2,000 particles
   const particleCount = 2200;
   const [positions, originalPositions] = useMemo(() => {

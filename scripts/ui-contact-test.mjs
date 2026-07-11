@@ -24,6 +24,14 @@ try {
 
   const statusLocator = page.locator('div[role="status"], div[role="alert"]');
   await statusLocator.first().waitFor({ timeout: 30000 });
+
+  await page.waitForFunction(() => {
+    const statusEl = document.querySelector('div[role="status"], div[role="alert"]');
+    if (!statusEl) return false;
+    const text = (statusEl.textContent || "").trim();
+    return /Message sent successfully|Failed to send message/i.test(text);
+  }, { timeout: 60000 });
+
   const statusText = (await statusLocator.first().innerText()).trim();
 
   if (/Message sent successfully/i.test(statusText)) {

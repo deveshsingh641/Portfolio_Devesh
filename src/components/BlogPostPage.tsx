@@ -3,6 +3,14 @@ import ReactMarkdown from "react-markdown";
 import { ArrowLeft, Calendar, Clock3, Share2 } from "lucide-react";
 import { extractHeadings, Post } from "../blog/posts";
 
+const getPlainText = (node: any): string => {
+  if (!node) return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(getPlainText).join("");
+  if (node.props && node.props.children) return getPlainText(node.props.children);
+  return "";
+};
+
 function slugToTitle(slug: string) {
   return slug
     .replace(/[-_]+/g, " ")
@@ -10,7 +18,7 @@ function slugToTitle(slug: string) {
 }
 
 function getHeadingId(children: React.ReactNode) {
-  const raw = Array.isArray(children) ? children.join("") : String(children);
+  const raw = getPlainText(children);
   return raw
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")

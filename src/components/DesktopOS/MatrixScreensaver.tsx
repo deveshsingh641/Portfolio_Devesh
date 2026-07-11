@@ -6,6 +6,11 @@ interface MatrixScreensaverProps {
 
 export const MatrixScreensaver: React.FC<MatrixScreensaverProps> = ({ onClose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -92,12 +97,12 @@ export const MatrixScreensaver: React.FC<MatrixScreensaverProps> = ({ onClose })
         Math.abs(e.clientX - lastMouseX) > movementThreshold ||
         Math.abs(e.clientY - lastMouseY) > movementThreshold
       ) {
-        onClose();
+        onCloseRef.current();
       }
     };
 
     const handleInput = () => {
-      onClose();
+      onCloseRef.current();
     };
 
     // Attach listeners
@@ -115,7 +120,7 @@ export const MatrixScreensaver: React.FC<MatrixScreensaverProps> = ({ onClose })
       window.removeEventListener("mousedown", handleInput);
       window.removeEventListener("touchstart", handleInput);
     };
-  }, [onClose]);
+  }, []);
 
   return (
     <canvas

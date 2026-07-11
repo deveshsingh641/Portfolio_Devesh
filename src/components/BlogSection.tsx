@@ -17,6 +17,14 @@ import {
 
 import { extractHeadings, loadAllPosts, type Post } from "../blog/posts";
 
+const getPlainText = (node: any): string => {
+  if (!node) return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(getPlainText).join("");
+  if (node.props && node.props.children) return getPlainText(node.props.children);
+  return "";
+};
+
 /* ------------------------------------------------------------------ */
 /*  Category badge color mapping                                       */
 /* ------------------------------------------------------------------ */
@@ -449,12 +457,12 @@ const BlogSection: React.FC<{ theme: string; posts?: Post[]; onNavigate?: (to: s
                   <ReactMarkdown
                     components={{
                       h2: ({ children, ...props }) => {
-                        const text = typeof children === "string" ? children : String(children);
+                        const text = getPlainText(children);
                         const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
                         return <h2 id={id} {...props}>{children}</h2>;
                       },
                       h3: ({ children, ...props }) => {
-                        const text = typeof children === "string" ? children : String(children);
+                        const text = getPlainText(children);
                         const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
                         return <h3 id={id} {...props}>{children}</h3>;
                       },
