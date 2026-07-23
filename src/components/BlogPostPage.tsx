@@ -3,11 +3,14 @@ import ReactMarkdown from "react-markdown";
 import { ArrowLeft, Calendar, Clock3, Share2 } from "lucide-react";
 import { extractHeadings, Post } from "../blog/posts";
 
-const getPlainText = (node: any): string => {
+const getPlainText = (node: unknown): string => {
   if (!node) return "";
   if (typeof node === "string" || typeof node === "number") return String(node);
   if (Array.isArray(node)) return node.map(getPlainText).join("");
-  if (node.props && node.props.children) return getPlainText(node.props.children);
+  if (typeof node === "object" && node !== null && "props" in node) {
+    const props = (node as { props?: { children?: unknown } }).props;
+    if (props && props.children) return getPlainText(props.children);
+  }
   return "";
 };
 
