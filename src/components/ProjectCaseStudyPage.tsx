@@ -97,7 +97,17 @@ export default function ProjectCaseStudyPage({
         <header className={`rounded-2xl border overflow-hidden shadow-xl ${isDark ? "bg-slate-900/60 border-slate-700/40" : "bg-white border-slate-200"}`}>
           <div className="h-56 relative">
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent z-10" />
-            <img src={project.image} alt={project.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                e.currentTarget.src =
+                  "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1200&q=80";
+              }}
+            />
             <div className="absolute bottom-4 left-4 right-4 z-20">
               <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-emerald-300">CASE_STUDY</p>
               <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-1">{project.title}</h1>

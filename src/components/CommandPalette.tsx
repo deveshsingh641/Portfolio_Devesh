@@ -17,7 +17,7 @@ interface CommandPaletteProps {
   scrollToSection: (section: string) => void;
   navigate?: (to: string) => void;
   posts?: Array<{ slug: string; title: string }>;
-  projects?: Array<{ slug: string; title: string; category?: string }>;
+  projects?: Array<{ slug: string; title: string; category?: string; tech?: string[] }>;
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
@@ -227,7 +227,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
     keywords: [post.title.toLowerCase(), post.slug.toLowerCase()],
   }));
 
-  const projectSearchCommands: Command[] = projects.slice(0, 6).map((project) => ({
+  const projectSearchCommands: Command[] = projects.map((project) => ({
     id: `project-${project.slug}`,
     label: project.title,
     description: project.category ? `Open ${project.category} project` : "Open project case study",
@@ -245,6 +245,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
       project.title.toLowerCase(),
       project.slug.toLowerCase(),
       (project.category || "").toLowerCase(),
+      ...(project.tech || []).map((t) => t.toLowerCase()),
       "project",
       "case study",
     ].filter(Boolean),

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import {
   Github,
   ExternalLink,
@@ -31,11 +31,13 @@ import AboutSection from "./components/AboutSection";
 import SkillsSection from "./components/SkillsSection";
 import CertificationsSection from "./components/CertificationsSection";
 import ContactSection from "./components/ContactSection";
-import ThreeHeroCanvas from "./components/ThreeHeroCanvas";
 import DesktopManager from "./components/DesktopOS/DesktopManager";
+import { projects, techCategories, education, certifications } from "./data/portfolio";
 import { loadAllPosts, type Post } from "./blog/posts";
 import { useEasterEggs, triggerKonamiEffect, triggerHiddenTerminal } from "./hooks/useEasterEggs";
 import { MatrixScreensaver } from "./components/DesktopOS/MatrixScreensaver";
+
+const ThreeHeroCanvas = lazy(() => import("./components/ThreeHeroCanvas"));
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -604,180 +606,6 @@ function App() {
     }
   };
 
-  // --- DATA ---
-  const techCategories = [
-    {
-      title: "Languages",
-      icon: "code",
-      techs: [
-        { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
-        { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-        { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
-        { name: "SQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
-      ],
-    },
-    {
-      title: "Frontend",
-      icon: "globe",
-      techs: [
-        { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-        { name: "Tailwind CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
-        { name: "Vite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" },
-        { name: "HTML5", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-        { name: "CSS3", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
-      ],
-    },
-    {
-      title: "Backend & Databases",
-      icon: "server",
-      techs: [
-        { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
-        { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
-        { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-        { name: "MySQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
-        { name: "Mongoose ODM", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-      ],
-    },
-
-    {
-      title: "DevOps & Version Control",
-      icon: "gitbranch",
-      techs: [
-        { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-        { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
-        { name: "GitHub Actions", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" },
-        { name: "Vercel", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" },
-      ],
-    },
-    {
-      title: "Tools",
-      icon: "wrench",
-      techs: [
-        { name: "VS Code", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
-        { name: "Postman", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" },
-        { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
-        { name: "ESLint", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/eslint/eslint-original.svg" },
-      ],
-    },
-  ];
-
-  const education = [
-    {
-      degree: "B.Tech – Information Technology",
-      school: "ABES Engineering College, Ghaziabad",
-      year: "Aug 2023 – Present",
-      score: "CGPA: 8.0 / 10.0",
-    },
-    {
-      degree: "Senior Secondary (Class XII), CBSE",
-      school: "Sant Atulanand Convent School, Varanasi",
-      year: "2023",
-      score: "89.02%",
-    },
-    {
-      degree: "Secondary (Class X), CBSE",
-      school: "Sant Atulanand Convent School, Varanasi",
-      year: "2021",
-      score: "94.6%",
-    },
-  ];
-
-  const certifications = [
-    {
-      name: "Mastering Agentic Design Patterns with Hands-on Projects",
-      source: "Udemy",
-      year: "2026",
-      icon: Award,
-    },
-    {
-      name: "Google Cloud: Essentials, Generative AI & Kubernetes",
-      source: "Google",
-      year: "2025",
-      icon: Award,
-    },
-    {
-      name: "Data Structures & Algorithms",
-      source: "Infosys Springboard",
-      year: "2025",
-      icon: FileText,
-    },
-    {
-      name: "Python for Data Science",
-      source: "NPTEL",
-      year: "2025",
-      icon: FileText,
-    },
-  ];
-
-  const projects = [
-    {
-      title: "Classroom Feedback & Analytics System (ClassIntel)",
-      slug: "classintel-ai",
-      description:
-        "AI-powered classroom intelligence platform that turns student feedback into actionable teaching insights. Supports text + voice feedback, sentiment analysis, topic extraction, risk prediction, real-time alerts, and dashboards with trends & top-performer analytics.",
-      tech: ["React", "Node.js", "Express.js", "MongoDB", "AI/NLP", "Speech-to-Text"],
-      github: "https://github.com/deveshsingh641/lecture_feedback_system",
-      live: "https://lecture-feedback-system.vercel.app",
-      demoUrl: "https://lecture-feedback-system.vercel.app",
-      image: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80",
-      status: "Live",
-      category: "AI",
-      caseStudy: {
-        problem:
-          "Manual feedback collection is slow and often lacks actionable insight. Educators need a fast way to capture sentiment and surface risks/weak topics early.",
-        solution:
-          "Built a feedback-to-insights pipeline that collects text/voice feedback, analyzes sentiment/topics, and surfaces dashboards + alerts so educators can iterate quickly.",
-        keyFeatures: [
-          "Text + voice feedback submission",
-          "Sentiment analysis and trend tracking",
-          "Topic extraction to identify weak areas",
-          "Risk prediction scoring and anomaly alerts",
-          "Live activity feed + top performers dashboard",
-          "Authentication flows (login/signup)",
-        ],
-        architecture: {
-          frontend: "React UI with responsive dashboard views and optimized client rendering.",
-          backend: "Node.js + Express APIs to ingest feedback, run analysis, and serve aggregated analytics.",
-          data: "MongoDB for persistence + AI/NLP pipeline for sentiment/topic/risk computation.",
-        },
-      },
-    },
-
-    {
-      title: "Developer Portfolio Website",
-      slug: "personal-portfolio",
-      description:
-        "A modern, responsive personal portfolio built with React and Tailwind CSS. Features dark/light theme toggle, animated intro sequence, parallax effects, custom cursor, embedded blog with markdown rendering, live project previews, and glassmorphic design aesthetic.",
-      tech: ["React", "TypeScript", "Tailwind CSS", "Vite"],
-      github: "https://github.com/deveshsingh641/Portfolio_Devesh",
-      live: "https://deveshdev.live",
-      demoUrl: "https://deveshdev.live",
-      image:
-        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80",
-      status: "Live",
-      category: "Frontend",
-      caseStudy: {
-        problem:
-          "Recruiters skim fast. A portfolio needs strong storytelling, fast performance, and clear proof of skills without feeling cluttered.",
-        solution:
-          "Built a high-performance portfolio with a strong visual identity, section-based navigation, embedded blog, and project previews to showcase real work quickly.",
-        keyFeatures: [
-          "Dark/light mode with persistence",
-          "Custom cursor + micro-interactions",
-          "Markdown blog posts with routing-friendly bundles",
-          "Project previews embedded on cards",
-          "Command palette (Ctrl/Cmd+K)",
-          "Optimized build output with Vite",
-        ],
-        architecture: {
-          frontend: "React + TypeScript component architecture, Tailwind for consistent styling.",
-          backend: "Static hosting optimized for speed; content lives in-repo and loads via bundles.",
-          data: "Markdown content + local configuration; deploy pipeline handles static assets.",
-        },
-      },
-    },
-  ];
-
   const projectCategories = [
     "All",
     ...Array.from(new Set(projects.map((p) => p.category))).filter(Boolean),
@@ -1090,7 +918,9 @@ function App() {
           onMouseMove={handleHeroMouseMove}
           onMouseLeave={resetHeroParallax}
         >
-          <ThreeHeroCanvas theme={theme!} />
+          <Suspense fallback={<div className="absolute inset-0 pointer-events-none" />}>
+            <ThreeHeroCanvas theme={theme!} />
+          </Suspense>
           <div className="hidden md:block absolute top-0 w-full h-full overflow-hidden z-0 pointer-events-none">
             <div className="absolute top-0 left-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob motion-reduce:animate-none"></div>
             <div className="absolute top-0 right-1/4 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 motion-reduce:animate-none"></div>
@@ -1326,6 +1156,10 @@ function App() {
                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                         loading="lazy"
                         decoding="async"
+                        onError={(e) => {
+                          e.currentTarget.src =
+                            "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1200&q=80";
+                        }}
                       />
 
                       {/* Tech stack overlay */}
@@ -1511,7 +1345,7 @@ function App() {
         scrollToSection={scrollToSection}
         navigate={navigate}
         posts={blogPosts.map((p) => ({ slug: p.slug, title: p.title }))}
-        projects={projects.map((p) => ({ slug: p.slug, title: p.title, category: p.category }))}
+        projects={projects.map((p) => ({ slug: p.slug, title: p.title, category: p.category, tech: p.tech }))}
         isOpen={commandPaletteOpen}
         onOpenChange={setCommandPaletteOpen}
       />

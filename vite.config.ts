@@ -19,7 +19,8 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'ui-vendor': ['react-parallax-tilt', 'react-type-animation'],
+          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
+          'ui-vendor': ['react-parallax-tilt', 'react-type-animation', 'lucide-react'],
         },
       },
     },
