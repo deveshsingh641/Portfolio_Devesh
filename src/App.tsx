@@ -36,6 +36,7 @@ import DesktopManager from "./components/DesktopOS/DesktopManager";
 import { loadAllPosts, type Post } from "./blog/posts";
 import { useEasterEggs, triggerKonamiEffect, triggerHiddenTerminal } from "./hooks/useEasterEggs";
 import { MatrixScreensaver } from "./components/DesktopOS/MatrixScreensaver";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -1578,6 +1579,9 @@ function App() {
       {isScreensaverActive && (
         <MatrixScreensaver onClose={() => setIsScreensaverActive(false)} />
       )}
+
+      {/* VERCEL WEB ANALYTICS */}
+      <Analytics />
     </div>
   );
 }
