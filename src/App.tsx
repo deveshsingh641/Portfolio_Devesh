@@ -5,7 +5,6 @@ import {
   Menu,
   X,
   FileText,
-  Award,
   ChevronRight,
   Download,
   Sun,
