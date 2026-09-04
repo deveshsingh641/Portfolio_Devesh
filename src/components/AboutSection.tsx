@@ -2,6 +2,7 @@ import React from "react";
 import { Download, GraduationCap, Calendar, Award } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import { EducationItem } from "../types";
+import { trackResumeAction } from "../lib/analytics";
 
 interface AboutSectionProps {
   theme: string;
@@ -149,6 +150,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                 href="/FINAL_RESUME_DEVESH.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackResumeAction("download", "about_section")}
                 className={`px-6 py-3 border font-semibold rounded-lg transition-all duration-300 hover:-translate-y-0.5 text-sm flex items-center gap-2 ${
                   theme === "dark"
                     ? "border-slate-700 text-slate-300 hover:border-cyan-300/50 hover:text-cyan-300"

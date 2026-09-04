@@ -1,5 +1,5 @@
 import React from "react";
-import { Activity, BookOpen, Code2, Rocket, Target, Zap, ExternalLink, Briefcase } from "lucide-react";
+import { Activity, BookOpen, Code2, Rocket, Target, Zap, ExternalLink, Briefcase, Eye } from "lucide-react";
 
 interface StatusItem {
   id: string;
@@ -137,7 +137,7 @@ const MissionControl: React.FC<{ theme: string }> = ({ theme }) => {
           { icon: Activity, label: "UPTIME", value: "99.9%" },
           { icon: Zap, label: "ACTIVE PROJECTS", value: "3" },
           { icon: Target, label: "THIS MONTH GOALS", value: "5" },
-          { icon: Rocket, label: "DEPLOYED", value: "2 this week" },
+          { icon: Eye, label: "LIVE TELEMETRY", value: "Active" },
         ].map(({ icon: Icon, label, value }) => (
           <div
             key={label}

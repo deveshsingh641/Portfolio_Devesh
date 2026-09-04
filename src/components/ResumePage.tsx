@@ -1,4 +1,5 @@
 import { Download, ArrowLeft, Mail, Github, Linkedin, Globe } from "lucide-react";
+import { trackResumeAction } from "../lib/analytics";
 
 type TechCategory = {
   title: string;
@@ -50,6 +51,7 @@ export default function ResumePage({
   const isDark = theme === "dark";
 
   const handleDownloadPdf = () => {
+    trackResumeAction("download", "resume_page");
     const link = document.createElement("a");
     link.href = "/FINAL_RESUME_DEVESH.pdf";
     link.download = "Devesh_Singh_Resume.pdf";

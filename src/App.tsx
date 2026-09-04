@@ -35,6 +35,14 @@ import { projects, techCategories, education, certifications } from "./data/port
 import { loadAllPosts, type Post } from "./blog/posts";
 import { useEasterEggs, triggerKonamiEffect, triggerHiddenTerminal } from "./hooks/useEasterEggs";
 import { MatrixScreensaver } from "./components/DesktopOS/MatrixScreensaver";
+import {
+  trackProfileView,
+  trackSectionView,
+  trackResumeAction,
+  trackProjectInteraction,
+  trackContactSubmission,
+  trackOsModeToggle,
+} from "./lib/analytics";
 
 const ThreeHeroCanvas = lazy(() => import("./components/ThreeHeroCanvas"));
 
@@ -84,6 +92,7 @@ function App() {
     try {
       localStorage.setItem("isOsMode", String(isOsMode));
     } catch { /* ignore */ }
+    trackOsModeToggle(isOsMode);
   }, [isOsMode]);
 
   // --- Screensaver & Custom Easter Egg Command States ---
@@ -162,6 +171,11 @@ function App() {
 
   // Hash navigation: when URL has #section, scroll to that element.
   useEffect(() => {
+    trackProfileView({
+      route: routePath,
+      osMode: isOsMode,
+    });
+
     if (typeof window === "undefined") return;
     const hash = window.location.hash;
     if (!hash) return;
@@ -179,7 +193,7 @@ function App() {
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
       window.scrollTo({ top: offsetPosition, behavior: "smooth" });
     });
-  }, [routePath]);
+  }, [routePath, isOsMode]);
 
   useEffect(() => {
     let active = true;
@@ -395,6 +409,7 @@ function App() {
                 scrollPosition < offsetTop + offsetHeight
               ) {
                 setActiveSection(section);
+                trackSectionView(section);
                 break;
               }
             }
@@ -410,6 +425,7 @@ function App() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    trackSectionView(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
       const headerOffset = 80;
@@ -575,6 +591,7 @@ function App() {
         );
       }
 
+      trackContactSubmission("success");
       setFormStatus({
         status: "success",
         message: "Message sent successfully! I'll get back to you within 24-48 hours.",
@@ -593,6 +610,7 @@ function App() {
         ? "EmailJS is in strict mode for server API. For reliable client-side delivery, set VITE_FORMSPREE_ENDPOINT in .env.local or adjust EmailJS strict-mode settings."
         : fullError;
       
+      trackContactSubmission("error");
       setFormStatus({
         status: "error",
         message: `Failed to send message: ${helpMessage}. Please try contacting me directly at deveshsingh20666@gmail.com.`,
@@ -998,6 +1016,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor-label="Download"
+                onClick={() => trackResumeAction("download", "hero_section")}
                 className={`magnetic-btn px-6 py-4 rounded-full font-bold border shadow-md transition-all flex items-center justify-center gap-2 w-full sm:w-auto hover:scale-105 ${theme === 'dark' ? 'bg-slate-950/60 text-slate-200 border-slate-700/50 hover:border-cyan-300/50' : 'bg-white text-slate-700 border-slate-200 hover:border-violet-300/50'}`}
               >
                 Download PDF <Download size={18} />
@@ -1196,7 +1215,10 @@ function App() {
                           rel="noopener noreferrer"
                           data-cursor-label="Source"
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-300 hover:scale-105 ${theme === 'dark' ? 'bg-slate-800/60 border-slate-700/50 text-slate-300 hover:text-cyan-300 hover:border-cyan-400/40' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-violet-600 hover:border-violet-300'}`}
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            trackProjectInteraction(project.title, "github_click");
+                          }}
                         >
                           <Github size={14} /> Source
                         </a>
@@ -1206,6 +1228,7 @@ function App() {
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-300 hover:scale-105 ${theme === 'dark' ? 'bg-slate-800/60 border-slate-700/50 text-slate-300 hover:text-emerald-300 hover:border-emerald-400/40' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-emerald-700 hover:border-emerald-300'}`}
                           onClick={(e) => {
                             e.stopPropagation();
+                            trackProjectInteraction(project.title, "case_study_view");
                             navigate(`/projects/${project.slug}`);
                           }}
                         >
@@ -1218,7 +1241,10 @@ function App() {
                             rel="noopener noreferrer"
                             data-cursor-label="Live"
                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 border border-emerald-400/30 hover:border-emerald-400/60 transition-all duration-300 hover:scale-105"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              trackProjectInteraction(project.title, "demo_click");
+                            }}
                           >
                             <ExternalLink size={14} /> Live Site
                           </a>

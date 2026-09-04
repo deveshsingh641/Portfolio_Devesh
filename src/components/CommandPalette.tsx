@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Search, X, ChevronRight, Moon, Sun, BookOpen, Code2, Mail, Home, User, Award, Command, Play, Rocket, Bug, Coffee, Download } from "lucide-react";
+import { trackResumeAction } from "../lib/analytics";
 
 interface Command {
   id: string;
@@ -181,6 +182,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ theme, setTheme, scroll
       category: "action",
       icon: <Download size={16} />,
       action: () => {
+        trackResumeAction("download", "command_palette");
         const link = document.createElement("a");
         link.href = "/FINAL_RESUME_DEVESH.pdf";
         link.download = "Devesh_Singh_Resume.pdf";
