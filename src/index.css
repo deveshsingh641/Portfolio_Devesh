@@ -12,13 +12,13 @@ html {
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
-  min-height: 100dvh; /* Prevents viewport jumps on mobile when URL bar hides/shows */
-  transition: background 0.3s ease;
+  min-height: 100dvh;
+  transition: background-color 0.3s ease, color 0.3s ease;
   width: 100%;
-  -webkit-overflow-scrolling: touch; /* Momentum-based smooth scroll for iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 @media print {
@@ -42,12 +42,54 @@ body {
 
 .dark body,
 body {
-  background: radial-gradient(circle at 20% 20%, #112244 0%, #070b1a 45%, #040611 100%);
+  background-color: #09090b;
+  color: #f4f4f5;
 }
 
 html:not(.dark) body {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-color: #fafafa;
+  color: #18181b;
 }
+
+.font-display {
+  font-family: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
+}
+
+.rainbow-border {
+  background: linear-gradient(90deg, #ff5722, #ff9800, #4caf50, #00bcd4, #2196f3, #9c27b0, #ff5722);
+  background-size: 300% 100%;
+  animation: rainbow-shift 5s linear infinite;
+}
+
+@keyframes rainbow-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Cosmic Arc & Glow */
+.cosmic-arc-glow {
+  box-shadow: 0 -25px 90px 15px rgba(168, 85, 247, 0.45), 0 -8px 30px rgba(192, 132, 252, 0.6);
+}
+
+.cosmic-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(168, 85, 247, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 85, 247, 0.07) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+}
+
+/* Paper airplane custom cursor */
+.arslan-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.06s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.2s ease;
+  will-change: transform;
+}
+
+
 
 /* ===== LIGHT MODE THEME OVERRIDES ===== */
 

@@ -8,10 +8,17 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // This sets the default font-sans to Lato
-        sans: ['Lato', 'sans-serif'],
-        // This allows you to use font-poppins in your classNames
-        poppins: ['Poppins', 'sans-serif'],
+        display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"Space Grotesk"', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        darkBg: '#09090b',
+        darkCard: '#121215',
+        darkBorder: '#27272a',
+        lightBg: '#fafafa',
+        lightCard: '#ffffff',
+        lightBorder: '#e4e4e7',
       },
     },
   },

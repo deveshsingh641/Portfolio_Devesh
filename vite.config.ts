@@ -95,6 +95,9 @@ export default defineConfig(({ mode }) => {
       headers: {
         'Cache-Control': 'public, max-age=3600',
       },
+      watch: {
+        ignored: ['**/*.mp4', '**/*.mkv', '**/*.avi', '**/Recording*'],
+      },
     },
   };
 });

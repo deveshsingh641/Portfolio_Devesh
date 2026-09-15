@@ -20,82 +20,73 @@ const CertificationsSection: React.FC<CertificationsSectionProps> = ({
       data-reveal
       className={`reveal-section ${
         visibleSections.has("certifications") ? "is-visible" : ""
-      } py-24 relative ${
-        theme === "dark"
-          ? "bg-gradient-to-b from-slate-900/50 via-violet-900/20 to-slate-900/50"
-          : "bg-gradient-to-b from-slate-100/50 via-violet-50/20 to-slate-100/50"
+      } py-28 px-6 relative transition-colors duration-300 ${
+        theme === "dark" ? "bg-neutral-900/20" : "bg-neutral-100/30"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <p className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 mb-3">
-            CREDENTIALS
-          </p>
-          <h2
-            className={`text-4xl font-bold mb-3 ${theme === "dark" ? "text-white" : "text-slate-900"}`}
-          >
-            Certifications & Badges
+      <div className="max-w-6xl mx-auto">
+        {/* Arslan-style Section Header */}
+        <div className="mb-14">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase border mb-3 border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400">
+            <span>WALL OF FAME</span>
+          </div>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">
+            <span className="text-neutral-400 dark:text-neutral-500">Certifications & </span>
+            <span className="text-neutral-900 dark:text-white">Recognitions</span>
           </h2>
-          <p
-            className={`font-medium text-lg ${
-              theme === "dark" ? "text-cyan-300" : "text-cyan-700"
-            }`}
-          >
-            Professional credentials & achievements
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 mt-2 max-w-xl">
+            Verified professional certifications, coursework milestones, and technical credentials.
           </p>
-          <div className="w-32 h-1.5 bg-gradient-to-r from-cyan-600 via-emerald-500 to-violet-600 mx-auto rounded-full shadow-lg shadow-cyan-400/50 mt-4"></div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 stagger-animation">
+        {/* Certifications Grid */}
+        <div className="grid md:grid-cols-2 gap-6">
           {certifications.map((cert, index) => {
             const IconComponent = cert.icon;
             return (
               <Tilt
                 key={index}
-                tiltMaxAngleX={4}
-                tiltMaxAngleY={4}
-                scale={1.02}
+                tiltMaxAngleX={3}
+                tiltMaxAngleY={3}
+                scale={1.01}
                 glareEnable={true}
-                glareMaxOpacity={0.1}
+                glareMaxOpacity={0.08}
+                className="h-full"
               >
                 <div
-                  className={`p-7 rounded-2xl shadow-lg border group h-full backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${
+                  className={`group p-6 sm:p-7 rounded-3xl border transition-all duration-300 flex flex-col justify-between h-full hover:shadow-xl ${
                     theme === "dark"
-                      ? "bg-slate-950/75 border-cyan-300/35 hover:shadow-cyan-900/20"
-                      : "bg-white border-slate-200 hover:shadow-slate-300/30"
+                      ? "bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 hover:shadow-black/40"
+                      : "bg-white border-neutral-200 hover:border-neutral-300 hover:shadow-neutral-200/60"
                   }`}
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 via-emerald-500 to-violet-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-cyan-400/70 shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                      <IconComponent size={32} />
+                    <div className="w-12 h-12 rounded-2xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-900 dark:text-white shrink-0 group-hover:scale-105 transition-transform">
+                      <IconComponent size={24} className="text-emerald-500" />
                     </div>
-                    <div className="flex-1">
-                      <h3
-                        className={`font-bold text-lg leading-tight mb-2 transition-colors ${
-                          theme === "dark"
-                            ? "text-slate-100 group-hover:text-cyan-300"
-                            : "text-slate-900 group-hover:text-cyan-600"
-                        }`}
-                      >
+
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-display text-lg sm:text-xl font-bold leading-snug mb-2 text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
                         {cert.name}
                       </h3>
-                      <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-                        <p className="text-sm font-bold text-emerald-800 dark:text-emerald-100 bg-emerald-100 dark:bg-emerald-900/60 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-700/50">
+
+                      <div className="flex flex-wrap items-center gap-2 mb-4">
+                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700">
                           {cert.source}
-                        </p>
+                        </span>
                         {cert.year && (
-                          <span className="text-xs text-cyan-800 dark:text-cyan-100 font-semibold bg-cyan-100 dark:bg-cyan-900/60 px-3 py-1.5 rounded-full border border-cyan-200 dark:border-cyan-700/50 flex items-center gap-1">
-                            <Calendar size={12} /> {cert.year}
+                          <span className="px-2.5 py-1 rounded-full text-xs font-mono text-neutral-500 border border-neutral-200 dark:border-neutral-800 flex items-center gap-1">
+                            <Calendar size={11} /> {cert.year}
                           </span>
                         )}
                       </div>
 
                       {cert.badges && (
-                        <div className="mt-4 flex flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-1.5 pt-2">
                           {cert.badges.map((badge, badgeIndex) => (
                             <span
                               key={badgeIndex}
-                              className="px-3 py-2 bg-gradient-to-r from-violet-600/80 to-cyan-600/80 border-2 border-violet-400/90 text-white text-[12px] uppercase tracking-wider font-bold rounded-lg shadow-md hover:shadow-lg hover:shadow-violet-500/70 transition-all hover:from-violet-600/95 hover:to-cyan-600/95 hover:border-violet-300 hover:scale-105"
+                              className="px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
                             >
                               {badge}
                             </span>

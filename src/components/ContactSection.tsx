@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Tilt from "react-parallax-tilt";
-import { Mail, Globe, Linkedin, Github, Twitter, CheckCircle, AlertCircle } from "lucide-react";
+import { Mail, Globe, Linkedin, Github, Twitter, CheckCircle, AlertCircle, Copy, Check, Send } from "lucide-react";
 
 interface ContactSectionProps {
   theme: string;
@@ -29,255 +29,194 @@ const ContactSection: React.FC<ContactSectionProps> = ({
   handleFormSubmit,
   isMobile,
 }) => {
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText("deveshsingh20666@gmail.com");
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } catch {
+      // fallback ignored
+    }
+  };
+
   return (
     <section
       id="contact"
       data-reveal
       className={`reveal-section ${
         visibleSections.has("contact") ? "is-visible" : ""
-      } py-24 relative overflow-hidden transition-colors duration-300 ${
-        theme === "dark"
-          ? "bg-gradient-to-b from-slate-900/40 via-violet-900/30 to-slate-900/40"
-          : "bg-gradient-to-b from-slate-100/40 via-violet-50/30 to-slate-100/40"
+      } py-28 px-6 relative overflow-hidden transition-colors duration-300 ${
+        theme === "dark" ? "bg-neutral-950" : "bg-neutral-50/50"
       }`}
     >
-      {/* Background decoration */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-4 relative z-10">
-        {/* Section header */}
-        <div className="text-center mb-4">
-          <span className="inline-block text-xs font-bold uppercase tracking-[0.3em] text-cyan-400 mb-3">
-            Get in Touch
-          </span>
-          <h2
-            className={`text-4xl md:text-5xl font-bold mb-4 ${
-              theme === "dark" ? "text-slate-100" : "text-slate-900"
-            }`}
-          >
-            Let's{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Connect
-            </span>
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Arslan Section Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase border mb-3 border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400">
+            <span>GET IN TOUCH</span>
+          </div>
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+            <span className="text-neutral-400 dark:text-neutral-500">Let's Build </span>
+            <span className="text-neutral-900 dark:text-white">Something Great</span>
           </h2>
-          <p
-            className={`text-lg max-w-2xl mx-auto leading-relaxed ${
-              theme === "dark" ? "text-slate-300" : "text-slate-600"
-            }`}
-          >
-            Have a project in mind? Want to collaborate? Or just want to say hello? I'd love to hear
-            from you.
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 mt-2 max-w-xl mx-auto">
+            Have a project in mind, an engineering role, or just want to chat? Drop a line below.
           </p>
-          <div className="w-32 h-1.5 bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 mx-auto rounded-full shadow-lg shadow-violet-400/50 mt-6" />
         </div>
 
-        <div className="grid lg:grid-cols-5 gap-8 mt-14">
-          {/* LEFT — Contact Information */}
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          {/* LEFT: Quick Contact & Info (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
+            {/* Quick Email Card */}
             <div
-              className={`rounded-2xl p-8 border shadow-xl ${
+              className={`p-6 sm:p-7 rounded-3xl border transition-all duration-300 ${
                 theme === "dark"
-                  ? "bg-gradient-to-br from-slate-900/90 via-violet-900/25 to-slate-900/90 border-violet-400/20"
-                  : "bg-white border-slate-200"
+                  ? "bg-neutral-900/60 border-neutral-800"
+                  : "bg-white border-neutral-200 shadow-sm"
               }`}
             >
-              <h3 className={`text-xl font-bold mb-2 ${theme === "dark" ? "text-slate-100" : "text-slate-900"}`}>
+              <h3 className="font-display text-xl font-bold mb-2 text-neutral-900 dark:text-white">
                 Contact Information
               </h3>
-              <p
-                className={`text-sm mb-8 ${theme === "dark" ? "text-slate-400" : "text-slate-500"}`}
-              >
-                Feel free to reach out through any of these channels. I typically respond within 24
-                hours.
+              <p className="text-sm text-neutral-500 mb-6">
+                Feel free to reach out through any of these channels. I typically respond within 24 hours.
               </p>
 
-              {/* Email */}
-              <div className="space-y-5">
-                <a href="mailto:deveshsingh20666@gmail.com" className="flex items-start gap-4 group">
-                  <div className="w-10 h-10 rounded-lg bg-violet-500/15 border border-violet-400/25 flex items-center justify-center shrink-0 group-hover:bg-violet-500/25 group-hover:border-violet-400/40 transition-all">
-                    <Mail size={18} className="text-violet-300" />
+              {/* Direct email pill with copy */}
+              <div className="space-y-4">
+                <div className={`p-4 rounded-2xl border flex items-center justify-between gap-3 ${
+                  theme === 'dark' ? 'bg-neutral-900/90 border-neutral-800' : 'bg-neutral-50 border-neutral-200'
+                }`}>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+                      <Mail size={18} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">EMAIL</p>
+                      <a
+                        href="mailto:deveshsingh20666@gmail.com"
+                        className="text-xs sm:text-sm font-mono truncate block text-neutral-800 dark:text-neutral-200 hover:text-emerald-500 transition-colors"
+                      >
+                        deveshsingh20666@gmail.com
+                      </a>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">
-                      Email
-                    </p>
-                    <p
-                      className={`text-sm transition-colors ${
-                        theme === "dark"
-                          ? "text-slate-200 group-hover:text-cyan-300"
-                          : "text-slate-700 group-hover:text-cyan-600"
-                      }`}
-                    >
-                      deveshsingh20666@gmail.com
-                    </p>
-                  </div>
-                </a>
+                  <button
+                    type="button"
+                    onClick={copyEmail}
+                    className="p-2 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-neutral-500 shrink-0"
+                    title="Copy email address"
+                  >
+                    {copiedEmail ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                  </button>
+                </div>
 
                 {/* Location */}
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-400/25 flex items-center justify-center shrink-0">
-                    <Globe size={18} className="text-emerald-300" />
+                <div className={`p-4 rounded-2xl border flex items-center gap-3 ${
+                  theme === 'dark' ? 'bg-neutral-900/90 border-neutral-800' : 'bg-neutral-50 border-neutral-200'
+                }`}>
+                  <div className="w-10 h-10 rounded-full bg-cyan-500/10 text-cyan-500 flex items-center justify-center shrink-0">
+                    <Globe size={18} />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">
-                      Location
-                    </p>
-                    <p className={`text-sm ${theme === "dark" ? "text-slate-200" : "text-slate-700"}`}>
-                      India
+                    <p className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">LOCATION</p>
+                    <p className="text-xs sm:text-sm font-mono text-neutral-800 dark:text-neutral-200">
+                      India · Open to Remote & Global Relocation
                     </p>
                   </div>
                 </div>
 
-                {/* LinkedIn */}
-                <a
-                  href="https://linkedin.com/in/deveshsingh64"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-4 group"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-cyan-500/15 border border-cyan-400/25 flex items-center justify-center shrink-0 group-hover:bg-cyan-500/25 group-hover:border-cyan-400/40 transition-all">
-                    <Linkedin size={18} className="text-cyan-300" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-0.5">
-                      LinkedIn
-                    </p>
-                    <p
-                      className={`text-sm transition-colors ${
-                        theme === "dark"
-                          ? "text-slate-200 group-hover:text-cyan-300"
-                          : "text-slate-700 group-hover:text-cyan-600"
-                      }`}
-                    >
-                      Devesh Singh
-                    </p>
-                  </div>
-                </a>
+                {/* Status Pill */}
+                <div className="p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 flex items-center gap-3">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  <p className="text-xs font-mono text-emerald-600 dark:text-emerald-400">
+                    <strong>Currently Available</strong> for internships, full-time engineering roles, and selected freelance contracts.
+                  </p>
+                </div>
               </div>
 
-              {/* Social links row */}
-              <div
-                className={`mt-8 pt-6 border-t ${
-                  theme === "dark" ? "border-slate-700/50" : "border-slate-200"
-                }`}
-              >
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
-                  Follow Me
-                </h4>
-                <div className="flex items-center gap-3">
+              {/* Social Channels Strip */}
+              <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-800/80">
+                <p className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-3">
+                  Social Channels
+                </p>
+                <div className="flex flex-wrap gap-2">
                   {[
-                    { href: "https://deveshdev.live", icon: Globe, label: "Website" },
                     { href: "https://github.com/deveshsingh641", icon: Github, label: "GitHub" },
-                    {
-                      href: "https://linkedin.com/in/deveshsingh64",
-                      icon: Linkedin,
-                      label: "LinkedIn",
-                    },
-                    { href: "https://x.com/harshhere_666", icon: Twitter, label: "X / Twitter" },
+                    { href: "https://linkedin.com/in/deveshsingh64", icon: Linkedin, label: "LinkedIn" },
+                    { href: "https://x.com/harshhere_666", icon: Twitter, label: "X" },
+                    { href: "https://deveshdev.live", icon: Globe, label: "Website" },
                   ].map(({ href, icon: Icon, label }) => (
                     <a
                       key={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`w-10 h-10 rounded-lg border flex items-center justify-center transition-all duration-300 ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-mono transition-all hover:scale-105 ${
                         theme === "dark"
-                          ? "border-slate-700/60 bg-slate-800/40 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
-                          : "border-slate-200 bg-slate-50 text-slate-500 hover:text-cyan-600 hover:border-cyan-400/40 hover:bg-cyan-50"
+                          ? "border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:text-white hover:border-neutral-700"
+                          : "border-neutral-200 bg-neutral-50 text-neutral-700 hover:text-neutral-900 hover:border-neutral-300"
                       }`}
-                      title={label}
-                      aria-label={label}
                     >
-                      <Icon size={17} />
+                      <Icon size={12} />
+                      <span>{label}</span>
                     </a>
                   ))}
                 </div>
               </div>
             </div>
-
-            {/* Availability badge */}
-            <div
-              className={`rounded-2xl p-6 border shadow-lg ${
-                theme === "dark"
-                  ? "bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border-emerald-400/20"
-                  : "bg-emerald-50 border-emerald-200"
-              }`}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                </span>
-                <span
-                  className={`text-sm font-bold ${
-                    theme === "dark" ? "text-emerald-300" : "text-emerald-700"
-                  }`}
-                >
-                  Available for work
-                </span>
-              </div>
-              <p
-                className={`text-xs leading-relaxed ${
-                  theme === "dark" ? "text-slate-400" : "text-slate-600"
-                }`}
-              >
-                I'm currently open to new opportunities and exciting projects. Let's create
-                something amazing together!
-              </p>
-            </div>
           </div>
 
-          {/* RIGHT — Send a Message form */}
-          <div className="lg:col-span-3">
+          {/* RIGHT: Send a Message Form (7 cols) */}
+          <div className="lg:col-span-7">
             <Tilt
               tiltMaxAngleX={isMobile ? 0 : 2}
               tiltMaxAngleY={isMobile ? 0 : 2}
               tiltEnable={!isMobile}
               glareEnable={!isMobile}
-              glareMaxOpacity={0.05}
+              glareMaxOpacity={0.04}
             >
               <div
-                className={`rounded-2xl p-8 md:p-10 border shadow-xl ${
+                className={`p-7 sm:p-10 rounded-3xl border transition-all duration-300 ${
                   theme === "dark"
-                    ? "bg-gradient-to-br from-slate-900/90 via-violet-900/25 to-slate-900/90 border-violet-400/20"
-                    : "bg-white border-slate-200"
+                    ? "bg-neutral-900/60 border-neutral-800"
+                    : "bg-white border-neutral-200 shadow-sm"
                 }`}
               >
-                <h3 className={`text-xl font-bold mb-1 ${theme === "dark" ? "text-slate-100" : "text-slate-900"}`}>
+                <h3 className="font-display text-xl sm:text-2xl font-bold mb-1 text-neutral-900 dark:text-white">
                   Send a Message
                 </h3>
-                <p
-                  className={`text-sm mb-8 ${theme === "dark" ? "text-slate-400" : "text-slate-500"}`}
-                >
-                  I'll get back to you within 24–48 hours.
+                <p className="text-sm text-neutral-500 mb-6">
+                  Fill out the details below and I will get back to you promptly.
                 </p>
 
                 {/* Status Messages */}
                 {formStatus.status && (
                   <div
-                    className={`mb-6 p-4 rounded-xl flex items-center gap-3 ${
+                    className={`mb-6 p-4 rounded-2xl flex items-center gap-3 text-sm font-medium ${
                       formStatus.status === "success"
-                        ? "bg-emerald-500/15 border border-emerald-400/40 text-emerald-300"
+                        ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
                         : formStatus.status === "error"
-                          ? "bg-red-500/15 border border-red-400/40 text-red-300"
-                          : "bg-blue-500/15 border border-blue-400/40 text-blue-300"
+                          ? "bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400"
+                          : "bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
                     }`}
                     role={formStatus.status === "error" ? "alert" : "status"}
                     aria-live="polite"
                   >
-                    {formStatus.status === "success" && <CheckCircle size={18} className="flex-shrink-0" />}
-                    {formStatus.status === "error" && <AlertCircle size={18} className="flex-shrink-0" />}
-                    <span className="text-sm font-medium">{formStatus.message}</span>
+                    {formStatus.status === "success" && <CheckCircle size={18} className="shrink-0" />}
+                    {formStatus.status === "error" && <AlertCircle size={18} className="shrink-0" />}
+                    <span>{formStatus.message}</span>
                   </div>
                 )}
 
-                <form onSubmit={handleFormSubmit} className="space-y-5">
-                  <div className="grid md:grid-cols-2 gap-5">
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label
                         htmlFor="contact-name"
-                        className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2"
+                        className="block text-[11px] font-mono uppercase tracking-wider text-neutral-500 mb-1.5"
                       >
                         Your Name
                       </label>
@@ -290,17 +229,18 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                         onChange={handleFormChange}
                         required
                         disabled={formStatus.status === "sending"}
-                        className={`w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all hover:border-slate-600/80 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 disabled:opacity-50 ${
+                        className={`w-full px-4 py-3 rounded-2xl text-sm border outline-none transition-all ${
                           theme === "dark"
-                            ? "bg-slate-800/40 border-slate-700/60 text-slate-100 placeholder-slate-500"
-                            : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400"
+                            ? "bg-neutral-950/60 border-neutral-800 text-white placeholder-neutral-600 focus:border-neutral-500"
+                            : "bg-neutral-50 border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-neutral-400"
                         }`}
                       />
                     </div>
+
                     <div>
                       <label
                         htmlFor="contact-email"
-                        className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2"
+                        className="block text-[11px] font-mono uppercase tracking-wider text-neutral-500 mb-1.5"
                       >
                         Your Email
                       </label>
@@ -313,10 +253,10 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                         onChange={handleFormChange}
                         required
                         disabled={formStatus.status === "sending"}
-                        className={`w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all hover:border-slate-600/80 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 disabled:opacity-50 ${
+                        className={`w-full px-4 py-3 rounded-2xl text-sm border outline-none transition-all ${
                           theme === "dark"
-                            ? "bg-slate-800/40 border-slate-700/60 text-slate-100 placeholder-slate-500"
-                            : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400"
+                            ? "bg-neutral-950/60 border-neutral-800 text-white placeholder-neutral-600 focus:border-neutral-500"
+                            : "bg-neutral-50 border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-neutral-400"
                         }`}
                       />
                     </div>
@@ -325,7 +265,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   <div>
                     <label
                       htmlFor="contact-subject"
-                      className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2"
+                      className="block text-[11px] font-mono uppercase tracking-wider text-neutral-500 mb-1.5"
                     >
                       Subject
                     </label>
@@ -333,14 +273,14 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                       id="contact-subject"
                       type="text"
                       name="subject"
-                      placeholder="Project Collaboration"
+                      placeholder="Project Inquiry / Job Opportunity"
                       value={formData.subject}
                       onChange={handleFormChange}
                       disabled={formStatus.status === "sending"}
-                      className={`w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all hover:border-slate-600/80 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 disabled:opacity-50 ${
+                      className={`w-full px-4 py-3 rounded-2xl text-sm border outline-none transition-all ${
                         theme === "dark"
-                          ? "bg-slate-800/40 border-slate-700/60 text-slate-100 placeholder-slate-500"
-                          : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400"
+                          ? "bg-neutral-950/60 border-neutral-800 text-white placeholder-neutral-600 focus:border-neutral-500"
+                          : "bg-neutral-50 border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-neutral-400"
                       }`}
                     />
                   </div>
@@ -348,7 +288,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   <div>
                     <label
                       htmlFor="contact-message"
-                      className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2"
+                      className="block text-[11px] font-mono uppercase tracking-wider text-neutral-500 mb-1.5"
                     >
                       Message
                     </label>
@@ -356,33 +296,33 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                       id="contact-message"
                       name="message"
                       rows={5}
-                      placeholder="Tell me about your project..."
+                      placeholder="Tell me about your project, timeline, or idea..."
                       value={formData.message}
                       onChange={handleFormChange}
                       required
                       disabled={formStatus.status === "sending"}
-                      className={`w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all resize-none hover:border-slate-600/80 focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/40 disabled:opacity-50 ${
+                      className={`w-full px-4 py-3 rounded-2xl text-sm border outline-none resize-none transition-all ${
                         theme === "dark"
-                          ? "bg-slate-800/40 border-slate-700/60 text-slate-100 placeholder-slate-500"
-                          : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400"
+                          ? "bg-neutral-950/60 border-neutral-800 text-white placeholder-neutral-600 focus:border-neutral-500"
+                          : "bg-neutral-50 border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-neutral-400"
                       }`}
-                    ></textarea>
+                    />
                   </div>
 
                   <button
                     type="submit"
                     disabled={formStatus.status === "sending"}
-                    className="w-full bg-gradient-to-r from-violet-600 via-emerald-500 to-cyan-400 text-white font-bold py-3.5 rounded-xl hover:shadow-2xl hover:shadow-violet-500/30 hover:scale-[1.02] transition-all transform active:scale-95 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="rainbow-border w-full py-3.5 px-6 rounded-full text-white font-medium text-sm transition-transform hover:scale-[1.01] active:scale-98 shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {formStatus.status === "sending" ? (
                       <>
                         <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Sending...
+                        <span>Sending message...</span>
                       </>
                     ) : (
                       <>
-                        <Mail size={16} />
-                        Send Message
+                        <span>Send Message</span>
+                        <Send size={15} />
                       </>
                     )}
                   </button>
