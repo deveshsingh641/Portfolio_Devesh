@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { Coffee, Heart, Star, Zap, Sparkles, ExternalLink, QrCode, Copy, Check, Smartphone } from "lucide-react";
+import { Heart, Star, Zap, Sparkles, ExternalLink, Lock, Check } from "lucide-react";
+import PaymentButton from "./PaymentButton";
 
 interface Tier {
+  id: string;
   emoji: string;
   label: string;
-  amount: number;
   inrAmount: number;
-  color: string;
   gradient: string;
+  popular?: boolean;
 }
 
 const tiers: Tier[] = [
-  { emoji: "☕", label: "ESPRESSO", amount: 1, inrAmount: 30, color: "text-amber-400", gradient: "from-amber-500 to-orange-500" },
-  { emoji: "🍕", label: "PIZZA", amount: 3, inrAmount: 100, color: "text-rose-400", gradient: "from-rose-500 to-pink-500" },
-  { emoji: "🎧", label: "HEADPHONES", amount: 5, inrAmount: 250, color: "text-violet-400", gradient: "from-violet-500 to-purple-500" },
-  { emoji: "🚀", label: "ROCKET FUEL", amount: 10, inrAmount: 500, color: "text-cyan-400", gradient: "from-cyan-500 to-blue-500" },
+  { id: "espresso", emoji: "☕", label: "ESPRESSO", inrAmount: 30, gradient: "from-amber-500 to-orange-500" },
+  { id: "pizza", emoji: "🍕", label: "PIZZA", inrAmount: 100, gradient: "from-rose-500 to-pink-500" },
+  { id: "headphones", emoji: "🎧", label: "HEADPHONES", inrAmount: 250, gradient: "from-violet-500 to-purple-500" },
+  { id: "rocket", emoji: "🚀", label: "ROCKET FUEL", inrAmount: 500, gradient: "from-amber-400 via-rose-500 to-violet-600", popular: true },
 ];
 
 const perks = [
@@ -24,29 +25,15 @@ const perks = [
   { icon: Sparkles, text: "Early access to new features" },
 ];
 
+const quickCustomChips = [50, 150, 300, 750, 1000];
+
 const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
-  const [selectedTier, setSelectedTier] = useState(0);
-  const [method, setMethod] = useState<"bmc" | "upi">("upi");
+  const [selectedTier, setSelectedTier] = useState<number>(0);
+  const [isCustom, setIsCustom] = useState(false);
+  const [customAmount, setCustomAmount] = useState<number>(150);
 
-  // Customize payment variables here
   const supportBaseUrl = "https://buymeacoffee.com/devesh_6661";
-  const upiId = "deveshsingh20666@okaxis"; // <--- Replace with actual UPI ID (VPA)
-  const payeeName = "Devesh Singh";
-
-  const [copiedUpi, setCopiedUpi] = useState(false);
-  const handleCopyUpi = async () => {
-    try {
-      await navigator.clipboard.writeText(upiId);
-      setCopiedUpi(true);
-      setTimeout(() => setCopiedUpi(false), 2000);
-    } catch {
-      // ignore
-    }
-  };
-
   const selected = tiers[selectedTier];
-  const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${selected.inrAmount}&cu=INR`;
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUrl)}`;
 
   return (
     <div className="space-y-10">
@@ -85,157 +72,153 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
         ))}
       </div>
 
-      {/* Amount selector card */}
-      <div className="max-w-lg mx-auto">
+      {/* Single Unified Checkout Card */}
+      <div className="max-w-md mx-auto">
         <div
-          className={`rounded-2xl border p-8 transition-all duration-500 ${
+          className={`rounded-2xl border p-6 md:p-7 transition-all duration-300 ${
             theme === "dark"
-              ? "border-slate-700/40 bg-slate-900/60"
-              : "border-slate-200 bg-white shadow-lg"
+              ? "border-slate-700/50 bg-slate-900/70 shadow-2xl shadow-black/40"
+              : "border-slate-200 bg-white shadow-xl"
           }`}
         >
-          {/* Method Selector Tabs */}
-          <div className="flex gap-2 p-1 rounded-xl border mb-6 bg-slate-800/25 border-slate-700/30">
-            <button
-              key="bmc"
-              type="button"
-              onClick={() => setMethod("bmc")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all duration-300 ${
-                method === "bmc"
-                  ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-400/30"
-                  : theme === "dark"
-                    ? "text-slate-400 hover:text-slate-200"
-                    : "text-slate-500 hover:text-slate-700"
-              }`}
-            >
-              <Coffee size={14} /> Buy Me a Coffee
-            </button>
-            <button
-              key="upi"
-              type="button"
-              onClick={() => setMethod("upi")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all duration-300 ${
-                method === "upi"
-                  ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-400/30"
-                  : theme === "dark"
-                    ? "text-slate-400 hover:text-slate-200"
-                    : "text-slate-500 hover:text-slate-700"
-              }`}
-            >
-              <QrCode size={14} /> UPI / Scan to Pay
-            </button>
-          </div>
-
-          {/* Amount Label */}
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Coffee size={16} className="text-amber-400" />
-            <span className={`text-xs font-bold uppercase tracking-[0.2em] ${theme === "dark" ? "text-slate-400" : "text-slate-500"}`}>
-              SELECT AMOUNT
+          {/* Header Row: Title & Custom Amount Toggle */}
+          <div className="flex items-center justify-between mb-5">
+            <span className={`text-xs font-bold uppercase tracking-[0.18em] ${theme === "dark" ? "text-slate-300" : "text-slate-600"}`}>
+              {isCustom ? "Custom Amount" : "Choose Tier"}
             </span>
-          </div>
 
-          {/* Tier buttons */}
-          <div className="grid grid-cols-4 gap-3 mb-8">
-            {tiers.map((tier, idx) => (
-              <button
-                key={tier.label}
-                type="button"
-                onClick={() => setSelectedTier(idx)}
-                className={`relative flex flex-col items-center py-4 px-2 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
-                  selectedTier === idx
-                    ? theme === "dark"
-                      ? `border-amber-400/60 bg-amber-950/30 shadow-lg shadow-amber-500/10`
-                      : `border-amber-400 bg-amber-50 shadow-lg shadow-amber-200/50`
-                    : theme === "dark"
-                      ? "border-slate-700/40 bg-slate-800/40 hover:border-slate-600"
-                      : "border-slate-200 bg-slate-50 hover:border-slate-300"
-                }`}
-              >
-                <span className="text-2xl mb-1">{tier.emoji}</span>
-                <span className={`text-sm font-bold ${theme === "dark" ? "text-slate-100" : "text-slate-900"}`}>
-                  {method === "upi" ? `₹${tier.inrAmount}` : `$${tier.amount}`}
-                </span>
-                <span className="text-[9px] font-mono uppercase tracking-wider text-slate-500 mt-0.5">
-                  {tier.label}
-                </span>
-                {selectedTier === idx && (
-                  <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gradient-to-br ${tier.gradient}`} />
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Method View: Buy Me a Coffee */}
-          {method === "bmc" && (
-            <a
-              href={`${supportBaseUrl}?price=${selected.amount}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl bg-gradient-to-r ${selected.gradient} text-white font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99]`}
+            <button
+              type="button"
+              onClick={() => setIsCustom(!isCustom)}
+              className="text-xs font-semibold text-amber-400 hover:text-amber-300 transition-colors py-1 px-2.5 rounded-lg border border-amber-400/20 bg-amber-400/5 hover:bg-amber-400/10"
             >
-              <Coffee size={16} />
-              Support with ${selected.amount}
-              <ExternalLink size={12} />
-            </a>
-          )}
+              {isCustom ? "View Tiers" : "+ Custom Amount"}
+            </button>
+          </div>
 
-          {/* Method View: UPI QR Code & App Direct Link */}
-          {method === "upi" && (
-            <div className="flex flex-col items-center gap-6 animate-slideInUp">
-              {/* QR Code Container */}
-              <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xl relative group">
-                <img
-                  src={qrCodeUrl}
-                  alt="UPI Payment QR Code"
-                  className="w-[180px] h-[180px]"
-                  loading="lazy"
+          {/* Mode 1: Preset Tiers */}
+          {!isCustom ? (
+            <div className="grid grid-cols-4 gap-2.5 mb-6">
+              {tiers.map((tier, idx) => {
+                const isSelected = selectedTier === idx;
+                return (
+                  <button
+                    key={tier.label}
+                    type="button"
+                    onClick={() => setSelectedTier(idx)}
+                    className={`relative flex flex-col items-center py-3.5 px-2 rounded-xl border transition-all duration-200 hover:scale-[1.03] ${
+                      isSelected
+                        ? theme === "dark"
+                          ? "border-amber-400 bg-gradient-to-b from-amber-400/15 to-transparent shadow-lg shadow-amber-500/15"
+                          : "border-amber-500 bg-amber-50 shadow-md shadow-amber-200/60"
+                        : theme === "dark"
+                          ? "border-slate-800 bg-slate-800/40 hover:border-slate-700"
+                          : "border-slate-200 bg-slate-50/80 hover:border-slate-300"
+                    }`}
+                  >
+                    {/* Active Checkmark Pill */}
+                    {isSelected && (
+                      <div className="absolute top-1.5 right-1.5 w-3.5 h-3.5 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-xs">
+                        <Check size={9} strokeWidth={3.5} />
+                      </div>
+                    )}
+
+                    <span className="text-2xl mb-1.5 select-none">{tier.emoji}</span>
+                    <span className={`text-base font-extrabold leading-none mb-1 ${
+                      isSelected
+                        ? "text-amber-400"
+                        : theme === "dark"
+                          ? "text-white"
+                          : "text-slate-900"
+                    }`}>
+                      ₹{tier.inrAmount}
+                    </span>
+                    <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">
+                      {tier.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            /* Mode 2: Custom Amount Input */
+            <div className="mb-6 space-y-3">
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-lg text-slate-400 font-bold select-none">
+                  ₹
+                </span>
+                <input
+                  type="number"
+                  min="10"
+                  max="50000"
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(Math.max(10, Number(e.target.value) || 10))}
+                  className={`w-full pl-9 pr-4 py-3 rounded-xl border font-mono text-lg font-bold focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all ${
+                    theme === "dark"
+                      ? "bg-slate-950/70 border-slate-700 text-white placeholder-slate-500"
+                      : "bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400"
+                  }`}
+                  placeholder="Enter amount (min ₹10)"
                 />
-                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none" />
               </div>
 
-              {/* UPI details */}
-              <div className="text-center w-full space-y-4">
-                <p className={`text-xs ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>
-                  Scan the QR code using any UPI App (GPay, PhonePe, Paytm, BHIM) to pay.
-                </p>
-
-                {/* UPI ID Copy Field */}
-                <div className={`flex items-center justify-between p-3 rounded-xl border ${
-                  theme === "dark" ? "bg-slate-950/60 border-slate-800" : "bg-slate-50 border-slate-200"
-                }`}>
-                  <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">UPI ID:</span>
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs font-mono font-extrabold ${theme === "dark" ? "text-cyan-400" : "text-violet-600"}`}>
-                      {upiId}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleCopyUpi}
-                      className={`p-1.5 rounded-lg border transition-all ${
-                        copiedUpi
-                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                          : theme === "dark"
-                            ? "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
-                            : "bg-white border-slate-200 text-slate-500 hover:text-slate-700"
-                      }`}
-                      title="Copy UPI ID"
-                    >
-                      {copiedUpi ? <Check size={13} /> : <Copy size={13} />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Direct Pay Button */}
-                <a
-                  href={upiUrl}
-                  className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r ${selected.gradient} text-white font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99]`}
-                >
-                  <Smartphone size={16} />
-                  Pay via UPI App (GPay/PhonePe)
-                </a>
+              {/* Quick Chip Suggestions */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] text-slate-400 mr-1 font-mono">Quick:</span>
+                {quickCustomChips.map((val) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => setCustomAmount(val)}
+                    className={`text-xs px-2.5 py-1 rounded-lg border font-mono transition-all ${
+                      customAmount === val
+                        ? "border-amber-400 bg-amber-400/20 text-amber-300 font-bold"
+                        : theme === "dark"
+                          ? "border-slate-800 bg-slate-800/40 text-slate-300 hover:border-slate-700"
+                          : "border-slate-200 bg-slate-100 text-slate-700 hover:border-slate-300"
+                    }`}
+                  >
+                    ₹{val}
+                  </button>
+                ))}
               </div>
             </div>
           )}
+
+          {/* Payment Action Button */}
+          <div className="space-y-3">
+            <PaymentButton
+              tier={!isCustom ? selected.id : undefined}
+              amount={!isCustom ? selected.inrAmount : undefined}
+              customAmount={isCustom ? customAmount : undefined}
+              label={
+                isCustom
+                  ? `Pay ₹${customAmount} via Razorpay`
+                  : `Support with ₹${selected.inrAmount} (${selected.label})`
+              }
+              gradient={selected.gradient}
+              theme={theme}
+            />
+
+            {/* Clean, Single Trust Badge */}
+            <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 pt-1">
+              <Lock size={12} className="text-emerald-400" />
+              <span>256-bit Encrypted • UPI, GPay, PhonePe, Cards, NetBanking</span>
+            </div>
+          </div>
+
+          {/* Subtle Buy Me a Coffee alternative for international visitors */}
+          <div className="mt-5 pt-4 border-t border-slate-700/20 text-center">
+            <a
+              href={supportBaseUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-amber-400 transition-colors"
+            >
+              <span>International cards / USD? Support via Buy Me a Coffee</span>
+              <ExternalLink size={11} />
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -243,4 +226,3 @@ const SupporterRewards: React.FC<{ theme: string }> = ({ theme }) => {
 };
 
 export default SupporterRewards;
-
