@@ -170,7 +170,7 @@ const Playground: React.FC<{ theme: string; setTheme?: (theme: string) => void }
   const cardRef = useRef<HTMLDivElement>(null);
   const [tiltStyle, setTiltStyle] = useState({ transform: "" });
 
-  const active = snippets.find((s) => s.id === activeId)!;
+  const active = snippets.find((s) => s.id === activeId) || snippets[0];
 
   /* ── Code helpers ── */
   const handleCopy = async (code: string, id: string) => {

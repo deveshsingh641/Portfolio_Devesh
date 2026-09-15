@@ -41,6 +41,7 @@ interface DesktopManagerProps {
   formStatus: ContactFormStatus;
   handleFormChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onNavigate?: (to: string) => void;
 }
 
 const DesktopManager: React.FC<DesktopManagerProps> = ({
@@ -332,8 +333,6 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
         <div className="relative w-full h-full pointer-events-auto">
           {/* Window 1: About Me */}
           <DesktopWindow
-            id="about"
-            title="About Me"
             theme={theme}
             {...windows.about}
             onClose={handleWindowClose}
@@ -347,7 +346,7 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
               theme={theme}
               visibleSections={new Set(["about"])}
               scrollToSection={handleWindowOpen}
-              navigate={(to) => {
+              navigate={(to: string) => {
                 if (to.startsWith("/blog")) handleWindowOpen("blog");
                 else if (to.startsWith("/projects")) handleWindowOpen("projects");
               }}
@@ -358,8 +357,6 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
 
           {/* Window 2: Skills / Tech Stack */}
           <DesktopWindow
-            id="skills"
-            title="Tech Stack"
             theme={theme}
             {...windows.skills}
             onClose={handleWindowClose}
@@ -378,8 +375,6 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
 
           {/* Window 3: Projects Grid */}
           <DesktopWindow
-            id="projects"
-            title="Projects Portfolio"
             theme={theme}
             {...windows.projects}
             onClose={handleWindowClose}
@@ -473,8 +468,6 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
 
           {/* Window 4: Blog Section */}
           <DesktopWindow
-            id="blog"
-            title="Technical Blog"
             theme={theme}
             {...windows.blog}
             onClose={handleWindowClose}
@@ -497,8 +490,6 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
 
           {/* Window 5: Certifications */}
           <DesktopWindow
-            id="certifications"
-            title="Certifications"
             theme={theme}
             {...windows.certifications}
             onClose={handleWindowClose}
@@ -517,8 +508,6 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
 
           {/* Window 6: Contact Form */}
           <DesktopWindow
-            id="contact"
-            title="Contact Me"
             theme={theme}
             {...windows.contact}
             onClose={handleWindowClose}
@@ -541,8 +530,6 @@ const DesktopManager: React.FC<DesktopManagerProps> = ({
 
           {/* Window 7: Terminal Shell */}
           <DesktopWindow
-            id="terminal"
-            title="Terminal Shell"
             theme={theme}
             {...windows.terminal}
             onClose={handleWindowClose}

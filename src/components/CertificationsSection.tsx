@@ -1,14 +1,7 @@
 import React from "react";
 import Tilt from "react-parallax-tilt";
 import { Calendar } from "lucide-react";
-
-interface CertificationItem {
-  name: string;
-  source: string;
-  year?: string;
-  badges?: string[];
-  icon: React.ComponentType<{ size?: number }>;
-}
+import type { CertificationItem } from "../types";
 
 interface CertificationsSectionProps {
   theme: string;

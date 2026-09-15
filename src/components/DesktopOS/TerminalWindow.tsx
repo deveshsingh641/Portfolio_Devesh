@@ -249,14 +249,15 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ theme, setTheme 
     let localStatus = "start";
 
     const generateFood = () => {
-      let rx, ry;
+      let rx = 0;
+      let ry = 0;
       let onSnake = true;
       while (onSnake) {
         rx = Math.floor(Math.random() * (canvasSize / grid)) * grid;
         ry = Math.floor(Math.random() * (canvasSize / grid)) * grid;
         onSnake = snake.some((segment) => segment.x === rx && segment.y === ry);
       }
-      return { x: rx!, y: ry! };
+      return { x: rx, y: ry };
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {

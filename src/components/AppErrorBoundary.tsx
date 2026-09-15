@@ -27,7 +27,7 @@ class AppErrorBoundary extends React.Component<React.PropsWithChildren, AppError
     console.error("App runtime error:", error, errorInfo);
     this.setState({
       errorMessage: error.message,
-      errorStack: errorInfo.componentStack,
+      errorStack: errorInfo.componentStack ?? undefined,
     });
   }
 

@@ -1,29 +1,5 @@
-import React from "react";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
-
-type ProjectCaseStudy = {
-  problem: string;
-  solution: string;
-  keyFeatures: string[];
-  architecture: {
-    frontend: string;
-    backend: string;
-    data: string;
-  };
-};
-
-type ProjectItem = {
-  title: string;
-  slug: string;
-  description: string;
-  tech: string[];
-  github: string;
-  live?: string;
-  status: string;
-  category: string;
-  image: string;
-  caseStudy: ProjectCaseStudy;
-};
+import type { ProjectItem } from "../types";
 
 export default function ProjectCaseStudyPage({
   theme,
@@ -57,6 +33,17 @@ export default function ProjectCaseStudyPage({
       </div>
     );
   }
+
+  const caseStudy = project.caseStudy || {
+    problem: project.description,
+    solution: "Full details available in the source repository.",
+    keyFeatures: project.tech,
+    architecture: {
+      frontend: "Modern component architecture",
+      backend: "API services and logic",
+      data: "Persistent storage",
+    },
+  };
 
   return (
     <div className={`min-h-screen ${isDark ? "text-slate-100" : "text-slate-900"}`}>
@@ -133,18 +120,18 @@ export default function ProjectCaseStudyPage({
         <section className="mt-8 grid lg:grid-cols-2 gap-6">
           <div className={`rounded-2xl border p-6 ${isDark ? "bg-slate-900/50 border-slate-700/40" : "bg-white border-slate-200"}`}>
             <h2 className={`text-lg font-extrabold ${isDark ? "text-slate-100" : "text-slate-900"}`}>Problem</h2>
-            <p className={`mt-2 text-sm leading-relaxed ${isDark ? "text-slate-400" : "text-slate-600"}`}>{project.caseStudy.problem}</p>
+            <p className={`mt-2 text-sm leading-relaxed ${isDark ? "text-slate-400" : "text-slate-600"}`}>{caseStudy.problem}</p>
           </div>
           <div className={`rounded-2xl border p-6 ${isDark ? "bg-slate-900/50 border-slate-700/40" : "bg-white border-slate-200"}`}>
             <h2 className={`text-lg font-extrabold ${isDark ? "text-slate-100" : "text-slate-900"}`}>Solution</h2>
-            <p className={`mt-2 text-sm leading-relaxed ${isDark ? "text-slate-400" : "text-slate-600"}`}>{project.caseStudy.solution}</p>
+            <p className={`mt-2 text-sm leading-relaxed ${isDark ? "text-slate-400" : "text-slate-600"}`}>{caseStudy.solution}</p>
           </div>
         </section>
 
         <section className={`mt-6 rounded-2xl border p-6 ${isDark ? "bg-slate-900/50 border-slate-700/40" : "bg-white border-slate-200"}`}>
           <h2 className={`text-lg font-extrabold ${isDark ? "text-slate-100" : "text-slate-900"}`}>Key Features</h2>
           <div className="mt-3 grid md:grid-cols-2 gap-3">
-            {project.caseStudy.keyFeatures.map((f) => (
+            {(caseStudy.keyFeatures || []).map((f) => (
               <div key={f} className={`rounded-xl border px-4 py-3 ${isDark ? "bg-slate-950/40 border-slate-700/40" : "bg-slate-50 border-slate-200"}`}>
                 <p className={`text-sm font-semibold ${isDark ? "text-slate-200" : "text-slate-800"}`}>{f}</p>
               </div>
@@ -156,9 +143,9 @@ export default function ProjectCaseStudyPage({
           <h2 className={`text-lg font-extrabold ${isDark ? "text-slate-100" : "text-slate-900"}`}>Architecture</h2>
           <div className="mt-4 grid md:grid-cols-3 gap-4">
             {[
-              { label: "Frontend", value: project.caseStudy.architecture.frontend },
-              { label: "Backend", value: project.caseStudy.architecture.backend },
-              { label: "Data/AI", value: project.caseStudy.architecture.data },
+              { label: "Frontend", value: caseStudy.architecture?.frontend || "Frontend UI" },
+              { label: "Backend", value: caseStudy.architecture?.backend || "Backend Services" },
+              { label: "Data/AI", value: caseStudy.architecture?.data || "Persistence Layer" },
             ].map((item) => (
               <div key={item.label} className={`rounded-xl border p-4 ${isDark ? "bg-slate-950/40 border-slate-700/40" : "bg-slate-50 border-slate-200"}`}>
                 <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-emerald-400 mb-2">{item.label}</p>

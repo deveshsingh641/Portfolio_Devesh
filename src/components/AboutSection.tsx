@@ -10,6 +10,7 @@ interface AboutSectionProps {
   scrollToSection: (sectionId: string) => void;
   education: EducationItem[];
   isMobile: boolean;
+  navigate?: (to: string) => void;
 }
 
 const AboutSection: React.FC<AboutSectionProps> = ({

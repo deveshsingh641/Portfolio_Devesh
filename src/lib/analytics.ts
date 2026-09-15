@@ -32,7 +32,14 @@ export function trackEvent(name: string, properties?: Record<string, AnalyticsVa
 export function trackProfileView(details?: Record<string, AnalyticsValue>) {
   if (typeof window === "undefined") return;
 
-  const referrer = document.referrer ? new URL(document.referrer, window.location.href).hostname : "direct";
+  let referrer = "direct";
+  if (document.referrer) {
+    try {
+      referrer = new URL(document.referrer, window.location.href).hostname || "direct";
+    } catch {
+      referrer = "external";
+    }
+  }
   const path = window.location.pathname + (window.location.hash || "");
 
   trackEvent("profile_view", {

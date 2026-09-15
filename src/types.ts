@@ -24,7 +24,7 @@ export interface CertificationItem {
   source: string;
   year?: string;
   badges?: string[];
-  icon: React.ComponentType<{ size?: number }>;
+  icon: React.ComponentType<{ size?: number | string; className?: string }>;
 }
 
 export type ProjectCaseStudy = {

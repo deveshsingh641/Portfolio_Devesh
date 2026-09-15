@@ -86,7 +86,7 @@ export default function BlogPostPage({
                 : "bg-white border-slate-200 text-slate-700 hover:border-emerald-400/40 hover:text-emerald-700"
             }`}
             aria-label="Share"
-            title={navigator.share ? "Share" : "Copy link"}
+            title={typeof navigator !== "undefined" && "share" in navigator ? "Share" : "Copy link"}
           >
             <Share2 size={14} /> Share
           </button>
