@@ -10,9 +10,10 @@ import {
   Tag,
   BookOpen,
 } from "lucide-react";
-import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
 import { loadAllPosts, type Post } from "../blog/posts";
+
+const LazyReactMarkdown = React.lazy(() => import("react-markdown"));
 
 export const ThoughtsSection: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -353,7 +354,16 @@ export const ThoughtsSection: React.FC = () => {
                 data-lenis-prevent="true"
                 className="prose prose-invert prose-purple max-w-none prose-headings:font-display prose-headings:font-medium prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:leading-relaxed prose-p:text-foreground/90 prose-li:text-foreground/90 prose-pre:border prose-pre:border-border prose-pre:bg-secondary/40 prose-pre:rounded-xl prose-code:font-mono prose-code:text-purple-300"
               >
-                <ReactMarkdown>{selectedPost.content}</ReactMarkdown>
+                <React.Suspense
+                  fallback={
+                    <div className="py-12 flex flex-col items-center justify-center gap-3 text-muted-foreground">
+                      <div className="w-6 h-6 rounded-full border-2 border-purple-500 border-t-transparent animate-spin" />
+                      <span className="text-xs font-mono">Rendering article...</span>
+                    </div>
+                  }
+                >
+                  <LazyReactMarkdown>{selectedPost.content}</LazyReactMarkdown>
+                </React.Suspense>
               </div>
 
               {/* Article Footer */}

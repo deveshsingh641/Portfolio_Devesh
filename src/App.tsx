@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import Lenis from "lenis";
 import { useTactileSound } from "./hooks/useTactileSound";
 import { WelcomeIntro } from "./components/WelcomeIntro";
 import { Navbar } from "./components/Navbar";
-import { CvModal } from "./components/CvModal";
 import { CosmicHero } from "./components/CosmicHero";
 import { EducationSection } from "./components/EducationSection";
 import { FeaturedProjects } from "./components/FeaturedProjects";
@@ -12,14 +11,18 @@ import { AboutSection } from "./components/AboutSection";
 import { SoftwareExpertise } from "./components/SoftwareExpertise";
 import { CertificationsWall } from "./components/CertificationsWall";
 import { ThoughtsSection } from "./components/ThoughtsSection";
-import { SupporterRewards } from "./components/SupporterRewards";
 import { ContactFooter } from "./components/ContactFooter";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { SpideyCursor } from "./components/SpideyCursor";
-import { CommandPalette } from "./components/CommandPalette";
-import { ContactModal, type MessageCategory } from "./components/ContactModal";
 import { PORTFOLIO_DATA } from "./data/portfolio";
 import { loadAllPosts, type Post } from "./blog/posts";
+import type { MessageCategory } from "./components/ContactModal";
+
+// Code-split heavy below-the-fold & modal components to shrink main bundle
+const CvModal = lazy(() => import("./components/CvModal").then((m) => ({ default: m.CvModal })));
+const SupporterRewards = lazy(() => import("./components/SupporterRewards").then((m) => ({ default: m.SupporterRewards })));
+const CommandPalette = lazy(() => import("./components/CommandPalette").then((m) => ({ default: m.CommandPalette })));
+const ContactModal = lazy(() => import("./components/ContactModal").then((m) => ({ default: m.ContactModal })));
 
 export function App() {
   useTactileSound();
@@ -99,7 +102,7 @@ export function App() {
     };
   }, []);
 
-  // Listen for custom open events from subcomponents
+  // Listen for custom open events and shortcuts from subcomponents
   useEffect(() => {
     const handleOpenCmd = () => setCmdPaletteOpen(true);
     const handleOpenCv = () => setCvModalOpen(true);
@@ -110,15 +113,23 @@ export function App() {
       }
       setContactModalOpen(true);
     };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setCmdPaletteOpen((prev) => !prev);
+      }
+    };
 
     window.addEventListener("open-command-palette", handleOpenCmd);
     window.addEventListener("open-cv-modal", handleOpenCv);
     window.addEventListener("open-contact-modal", handleOpenContact);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("open-command-palette", handleOpenCmd);
       window.removeEventListener("open-cv-modal", handleOpenCv);
       window.removeEventListener("open-contact-modal", handleOpenContact);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
@@ -192,7 +203,16 @@ export function App() {
       <ThoughtsSection />
 
       {/* 10. Supporter Rewards — Fuel the Innovation */}
-      <SupporterRewards isDark={isDark} />
+      <Suspense
+        fallback={
+          <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted-foreground min-h-[260px]">
+            <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+            <span className="text-xs font-mono">Loading rewards...</span>
+          </div>
+        }
+      >
+        <SupporterRewards isDark={isDark} />
+      </Suspense>
 
       {/* 11. Contact & Comprehensive Footer */}
       <ContactFooter
@@ -203,10 +223,14 @@ export function App() {
       />
 
       {/* 12. CV Download Modal */}
-      <CvModal
-        isOpen={cvModalOpen}
-        onClose={() => setCvModalOpen(false)}
-      />
+      <Suspense fallback={null}>
+        {cvModalOpen && (
+          <CvModal
+            isOpen={cvModalOpen}
+            onClose={() => setCvModalOpen(false)}
+          />
+        )}
+      </Suspense>
 
       {/* 13. Floating Bottom-Center Theme Toggle */}
       <ThemeToggle
@@ -215,35 +239,43 @@ export function App() {
       />
 
       {/* 14. Quick Command Palette (⌘K Spotlight Search) */}
-      <CommandPalette
-        isOpen={cmdPaletteOpen}
-        onOpenChange={setCmdPaletteOpen}
-        theme={isDark ? "dark" : "light"}
-        setTheme={(newTheme) => setIsDark(newTheme === "dark")}
-        scrollToSection={scrollToSection}
-        projects={PORTFOLIO_DATA.projects.map((p) => ({
-          slug: p.slug,
-          title: p.title,
-          category: p.category,
-          tech: p.tags,
-          summary: p.summary,
-        }))}
-        posts={posts.map((p) => ({
-          slug: p.slug,
-          title: p.title,
-          category: p.category,
-          tags: p.tags,
-        }))}
-        onOpenCvModal={() => setCvModalOpen(true)}
-        hideTrigger={true}
-      />
+      <Suspense fallback={null}>
+        {cmdPaletteOpen && (
+          <CommandPalette
+            isOpen={cmdPaletteOpen}
+            onOpenChange={setCmdPaletteOpen}
+            theme={isDark ? "dark" : "light"}
+            setTheme={(newTheme) => setIsDark(newTheme === "dark")}
+            scrollToSection={scrollToSection}
+            projects={PORTFOLIO_DATA.projects.map((p) => ({
+              slug: p.slug,
+              title: p.title,
+              category: p.category,
+              tech: p.tags,
+              summary: p.summary,
+            }))}
+            posts={posts.map((p) => ({
+              slug: p.slug,
+              title: p.title,
+              category: p.category,
+              tags: p.tags,
+            }))}
+            onOpenCvModal={() => setCvModalOpen(true)}
+            hideTrigger={true}
+          />
+        )}
+      </Suspense>
 
       {/* 15. Direct Contact & Bug Report Modal */}
-      <ContactModal
-        isOpen={contactModalOpen}
-        onClose={() => setContactModalOpen(false)}
-        defaultCategory={contactModalCategory}
-      />
+      <Suspense fallback={null}>
+        {contactModalOpen && (
+          <ContactModal
+            isOpen={contactModalOpen}
+            onClose={() => setContactModalOpen(false)}
+            defaultCategory={contactModalCategory}
+          />
+        )}
+      </Suspense>
 
       {/* Interactive Spidey Companion Cursor from kashyaap69 template */}
       <SpideyCursor />
