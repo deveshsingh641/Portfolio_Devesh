@@ -34,7 +34,9 @@ export const QuoteBanner: React.FC = () => {
       } while (quotes.length > 1 && nextIdx === prev);
       try {
         sessionStorage.setItem("portfolio_quote_idx", nextIdx.toString());
-      } catch {}
+      } catch {
+        // ignore storage write failures (e.g., private browsing restrictions)
+      }
       return nextIdx;
     });
     setTimeout(() => setIsRotating(false), 500);
