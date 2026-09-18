@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="udemy-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c1d1f"/>
+      <stop offset="100%" stop-color="#0e0f11"/>
+    </linearGradient>
+    <linearGradient id="udemy-purple" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a435f0"/>
+      <stop offset="100%" stop-color="#8710d8"/>
+    </linearGradient>
+    <pattern id="grid-pattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="640" height="400" fill="url(#udemy-bg)"/>
+  <rect width="640" height="400" fill="url(#grid-pattern)"/>
+
+  <!-- Border -->
+  <rect x="16" y="16" width="608" height="368" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+  <rect x="22" y="22" width="596" height="356" rx="8" fill="none" stroke="rgba(164,53,240,0.25)" stroke-width="1"/>
+
+  <!-- Top Accent Bar -->
+  <rect x="22" y="22" width="596" height="6" fill="url(#udemy-purple)" rx="3"/>
+
+  <!-- Header: Udemy Brand -->
+  <g transform="translate(48, 56)">
+    <!-- Udemy Logo Icon (inverted U symbol) -->
+    <path d="M12 0 C18.6 0 24 5.4 24 12 L24 24 C24 26.2 22.2 28 20 28 C17.8 28 16 26.2 16 24 L16 12 C16 9.8 14.2 8 12 8 C9.8 8 8 9.8 8 12 L8 24 C8 26.2 6.2 28 4 28 C1.8 28 0 26.2 0 24 L0 12 C0 5.4 5.4 0 12 0 Z" fill="#a435f0"/>
+    <text x="36" y="20" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="800" letter-spacing="0.5">udemy</text>
+    <text x="110" y="20" fill="#a435f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="1">CERTIFICATE OF COMPLETION</text>
+  </g>
+
+  <!-- Title & Course Details -->
+  <g transform="translate(48, 125)">
+    <text x="0" y="0" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="1.5" text-transform="uppercase">OFFICIAL COURSE CREDENTIAL</text>
+    <text x="0" y="32" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" letter-spacing="-0.3">Mastering Agentic Design Patterns</text>
+    <text x="0" y="62" fill="#c084fc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="500">with Hands-on Projects</text>
+    <text x="0" y="92" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="500">Recipient: <tspan fill="#ffffff" font-weight="700">Devesh Singh</tspan> • 5.5 hrs</text>
+  </g>
+
+  <!-- Verification Badge & Date Footer -->
+  <g transform="translate(48, 280)">
+    <!-- Badge Box -->
+    <rect x="0" y="0" width="160" height="34" rx="17" fill="rgba(164,53,240,0.15)" stroke="rgba(164,53,240,0.4)" stroke-width="1"/>
+    <!-- Check icon -->
+    <circle cx="17" cy="17" r="8" fill="#a435f0"/>
+    <path d="M13 17 L16 20 L22 13" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="32" y="21" fill="#e9d5ff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5">VERIFIED ISSUED</text>
+
+    <!-- Meta Right -->
+    <text x="544" y="21" fill="#71717a" font-family="monospace" font-size="10" text-anchor="end">ID: UC-836cf942-ca3a-41ef-bae4</text>
+  </g>
+</svg>

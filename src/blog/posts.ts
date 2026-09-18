@@ -8,6 +8,7 @@ export type Post = {
   content: string;
   readTime: number;
   wordCount: number;
+  coverImage?: string;
 };
 
 /* ------------------------------------------------------------------ */
@@ -84,6 +85,15 @@ export async function loadAllPosts(): Promise<Post[]> {
       const { data, content } = parseFrontmatter(raw);
       const slug = slugFromPath(path);
       const { readTime, wordCount } = estimateReadTime(content);
+      const coverMap: Record<string, string> = {
+        "engineering-feedback": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1600&q=85",
+        "node-websocket-scaling": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=85",
+        "building-restful-apis": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1600&q=85",
+        "dsa-to-production": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1600&q=85",
+        "mongodb-aggregation-indexing": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1600&q=85",
+        "react-performance-guide": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85",
+      };
+
       loaded.push({
         slug,
         title: (data.title as string) || slug,
@@ -94,6 +104,7 @@ export async function loadAllPosts(): Promise<Post[]> {
         content,
         readTime,
         wordCount,
+        coverImage: (data.coverImage as string) || (data.image as string) || coverMap[slug] || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1600&q=85",
       });
     } catch {
       // skip bad files

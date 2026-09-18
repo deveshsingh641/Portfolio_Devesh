@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gcp-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#181a20"/>
+      <stop offset="100%" stop-color="#0c0e12"/>
+    </linearGradient>
+    <linearGradient id="gcp-bar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4285F4"/>
+      <stop offset="33%" stop-color="#EA4335"/>
+      <stop offset="66%" stop-color="#FBBC04"/>
+      <stop offset="100%" stop-color="#34A853"/>
+    </linearGradient>
+    <pattern id="gcp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(66,133,244,0.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="640" height="400" fill="url(#gcp-bg)"/>
+  <rect width="640" height="400" fill="url(#gcp-grid)"/>
+
+  <!-- Border -->
+  <rect x="16" y="16" width="608" height="368" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+  <rect x="22" y="22" width="596" height="356" rx="8" fill="none" stroke="rgba(66,133,244,0.25)" stroke-width="1"/>
+
+  <!-- Top Accent Bar: Google 4-Color Gradient -->
+  <rect x="22" y="22" width="596" height="6" rx="3" fill="url(#gcp-bar)"/>
+
+  <!-- Header: Google Cloud -->
+  <g transform="translate(48, 56)">
+    <!-- Google Cloud Stylized Icon -->
+    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" fill="#4285F4" transform="scale(1.2)"/>
+    <text x="36" y="20" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700" letter-spacing="0.2">Google Cloud</text>
+    <text x="172" y="20" fill="#60a5fa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="1">SKILLS CREDENTIAL</text>
+  </g>
+
+  <!-- Title & Course Details -->
+  <g transform="translate(48, 130)">
+    <text x="0" y="0" fill="#93c5fd" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="1.5" text-transform="uppercase">CLOUD &amp; GENERATIVE AI MILESTONE</text>
+    <text x="0" y="34" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" letter-spacing="-0.3">Google Cloud: Essentials,</text>
+    <text x="0" y="66" fill="#60a5fa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="500">Generative AI &amp; Kubernetes</text>
+  </g>
+
+  <!-- Verification Badge & Date Footer -->
+  <g transform="translate(48, 280)">
+    <!-- Badge Box -->
+    <rect x="0" y="0" width="160" height="34" rx="17" fill="rgba(66,133,244,0.15)" stroke="rgba(66,133,244,0.4)" stroke-width="1"/>
+    <!-- Check icon -->
+    <circle cx="17" cy="17" r="8" fill="#4285F4"/>
+    <path d="M13 17 L16 20 L22 13" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="32" y="21" fill="#bfdbfe" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5">VERIFIED BADGE</text>
+
+    <!-- Meta Right -->
+    <text x="544" y="21" fill="#71717a" font-family="monospace" font-size="11" text-anchor="end">YEAR: 2025 • GOOGLE CLOUD</text>
+  </g>
+</svg>

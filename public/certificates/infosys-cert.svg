@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="infy-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141c2b"/>
+      <stop offset="100%" stop-color="#0a0e17"/>
+    </linearGradient>
+    <linearGradient id="infy-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#007cc3"/>
+      <stop offset="100%" stop-color="#00a3e0"/>
+    </linearGradient>
+    <pattern id="infy-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(0,124,195,0.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="640" height="400" fill="url(#infy-bg)"/>
+  <rect width="640" height="400" fill="url(#infy-grid)"/>
+
+  <!-- Border -->
+  <rect x="16" y="16" width="608" height="368" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+  <rect x="22" y="22" width="596" height="356" rx="8" fill="none" stroke="rgba(0,124,195,0.25)" stroke-width="1"/>
+
+  <!-- Top Accent Bar -->
+  <rect x="22" y="22" width="596" height="6" fill="url(#infy-blue)" rx="3"/>
+
+  <!-- Header: Infosys Springboard -->
+  <g transform="translate(48, 56)">
+    <!-- Stylized Springboard Chevron -->
+    <path d="M0 16 L12 4 L24 16 L18 22 L12 16 L6 22 Z" fill="#00a3e0"/>
+    <text x="36" y="20" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700" letter-spacing="0.2">Infosys</text>
+    <text x="110" y="20" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="400">Springboard</text>
+    <text x="228" y="20" fill="#0284c7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="1">CERTIFIED</text>
+  </g>
+
+  <!-- Title & Course Details -->
+  <g transform="translate(48, 130)">
+    <text x="0" y="0" fill="#7dd3fc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="1.5" text-transform="uppercase">FOUNDATIONAL ALGORITHMIC RIGOR</text>
+    <text x="0" y="34" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" letter-spacing="-0.3">Data Structures &amp; Algorithms</text>
+    <text x="0" y="66" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="500">Core Problem Solving &amp; Optimization</text>
+  </g>
+
+  <!-- Verification Badge & Date Footer -->
+  <g transform="translate(48, 280)">
+    <!-- Badge Box -->
+    <rect x="0" y="0" width="160" height="34" rx="17" fill="rgba(0,163,224,0.15)" stroke="rgba(0,163,224,0.4)" stroke-width="1"/>
+    <!-- Check icon -->
+    <circle cx="17" cy="17" r="8" fill="#00a3e0"/>
+    <path d="M13 17 L16 20 L22 13" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="32" y="21" fill="#bae6fd" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5">COMPLETED</text>
+
+    <!-- Meta Right -->
+    <text x="544" y="21" fill="#71717a" font-family="monospace" font-size="11" text-anchor="end">YEAR: 2025 • INFOSYS SPRINGBOARD</text>
+  </g>
+</svg>

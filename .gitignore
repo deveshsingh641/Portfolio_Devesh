@@ -25,3 +25,19 @@ dist-ssr
 .env
 *.mp4
 *.mov
+
+# Temporary analysis, scratch scripts & screenshots
+scripts/
+public/antigravity_video_frames.zip
+public/Screenshot*.png
+public/live_*
+public/dark_*
+public/verified_*
+public/portfolio_full_page.png
+public/designnexus.*
+public/extracted_*
+public/hero_and_nav.js
+public/hero_component.js
+public/arslan_wop.html
+public/kashyaap_mouse_moved.png
+public/frames/

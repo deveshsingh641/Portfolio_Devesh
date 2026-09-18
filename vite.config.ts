@@ -96,9 +96,10 @@ export default defineConfig(({ mode }) => {
         'Cache-Control': 'public, max-age=3600',
       },
       watch: {
-        ignored: ['**/*.mp4', '**/*.mkv', '**/*.avi', '**/Recording*'],
+        ignored: ['**/*.mp4', '**/*.mkv', '**/*.avi', '**/Recording*', '**/frames/**', '**/*.zip', '**/*.jpg', '**/*.jpeg'],
       },
     },
   };
 });
+// Reloaded static assets
 

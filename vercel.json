@@ -1,7 +1,7 @@
 {
   "rewrites": [
     { "source": "/_vercel/(.*)", "destination": "/_vercel/$1" },
-    { "source": "/FINAL_RESUME_DEVESH.pdf", "destination": "/FINAL_RESUME_DEVESH.pdf" },
+    { "source": "/Devesh_Singh_SDE.pdf", "destination": "/Devesh_Singh_SDE.pdf" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
