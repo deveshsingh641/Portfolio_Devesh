@@ -5,13 +5,7 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import App from './App.tsx';
 import AppErrorBoundary from './components/AppErrorBoundary.tsx';
 import './index.css';
-
-declare global {
-  interface Window {
-    __lastErrorMessage?: string;
-    __lastErrorStack?: string;
-  }
-}
+import './types/global.d.ts';
 
 if (typeof window !== 'undefined') {
   window.addEventListener('error', (event) => {

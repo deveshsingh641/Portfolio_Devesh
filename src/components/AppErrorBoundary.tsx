@@ -1,16 +1,10 @@
 import React from "react";
+import "../types/global.d.ts";
 
 interface AppErrorBoundaryState {
   hasError: boolean;
   errorMessage?: string;
   errorStack?: string;
-}
-
-declare global {
-  interface Window {
-    __lastErrorMessage?: string;
-    __lastErrorStack?: string;
-  }
 }
 
 class AppErrorBoundary extends React.Component<React.PropsWithChildren, AppErrorBoundaryState> {
