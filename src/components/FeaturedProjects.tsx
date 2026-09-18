@@ -255,16 +255,32 @@ export const FeaturedProjects: React.FC = () => {
                       </div>
 
                       {/* Project UI Screen */}
-                      <img
-                        src={project.cardImage || project.thumbnail}
-                        alt={`Interface preview of ${project.title}`}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = "/placeholder-project.svg";
-                        }}
-                        className="w-full h-full object-cover object-top pt-6"
-                      />
+                      {(() => {
+                        const imgPath = project.cardImage || project.thumbnail;
+                        const basePath = imgPath.replace(/\.(webp|jpg|jpeg|png)$/i, "");
+                        return (
+                          <picture>
+                            <source
+                              type="image/webp"
+                              srcSet={`${basePath}-800.webp 800w, ${basePath}.webp 1376w`}
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+                            />
+                            <img
+                              src={imgPath}
+                              srcSet={`${basePath}-800.webp 800w, ${basePath}.webp 1376w`}
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+                              alt={`Interface preview of ${project.title}`}
+                              loading="lazy"
+                              decoding="async"
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = "/placeholder-project.svg";
+                              }}
+                              className="w-full h-full object-cover object-top pt-6"
+                            />
+                          </picture>
+                        );
+                      })()}
 
                       {/* Subtle Screen Glare */}
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/10" />

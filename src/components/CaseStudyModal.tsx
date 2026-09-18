@@ -204,15 +204,31 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
 
           {/* Hero Image */}
           <div className="relative w-full h-72 sm:h-96 md:h-[460px] overflow-hidden rounded-2xl border border-border shadow-2xl mb-14 bg-secondary/30">
-            <img
-              src={project.thumbnail}
-              alt={`Detailed interface screenshot of ${project.title}`}
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/placeholder-project.svg";
-              }}
-              className="w-full h-full object-cover"
-            />
+            {(() => {
+              const basePath = project.thumbnail.replace(/\.(webp|jpg|jpeg|png)$/i, "");
+              return (
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcSet={`${basePath}-800.webp 800w, ${basePath}.webp 1376w`}
+                    sizes="(max-width: 768px) 100vw, 1200px"
+                  />
+                  <img
+                    src={project.thumbnail}
+                    srcSet={`${basePath}-800.webp 800w, ${basePath}.webp 1376w`}
+                    sizes="(max-width: 768px) 100vw, 1200px"
+                    alt={`Detailed interface screenshot of ${project.title}`}
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/placeholder-project.svg";
+                    }}
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
+              );
+            })()}
           </div>
 
           {/* Metrics Callout */}
