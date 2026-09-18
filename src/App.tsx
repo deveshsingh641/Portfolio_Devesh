@@ -71,7 +71,7 @@ export function App() {
       wheelMultiplier: 1,
     });
 
-    (window as any).__lenis = lenis;
+    window.__lenis = lenis;
 
     function raf(time: number) {
       lenis.raf(time);
@@ -83,7 +83,7 @@ export function App() {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
-      delete (window as any).__lenis;
+      delete window.__lenis;
     };
   }, []);
 
@@ -115,7 +115,7 @@ export function App() {
     const cleanId = sectionId.replace(/^#/, "");
     if (cleanId === "home" || cleanId === "top") {
       window.dispatchEvent(new CustomEvent("reset-hero-stage"));
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       if (lenis) {
         lenis.scrollTo(0, { duration: 1.1 });
       } else {
@@ -133,9 +133,9 @@ export function App() {
       targetSelector = "#support";
     }
 
-    const target = document.querySelector(targetSelector) || document.querySelector(`#${cleanId}`);
+    const target = document.querySelector<HTMLElement>(targetSelector) || document.querySelector<HTMLElement>(`#${cleanId}`);
     if (target) {
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       if (lenis) {
         lenis.scrollTo(target, { offset: -70, duration: 1.1 });
       } else {

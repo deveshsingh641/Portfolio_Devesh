@@ -238,31 +238,33 @@ export const SpideyCursor: React.FC = () => {
   // React createElement wrapper to execute the exact vector JSX from original
   const t = {
     Fragment: React.Fragment,
-    jsx: (type: any, props: any) => {
+    jsx: (type: React.ElementType, props: Record<string, unknown> & { children?: unknown }) => {
+      let finalProps = props;
       if (props && Array.isArray(props.children)) {
-        props = {
+        finalProps = {
           ...props,
-          children: props.children.map((c: any, i: number) =>
-            c && typeof c === "object" && !c.key
-              ? React.cloneElement(c, { key: `k-${i}` })
+          children: props.children.map((c: unknown, i: number) =>
+            c && typeof c === "object" && !("key" in c && (c as { key?: unknown }).key)
+              ? React.cloneElement(c as React.ReactElement, { key: `k-${i}` })
               : c
           ),
         };
       }
-      return React.createElement(type, props);
+      return React.createElement(type, finalProps);
     },
-    jsxs: (type: any, props: any) => {
+    jsxs: (type: React.ElementType, props: Record<string, unknown> & { children?: unknown }) => {
+      let finalProps = props;
       if (props && Array.isArray(props.children)) {
-        props = {
+        finalProps = {
           ...props,
-          children: props.children.map((c: any, i: number) =>
-            c && typeof c === "object" && !c.key
-              ? React.cloneElement(c, { key: `k-${i}` })
+          children: props.children.map((c: unknown, i: number) =>
+            c && typeof c === "object" && !("key" in c && (c as { key?: unknown }).key)
+              ? React.cloneElement(c as React.ReactElement, { key: `k-${i}` })
               : c
           ),
         };
       }
-      return React.createElement(type, props);
+      return React.createElement(type, finalProps);
     },
   };
 

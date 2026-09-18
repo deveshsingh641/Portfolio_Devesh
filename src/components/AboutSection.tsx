@@ -43,7 +43,7 @@ const AnimatedCounter: React.FC<{
   );
 };
 
-export const AboutSection: React.FC<any> = () => {
+export const AboutSection: React.FC = () => {
   const { badge, title, titleHighlight, description, stats, image } =
     PORTFOLIO_DATA.about;
 

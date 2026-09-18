@@ -109,7 +109,7 @@ export const EducationSection: React.FC = () => {
             href="#about"
             onClick={(e) => {
               e.preventDefault();
-              const lenis = (window as any).__lenis;
+              const lenis = window.__lenis;
               if (lenis) {
                 lenis.scrollTo("#about", { offset: -70, duration: 1.1 });
               } else {

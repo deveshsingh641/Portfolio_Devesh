@@ -59,14 +59,14 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
     };
 
     document.body.style.overflow = "hidden";
-    const lenis = (window as any).__lenis;
+    const lenis = window.__lenis;
     lenis?.stop();
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       clearTimeout(timer);
       document.body.style.overflow = "";
-      const l = (window as any).__lenis;
+      const l = window.__lenis;
       l?.start();
       window.removeEventListener("keydown", handleKeyDown);
     };

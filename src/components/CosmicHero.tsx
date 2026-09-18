@@ -29,7 +29,7 @@ export const CosmicHero: React.FC<CosmicHeroProps> = ({ isDark }) => {
 
   useEffect(() => {
     const updateProgress = () => {
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       const scrollY = lenis
         ? lenis.scroll
         : (window.scrollY || document.documentElement.scrollTop || 0);
@@ -42,7 +42,7 @@ export const CosmicHero: React.FC<CosmicHeroProps> = ({ isDark }) => {
     window.addEventListener("scroll", updateProgress, { passive: true });
     window.addEventListener("resize", updateProgress, { passive: true });
 
-    const lenis = (window as any).__lenis;
+    const lenis = window.__lenis;
     if (lenis) {
       lenis.on("scroll", updateProgress);
     }
@@ -50,7 +50,7 @@ export const CosmicHero: React.FC<CosmicHeroProps> = ({ isDark }) => {
     return () => {
       window.removeEventListener("scroll", updateProgress);
       window.removeEventListener("resize", updateProgress);
-      const l = (window as any).__lenis;
+      const l = window.__lenis;
       if (l) {
         l.off("scroll", updateProgress);
       }
@@ -60,7 +60,7 @@ export const CosmicHero: React.FC<CosmicHeroProps> = ({ isDark }) => {
   // Reset stage event handler (triggered by navbar logo or top clicks)
   useEffect(() => {
     const handleReset = () => {
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       if (lenis) {
         lenis.scrollTo(0, { immediate: true });
       } else {
@@ -94,7 +94,7 @@ export const CosmicHero: React.FC<CosmicHeroProps> = ({ isDark }) => {
     let isTransitioning = false;
 
     const onWheel = (e: WheelEvent) => {
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       if (!lenis || isTransitioning || lenis.isLocked) return;
 
       const H = window.innerHeight;

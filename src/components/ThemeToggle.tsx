@@ -12,8 +12,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) =>
   const handleClick = () => {
     soundService.playThemeSwitch(!isDark);
     // If browser supports View Transitions API
-    const doc = document as any;
-    if (doc.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (document.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       let x = window.innerWidth / 2;
       let y = window.innerHeight - 36;
       if (buttonRef.current) {
@@ -48,7 +47,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) =>
       `;
       document.head.appendChild(styleEl);
 
-      const transition = doc.startViewTransition(() => {
+      const transition = document.startViewTransition(() => {
         onToggle();
       });
 

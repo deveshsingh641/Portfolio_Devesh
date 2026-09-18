@@ -71,8 +71,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     if (isOpen) {
       setCategory(defaultCategory);
       const cat = CATEGORIES.find((c) => c.id === defaultCategory);
-      if (cat && !subject) {
-        setSubject(cat.defaultSubject);
+      if (cat) {
+        setSubject((prev) => prev || cat.defaultSubject);
       }
       setStatus("idle");
       setErrorMessage("");
@@ -124,18 +124,18 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     if (isOpen) {
       soundService.playModalOpen();
       document.body.style.overflow = "hidden";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       lenis?.stop();
       window.addEventListener("keydown", handleKeyDown);
     } else {
       document.body.style.overflow = "";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       lenis?.start();
     }
 
     return () => {
       document.body.style.overflow = "";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       lenis?.start();
       window.removeEventListener("keydown", handleKeyDown);
     };
@@ -196,7 +196,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       setStatus("success");
       setName("");
       setMessage("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Failed to submit message:", err);
       setStatus("error");
       setErrorMessage(

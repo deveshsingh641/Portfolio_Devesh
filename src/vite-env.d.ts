@@ -11,3 +11,13 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+interface Window {
+  __lenis?: import("lenis").default;
+}
+
+interface Document {
+  startViewTransition?: (updateCallback: () => Promise<void> | void) => {
+    finished: Promise<void>;
+  };
+}

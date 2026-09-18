@@ -97,7 +97,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   // Lock body scroll and pause Lenis while palette is open
   useEffect(() => {
     if (open) {
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       lenis?.stop();
       const prevOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";

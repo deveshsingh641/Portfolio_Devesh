@@ -12,7 +12,7 @@ export const ContactFooter: React.FC<ContactFooterProps> = ({ onOpenContactModal
   const { headline, headlineItalic, subline, email } = PORTFOLIO_DATA.contact;
 
   const scrollToTop = () => {
-    const lenis = (window as any).__lenis;
+    const lenis = window.__lenis;
     if (lenis) {
       lenis.scrollTo(0, { duration: 1.2 });
     } else {
@@ -158,7 +158,7 @@ export const ContactFooter: React.FC<ContactFooterProps> = ({ onOpenContactModal
                   href={link.href}
                   onClick={(e) => {
                     e.preventDefault();
-                    const lenis = (window as any).__lenis;
+                    const lenis = window.__lenis;
                     if (lenis) {
                       lenis.scrollTo(link.href, { offset: -70, duration: 1.1 });
                     } else {

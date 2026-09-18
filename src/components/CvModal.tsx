@@ -46,18 +46,18 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
     if (isOpen) {
       soundService.playModalOpen();
       document.body.style.overflow = "hidden";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       lenis?.stop();
       window.addEventListener("keydown", handleKeyDown);
     } else {
       document.body.style.overflow = "";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       lenis?.start();
     }
 
     return () => {
       document.body.style.overflow = "";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       lenis?.start();
       window.removeEventListener("keydown", handleKeyDown);
     };

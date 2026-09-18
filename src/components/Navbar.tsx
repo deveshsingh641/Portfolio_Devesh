@@ -15,18 +15,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal, onOpenCommandPale
 
   useEffect(() => {
     const handleScroll = () => {
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       const scrollY = lenis ? lenis.scroll : (window.scrollY || document.documentElement.scrollTop || 0);
       setIsScrolled(scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
-    const lenis = (window as any).__lenis;
+    const lenis = window.__lenis;
     if (lenis) {
       lenis.on("scroll", handleScroll);
     }
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      const l = (window as any).__lenis;
+      const l = window.__lenis;
       if (l) l.off("scroll", handleScroll);
     };
   }, []);
@@ -40,25 +40,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal, onOpenCommandPale
     if (mobileMenuOpen) {
       window.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       if (lenis) lenis.stop();
     } else {
       document.body.style.overflow = "";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       if (lenis) lenis.start();
     }
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
-      const lenis = (window as any).__lenis;
+      const lenis = window.__lenis;
       if (lenis) lenis.start();
     };
   }, [mobileMenuOpen]);
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false);
-    const lenis = (window as any).__lenis;
+    const lenis = window.__lenis;
     if (lenis) {
       lenis.scrollTo(href, { offset: -70, duration: 1.1 });
     } else {
@@ -73,7 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal, onOpenCommandPale
     e.preventDefault();
     setMobileMenuOpen(false);
     window.dispatchEvent(new CustomEvent("reset-hero-stage"));
-    const lenis = (window as any).__lenis;
+    const lenis = window.__lenis;
     if (lenis) {
       lenis.scrollTo(0, { duration: 1.1 });
     } else {
