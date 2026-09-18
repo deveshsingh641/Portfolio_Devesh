@@ -170,7 +170,6 @@ export const PORTFOLIO_DATA = {
       badge: "FEATURED",
       thumbnail: "/projects/agrisense_ui.jpg",
       cardImage: "/projects/agrisense_ui.jpg",
-      github: "https://github.com/deveshsingh641",
       tags: ["React.js", "Node.js", "Express.js", "MongoDB", "LightGBM", "Random Forest", "GIS"],
       summary: "Precision agriculture management platform integrating 6 heterogeneous data sources (weather, soil, remote sensing, terrain, crop, and spatial data) with interactive GIS visualizations, achieving 0.93 R² and 91% accuracy.",
       role: "Lead Full-Stack SDE",
