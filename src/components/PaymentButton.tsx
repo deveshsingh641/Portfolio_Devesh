@@ -1,10 +1,53 @@
 import React, { useState } from 'react';
 import { Loader2, AlertCircle, CheckCircle2, CreditCard } from 'lucide-react';
 
+export interface RazorpayPaymentResponse {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+}
+
+export interface RazorpayFailedResponse {
+  error?: {
+    code?: string;
+    description?: string;
+    source?: string;
+    step?: string;
+    reason?: string;
+    metadata?: Record<string, unknown>;
+  };
+}
+
+export interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  handler: (response: RazorpayPaymentResponse) => void | Promise<void>;
+  modal?: {
+    ondismiss?: () => void;
+  };
+  theme?: {
+    color?: string;
+  };
+  [key: string]: unknown;
+}
+
+export interface RazorpayInstance {
+  open(): void;
+  on(event: 'payment.failed', handler: (response: RazorpayFailedResponse) => void): void;
+  on(event: string, handler: (response: unknown) => void): void;
+}
+
+export interface RazorpayConstructor {
+  new (options: RazorpayOptions): RazorpayInstance;
+}
+
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Razorpay: any;
+    Razorpay?: RazorpayConstructor;
   }
 }
 
@@ -157,11 +200,14 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
         },
       };
 
+      if (!window.Razorpay) {
+        throw new Error('Razorpay SDK is not available.');
+      }
+
       const razorpayInstance = new window.Razorpay(options);
 
       // Handle payment failure event
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      razorpayInstance.on('payment.failed', (failResponse: any) => {
+      razorpayInstance.on('payment.failed', (failResponse: RazorpayFailedResponse) => {
         const errorDescription = failResponse?.error?.description || 'Payment was declined or failed.';
         setStatus('error');
         setErrorMessage(errorDescription);
