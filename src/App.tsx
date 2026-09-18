@@ -31,9 +31,13 @@ export function App() {
 
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("theme");
-      if (saved === "light") return false;
-      return true; // Default to dark mode
+      try {
+        const saved = localStorage.getItem("theme");
+        if (saved === "light") return false;
+        return true; // Default to dark mode
+      } catch {
+        return true;
+      }
     }
     return true;
   });
@@ -53,10 +57,18 @@ export function App() {
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+      try {
+        localStorage.setItem("theme", "dark");
+      } catch {
+        // Fall back gracefully if storage is restricted
+      }
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      try {
+        localStorage.setItem("theme", "light");
+      } catch {
+        // Fall back gracefully if storage is restricted
+      }
     }
   }, [isDark]);
 

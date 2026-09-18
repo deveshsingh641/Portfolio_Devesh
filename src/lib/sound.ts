@@ -12,8 +12,12 @@ class SoundService {
   constructor() {
     if (typeof window !== "undefined") {
       // Check stored preference (default to false for respectful opt-in)
-      const stored = localStorage.getItem("portfolio_sound");
-      this.isEnabled = stored === "enabled";
+      try {
+        const stored = localStorage.getItem("portfolio_sound");
+        this.isEnabled = stored === "enabled";
+      } catch {
+        this.isEnabled = false;
+      }
     }
   }
 
@@ -54,7 +58,11 @@ class SoundService {
   public toggleSound(): boolean {
     this.isEnabled = !this.isEnabled;
     if (typeof window !== "undefined") {
-      localStorage.setItem("portfolio_sound", this.isEnabled ? "enabled" : "disabled");
+      try {
+        localStorage.setItem("portfolio_sound", this.isEnabled ? "enabled" : "disabled");
+      } catch {
+        // Fall back gracefully if storage is restricted
+      }
     }
 
     if (this.isEnabled) {
